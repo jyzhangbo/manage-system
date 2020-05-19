@@ -1,6 +1,13 @@
 package com.github.managesystem.controller;
 
-import com.github.managesystem.model.*;
+import com.github.managesystem.model.req.ListUserReq;
+import com.github.managesystem.model.req.LoginReq;
+import com.github.managesystem.model.req.LogoutReq;
+import com.github.managesystem.model.req.UserInfoReq;
+import com.github.managesystem.model.resp.ListUserInfo;
+import com.github.managesystem.model.resp.ListUserResp;
+import com.github.managesystem.model.resp.Result;
+import com.github.managesystem.model.resp.UserInfoResp;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,14 +30,14 @@ public class UserController {
 
 
     @PostMapping(value = "/info")
-    public Result<UserInfo> userInfo(@RequestBody UserInfoReq userInfoReq){
+    public Result<UserInfoResp> userInfo(@RequestBody UserInfoReq userInfoReq){
         System.out.println("info:"+userInfoReq.getToken());
-        UserInfo userInfo = new UserInfo();
-        userInfo.setName("zhangbo");
-        userInfo.setRoles(Arrays.asList("admin"));
-        userInfo.setIntroduction("I am a admin!");
-        userInfo.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
-        return Result.ok(userInfo);
+        UserInfoResp userInfoResp = new UserInfoResp();
+        userInfoResp.setName("zhangbo");
+        userInfoResp.setRoles(Arrays.asList("admin"));
+        userInfoResp.setIntroduction("I am a admin!");
+        userInfoResp.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+        return Result.ok(userInfoResp);
     }
 
     @PostMapping(value = "/logout")

@@ -1,4 +1,4 @@
-package com.github.managesystem.model;
+package com.github.managesystem.model.resp;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,13 +7,13 @@ import java.util.List;
 
 /**
  * @Author:zhangbo
- * @Date:2020/5/18 17:43
+ * @Date:2020/5/19 9:48
  */
 @Data
 @Builder
-public class ListUserResp {
+public class ListDeviceResp {
 
-    private List<ListUserInfo> infos;
+    private List<ListDeviceInfo> infos;
 
     private Integer total;
 

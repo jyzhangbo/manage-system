@@ -1,4 +1,4 @@
-package com.github.managesystem.model;
+package com.github.managesystem.model.req;
 
 import lombok.Data;
 
