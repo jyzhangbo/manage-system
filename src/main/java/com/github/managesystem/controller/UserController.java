@@ -8,6 +8,9 @@ import com.github.managesystem.model.resp.ListUserInfo;
 import com.github.managesystem.model.resp.ListUserResp;
 import com.github.managesystem.model.resp.Result;
 import com.github.managesystem.model.resp.UserInfoResp;
+import org.nutz.lang.Strings;
+import org.nutz.lang.random.R;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -25,7 +28,13 @@ public class UserController {
     @PostMapping(value = "/login")
     public Result<String> userLogin(@RequestBody LoginReq loginReq){
         System.out.println("login:"+loginReq.getUsername());
-        return Result.ok("admin");
+        if(Strings.equals(loginReq.getUsername(),"admin")) {
+            return Result.ok("admin");
+        }else if(Strings.equals(loginReq.getUsername(),"userAdmin")){
+            return Result.ok("userAdmin");
+        }else {
+            return Result.ok("user");
+        }
     }
 
 
@@ -34,7 +43,13 @@ public class UserController {
         System.out.println("info:"+userInfoReq.getToken());
         UserInfoResp userInfoResp = new UserInfoResp();
         userInfoResp.setName("zhangbo");
-        userInfoResp.setRoles(Arrays.asList("admin"));
+        if(Strings.equals(userInfoReq.getToken(),"admin")) {
+            userInfoResp.setRoles(Arrays.asList("admin"));
+        }else if(Strings.equals(userInfoReq.getToken(),"userAdmin")){
+            userInfoResp.setRoles(Arrays.asList("userAdmin"));
+        }else {
+            userInfoResp.setRoles(Arrays.asList("user"));
+        }
         userInfoResp.setIntroduction("I am a admin!");
         userInfoResp.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
         return Result.ok(userInfoResp);
