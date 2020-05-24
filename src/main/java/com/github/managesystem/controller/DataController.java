@@ -50,6 +50,11 @@ public class DataController {
         return Result.ok(SimulationDataResp.builder().xDatas(xDatas).yDatas(yDatas).build());
     }
 
-
+    @PostMapping(value = "/query/table")
+    public Result queryDataTable(@RequestBody SimulationDataReq req){
+        QueryDataTable data1 = QueryDataTable.builder().time("2020-05-24").values(Arrays.asList(23.1, 24.3, 27.8, 30.3)).build();
+        QueryDataTable data2 = QueryDataTable.builder().time("2020-05-24").values(Arrays.asList(23.2, 24.5, 27.4, 30.8)).build();
+        return Result.ok(QueryDataTableResp.builder().datas(Arrays.asList(data1,data2)).build());
+    }
 
 }
