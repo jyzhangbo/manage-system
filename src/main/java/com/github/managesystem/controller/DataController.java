@@ -50,4 +50,6 @@ public class DataController {
         return Result.ok(SimulationDataResp.builder().xDatas(xDatas).yDatas(yDatas).build());
     }
 
+
+
 }
