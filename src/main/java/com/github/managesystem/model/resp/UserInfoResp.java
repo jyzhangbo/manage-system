@@ -1,5 +1,6 @@
 package com.github.managesystem.model.resp;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
  * @Date:2020/5/14 17:14
  */
 @Data
+@Builder
 public class UserInfoResp {
 
     private List<String> roles;

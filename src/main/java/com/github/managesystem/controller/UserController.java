@@ -1,5 +1,6 @@
 package com.github.managesystem.controller;
 
+import com.github.managesystem.model.exception.CodeException;
 import com.github.managesystem.model.req.ListUserReq;
 import com.github.managesystem.model.req.LoginReq;
 import com.github.managesystem.model.req.LogoutReq;
@@ -8,8 +9,10 @@ import com.github.managesystem.model.resp.ListUserInfo;
 import com.github.managesystem.model.resp.ListUserResp;
 import com.github.managesystem.model.resp.Result;
 import com.github.managesystem.model.resp.UserInfoResp;
+import com.github.managesystem.service.IUserService;
 import org.nutz.lang.Strings;
 import org.nutz.lang.random.R;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,34 +28,19 @@ import java.util.List;
 @RequestMapping(value = "/user")
 public class UserController {
 
+    @Autowired
+    private IUserService userService;
+
     @PostMapping(value = "/login")
-    public Result<String> userLogin(@RequestBody LoginReq loginReq){
-        System.out.println("login:"+loginReq.getUsername());
-        if(Strings.equals(loginReq.getUsername(),"admin")) {
-            return Result.ok("admin");
-        }else if(Strings.equals(loginReq.getUsername(),"userAdmin")){
-            return Result.ok("userAdmin");
-        }else {
-            return Result.ok("user");
-        }
+    public Result<String> userLogin(@RequestBody LoginReq req) throws CodeException{
+        return Result.ok(userService.login(req));
     }
 
 
     @PostMapping(value = "/info")
-    public Result<UserInfoResp> userInfo(@RequestBody UserInfoReq userInfoReq){
-        System.out.println("info:"+userInfoReq.getToken());
-        UserInfoResp userInfoResp = new UserInfoResp();
-        userInfoResp.setName("zhangbo");
-        if(Strings.equals(userInfoReq.getToken(),"admin")) {
-            userInfoResp.setRoles(Arrays.asList("admin"));
-        }else if(Strings.equals(userInfoReq.getToken(),"userAdmin")){
-            userInfoResp.setRoles(Arrays.asList("userAdmin"));
-        }else {
-            userInfoResp.setRoles(Arrays.asList("user"));
-        }
-        userInfoResp.setIntroduction("I am a admin!");
-        userInfoResp.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
-        return Result.ok(userInfoResp);
+    public Result<UserInfoResp> userInfo(@RequestBody UserInfoReq req) throws CodeException {
+
+        return Result.ok(userService.userInfo(req));
     }
 
     @PostMapping(value = "/logout")

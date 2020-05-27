@@ -62,7 +62,7 @@ public class LogHandler {
 
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
-
+        log.info(request.getContextPath());
         if (joinPoint.getArgs().length >= 1) {
             String reqStr = Json.toJson(joinPoint.getArgs()[0], JsonFormat.tidy());
             log.info(Lang.getIP(request) + "@" + request.getRequestURI() + "请求参数：{}", reqStr.substring(0, reqStr.length() > 500 ? 500 : reqStr.length()));

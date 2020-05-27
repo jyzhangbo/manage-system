@@ -21,7 +21,9 @@ public enum ResultCode {
     ERROR_REQUEST_BODY(1002, "接口请求JSON数据格式错误:%s"),
     ERROR_METHOD_REQUEST(1003, "调用方法不被支持"),
     ERROR_PARAMETER(1004, "检查输入参数:%s"),
-    ERROR_AUTHORITY(1005, "HTTP请求头需要包含认证信息：%s");
+    ERROR_AUTHORITY(1005, "HTTP请求头需要包含认证信息：%s"),
+
+    ERROR_USERNAME(1006, "用户名或密码错误");
 
     private int code;
     private String message;
