@@ -85,7 +85,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public void addUser(AddUserReq req) {
         User user = User.builder().companyName(req.getCompanyName())
-                .companyNum(UUID.fromString(req.getCompanyName()).toString())
                 .createTime(LocalDateTime.now())
                 .modifyTime(LocalDateTime.now())
                 .loginName(req.getLoginName())
@@ -101,7 +100,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public void editUser(EditUserReq req) {
         User user = this.getOne(new QueryWrapper<User>().eq(User.LOGIN_NAME, req.getLoginName()));
         user.setCompanyName(req.getCompanyName());
-        user.setCompanyNum(UUID.fromString(req.getCompanyName()).toString());
         user.setPassword(req.getPassword());
         user.setPhone(req.getPhone());
         user.setModifyTime(LocalDateTime.now());

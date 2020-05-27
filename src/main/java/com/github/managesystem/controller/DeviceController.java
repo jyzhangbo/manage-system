@@ -1,10 +1,15 @@
 package com.github.managesystem.controller;
 
-import com.github.managesystem.model.req.ListDeviceReq;
+import com.github.managesystem.model.req.AddDeviceReq;
+import com.github.managesystem.model.req.DeleteDeviceReq;
+import com.github.managesystem.model.req.EditDeviceAdmin;
+import com.github.managesystem.model.req.ListDeviceAdminReq;
 import com.github.managesystem.model.resp.AttributeInfo;
-import com.github.managesystem.model.resp.ListDeviceInfo;
-import com.github.managesystem.model.resp.ListDeviceResp;
+import com.github.managesystem.model.resp.ListDeviceAdminInfo;
+import com.github.managesystem.model.resp.ListDeviceAdminResp;
 import com.github.managesystem.model.resp.Result;
+import com.github.managesystem.service.IDeviceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,17 +26,30 @@ import java.util.List;
 @RequestMapping(value = "/device")
 public class DeviceController {
 
-    @PostMapping(value = "/list")
-    public Result listDevice(@RequestBody ListDeviceReq req){
-        List<AttributeInfo> attributeInfos = new ArrayList<>();
-        attributeInfos.add(AttributeInfo.builder().name("T1").build());
-        attributeInfos.add(AttributeInfo.builder().name("T2").build());
-        attributeInfos.add(AttributeInfo.builder().name("T3").build());
-        attributeInfos.add(AttributeInfo.builder().name("T4").build());
-        List<ListDeviceInfo> datas = new ArrayList<>();
-        datas.add(ListDeviceInfo.builder().devicePicture("https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg").companyName("自如").phone("1383838338").loginName("ziroom").deviceNum("123").devicePin(attributeInfos).build());
-        datas.add(ListDeviceInfo.builder().companyName("贝壳").phone("1383838339").loginName("beike").deviceNum("456").devicePin(attributeInfos).build());
-        return Result.ok(ListDeviceResp.builder().infos(datas).total(datas.size()).build());
+    @Autowired
+    private IDeviceService deviceService;
+
+    @PostMapping(value = "/list/admin")
+    public Result listDeviceAdmin(@RequestBody ListDeviceAdminReq req){
+        return Result.ok(deviceService.listDeviceAdmin(req));
+    }
+
+    @PostMapping(value = "/delete")
+    public Result deleteDevice(@RequestBody DeleteDeviceReq req){
+        deviceService.deleteDevice(req);
+        return Result.ok();
+    }
+
+    @PostMapping(value = "/add")
+    public Result addDevice(@RequestBody AddDeviceReq req){
+        deviceService.addDevice(req);
+        return Result.ok();
+    }
+
+    @PostMapping(value = "/edit/admin")
+    public Result editDeviceAdmin(@RequestBody EditDeviceAdmin req){
+        deviceService.editDeviceAdmin(req);
+        return Result.ok();
     }
 
 }

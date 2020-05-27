@@ -59,10 +59,6 @@ public class User implements Serializable {
      */
     private String userRole;
 
-    /**
-     * 公司编号
-     */
-    private String companyNum;
 
     /**
      * 创建时间

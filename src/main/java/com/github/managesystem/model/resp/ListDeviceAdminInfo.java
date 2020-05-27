@@ -11,10 +11,10 @@ import java.util.List;
  */
 @Data
 @Builder
-public class ListDeviceResp {
+public class ListDeviceAdminInfo {
 
-    private List<ListDeviceInfo> infos;
-
-    private Integer total;
+    private String companyName;
+    private String deviceNum;
+    private String deviceName;
 
 }

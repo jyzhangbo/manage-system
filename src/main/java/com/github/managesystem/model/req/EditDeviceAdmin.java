@@ -2,15 +2,10 @@ package com.github.managesystem.model.req;
 
 import lombok.Data;
 
-/**
- * @Author:zhangbo
- * @Date:2020/5/19 9:47
- */
 @Data
-public class ListDeviceReq {
+public class EditDeviceAdmin {
 
     private String deviceNum;
     private String companyName;
-
 
 }
