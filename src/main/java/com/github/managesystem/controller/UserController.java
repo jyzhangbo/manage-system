@@ -1,10 +1,7 @@
 package com.github.managesystem.controller;
 
 import com.github.managesystem.model.exception.CodeException;
-import com.github.managesystem.model.req.ListUserReq;
-import com.github.managesystem.model.req.LoginReq;
-import com.github.managesystem.model.req.LogoutReq;
-import com.github.managesystem.model.req.UserInfoReq;
+import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.ListUserInfo;
 import com.github.managesystem.model.resp.ListUserResp;
 import com.github.managesystem.model.resp.Result;
@@ -50,11 +47,26 @@ public class UserController {
     }
 
     @PostMapping(value = "/list")
-    public Result listUser(@RequestBody ListUserReq req){
-        List<ListUserInfo> datas = new ArrayList<>();
-        datas.add(ListUserInfo.builder().companyName("自如").phone("1383838338").loginName("ziroom").password("123").build());
-        datas.add(ListUserInfo.builder().companyName("贝壳").phone("1383838339").loginName("beike").password("123").build());
-        return Result.ok(ListUserResp.builder().infos(datas).total(datas.size()).build());
+    public Result listUser(@RequestBody ListUserReq req) throws CodeException{
+        return Result.ok(userService.listUser(req));
+    }
+
+    @PostMapping(value = "/delete")
+    public Result deleteUser(@RequestBody DeleteUserReq req) throws CodeException{
+        userService.deleteUser(req);
+        return Result.ok();
+    }
+
+    @PostMapping(value = "/add")
+    public Result addUser(@RequestBody AddUserReq req) throws CodeException{
+        userService.addUser(req);
+        return Result.ok();
+    }
+
+    @PostMapping(value = "/edit")
+    public Result editUser(@RequestBody EditUserReq req) throws CodeException{
+        userService.editUser(req);
+        return Result.ok();
     }
 
 }

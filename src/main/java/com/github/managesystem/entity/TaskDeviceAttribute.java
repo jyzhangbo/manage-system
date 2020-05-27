@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -21,6 +23,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("t_task_device_attribute")
+@Builder
 public class TaskDeviceAttribute implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -55,6 +58,11 @@ public class TaskDeviceAttribute implements Serializable {
      * 属性名
      */
     private String attributeCode;
+
+    /**
+     * 属性信息
+     */
+    private String attributeInfo;
 
     /**
      * 属性别名

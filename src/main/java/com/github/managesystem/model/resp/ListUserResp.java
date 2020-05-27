@@ -1,5 +1,6 @@
 package com.github.managesystem.model.resp;
 
+import com.github.managesystem.entity.User;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,8 +14,8 @@ import java.util.List;
 @Builder
 public class ListUserResp {
 
-    private List<ListUserInfo> infos;
+    private List<User> infos;
 
-    private Integer total;
+    private Long total;
 
 }

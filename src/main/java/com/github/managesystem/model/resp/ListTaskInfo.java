@@ -15,9 +15,9 @@ public class ListTaskInfo {
 
     private String taskName;
     private String taskNum;
-    private Integer state;
+    private Integer taskStatus;
     private String startTime;
     private String endTime;
-    private List<String> devices;
+    private List<DeviceInfo> devices;
 
 }

@@ -13,4 +13,8 @@ public class ListUserReq {
     private String phone;
     private String loginName;
 
+    public Integer pageNum;
+
+    public Integer pageSize;
+
 }

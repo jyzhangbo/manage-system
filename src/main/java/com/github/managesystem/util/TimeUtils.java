@@ -3,6 +3,8 @@ package com.github.managesystem.util;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -93,6 +95,10 @@ public class TimeUtils {
         }
         SimpleDateFormat df = new SimpleDateFormat(format);
         return df.format(new Date(time));
+    }
+
+    public static final String formatTime(LocalDateTime time){
+       return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
 

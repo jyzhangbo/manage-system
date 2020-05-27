@@ -1,8 +1,12 @@
 package com.github.managesystem.controller;
 
+import com.github.managesystem.model.req.DeleteTaskReq;
+import com.github.managesystem.model.req.EditTaskReq;
 import com.github.managesystem.model.req.ListTaskReq;
 import com.github.managesystem.model.req.SimulationDataReq;
 import com.github.managesystem.model.resp.*;
+import com.github.managesystem.service.ITaskService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,13 +24,33 @@ import java.util.List;
 @RequestMapping("/task")
 public class TaskController {
 
+    @Autowired
+    private ITaskService taskService;
+
     @PostMapping(value = "/list")
     public Result listTask(@RequestBody ListTaskReq req){
-        List<ListTaskInfo> tasks = new ArrayList<>();
-        tasks.add(ListTaskInfo.builder().taskName("任务1").taskNum("22").state(1).startTime("2020-05-13").endTime("2020-05-20").devices(Arrays.asList("123","234")).build());
-        tasks.add(ListTaskInfo.builder().taskName("任务2").taskNum("33").state(1).startTime("2020-05-15").endTime("2020-05-21").devices(Arrays.asList("789","678")).build());
-        return Result.ok(ListTaskResp.builder().tasks(tasks).build());
+        return Result.ok(taskService.listTask(req));
     }
+
+    @PostMapping(value = "/delete")
+    public Result deleteTask(@RequestBody DeleteTaskReq req){
+        taskService.deleteTask(req);
+        return Result.ok();
+    }
+
+    @PostMapping(value = "/edit")
+    public Result editTask(@RequestBody EditTaskReq req){
+        taskService.editTask(req);
+        return Result.ok();
+    }
+
+
+
+
+
+
+
+
 
     @PostMapping(value = "/device/list")
     public Result listTaskDevice(@RequestBody ListTaskReq req){

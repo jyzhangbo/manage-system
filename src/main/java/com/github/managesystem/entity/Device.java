@@ -61,6 +61,8 @@ public class Device implements Serializable {
      */
     private Integer collectSpace;
 
+    private String attributeInfo;
+
     /**
      * 创建时间
      */

@@ -8,4 +8,11 @@ import lombok.Data;
  */
 @Data
 public class ListTaskReq {
+
+    private String taskNum;
+    private String taskName;
+    public Integer pageNum;
+
+    public Integer pageSize;
+
 }
