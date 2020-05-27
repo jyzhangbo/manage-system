@@ -1,4 +1,9 @@
 spring:
+  datasource:
+    url:
+    username:
+    password:
+    type: com.alibaba.druid.pool.DruidDataSource
   servlet:
       multipart:
         max-file-size: 100MB

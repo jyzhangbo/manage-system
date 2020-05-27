@@ -29,7 +29,7 @@ public class DeviceController {
         deviceInfos.add(DeviceInfo.builder().name("T3").build());
         deviceInfos.add(DeviceInfo.builder().name("T4").build());
         List<ListDeviceInfo> datas = new ArrayList<>();
-        datas.add(ListDeviceInfo.builder().companyName("自如").phone("1383838338").loginName("ziroom").deviceNum("123").devicePin(deviceInfos).build());
+        datas.add(ListDeviceInfo.builder().devicePicture("https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg").companyName("自如").phone("1383838338").loginName("ziroom").deviceNum("123").devicePin(deviceInfos).build());
         datas.add(ListDeviceInfo.builder().companyName("贝壳").phone("1383838339").loginName("beike").deviceNum("456").devicePin(deviceInfos).build());
         return Result.ok(ListDeviceResp.builder().infos(datas).total(datas.size()).build());
     }

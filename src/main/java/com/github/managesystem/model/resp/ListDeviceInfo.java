@@ -18,5 +18,6 @@ public class ListDeviceInfo {
     private String loginName;
     private String deviceNum;
     private List<DeviceInfo> devicePin;
+    private String devicePicture;
 
 }

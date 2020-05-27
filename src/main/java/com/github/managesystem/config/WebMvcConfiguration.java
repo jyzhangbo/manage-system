@@ -1,18 +1,15 @@
 package com.github.managesystem.config;
 
+import com.github.managesystem.config.interceptor.UserInterceptor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 /**
  * mvc配置类
  *
- * @author whb
- * @date 2019-04-03
  */
 @Configuration
-public class ApiConfig implements WebMvcConfigurer {
+public class WebMvcConfiguration implements WebMvcConfigurer {
 
 
     /**
@@ -33,6 +30,17 @@ public class ApiConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+
+        //添加网关token验证拦截器
+        UserInterceptor gatewayInterceptor = new UserInterceptor();
+        InterceptorRegistration interceptorRegistration = registry.addInterceptor(gatewayInterceptor);
+        interceptorRegistration.addPathPatterns("/**");
+        interceptorRegistration.excludePathPatterns("/user/login");
+
     }
 
 }
