@@ -7,6 +7,7 @@ import com.github.managesystem.entity.Task;
 import com.github.managesystem.entity.TaskDevice;
 import com.github.managesystem.mapper.DeviceMapper;
 import com.github.managesystem.mapper.TaskDeviceMapper;
+import com.github.managesystem.model.constant.DeviceStateEnum;
 import com.github.managesystem.model.resp.DeviceInfo;
 import com.github.managesystem.service.IDeviceService;
 import com.github.managesystem.service.ITaskDeviceService;
@@ -48,6 +49,10 @@ public class TaskDeviceServiceImpl extends ServiceImpl<TaskDeviceMapper, TaskDev
         List<TaskDevice> taskDevices = new ArrayList<>();
         for (String deviceNum : devices) {
             Device device = deviceMapper.selectOne(new QueryWrapper<Device>().eq(Device.DEVICE_NUM, deviceNum));
+            device.setDeviceState(DeviceStateEnum.USING.value);
+            device.setModifyTime(LocalDateTime.now());
+            deviceMapper.updateById(device);
+
             taskDevices.add(TaskDevice.builder().attributeInfo(device.getAttributeInfo())
                     .createTime(LocalDateTime.now())
                     .modifyTime(LocalDateTime.now())

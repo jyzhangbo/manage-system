@@ -18,9 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * <p>
@@ -37,7 +35,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public String login(LoginReq req) throws CodeException{
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        User user = this.getOne(queryWrapper.eq(User.LOGIN_NAME, req.getUsername()).eq(User.PASSWORD, req.getPassword()));
+        User user = this.getOne(queryWrapper.eq(User.LOGIN_NAME, req.getUserName()).eq(User.PASSWORD, req.getPassword()));
         if(Objects.isNull(user)){
             throw new CodeException(ResultCode.ERROR_USERNAME);
         }

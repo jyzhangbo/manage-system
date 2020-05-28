@@ -9,11 +9,12 @@ import com.github.managesystem.entity.TaskDevice;
 import com.github.managesystem.mapper.DeviceMapper;
 import com.github.managesystem.mapper.TaskDeviceMapper;
 import com.github.managesystem.mapper.TaskMapper;
+import com.github.managesystem.model.constant.DeviceStateEnum;
+import com.github.managesystem.model.constant.TaskStateEnum;
 import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.*;
 import com.github.managesystem.service.IDeviceService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.sun.javafx.tk.Toolkit;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
 import org.nutz.lang.Strings;
@@ -39,7 +40,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 
     @Autowired
     private TaskMapper taskMapper;
-
 
     @Override
     public ListDeviceAdminResp listDeviceAdmin(ListDeviceAdminReq req) {
@@ -162,6 +162,24 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
                             .eq(TaskDevice.DEVICE_NUM,device.getDeviceNum()));
         }
 
+    }
+
+    @Override
+    public List<ListDeviceTaskResp> listDeviceTask(ListDeviceTaskReq req) {
+        List<ListDeviceTaskResp> resp = new ArrayList<>();
+        List<Device> devices = this.list(new QueryWrapper<Device>().eq(Device.DEVICE_STATE,DeviceStateEnum.UNUSE.value));
+        for(Device device : devices){
+            resp.add(ListDeviceTaskResp.builder().deviceName(device.getDeviceName())
+                    .deviceNum(device.getDeviceNum()).build());
+        }
+        if(Strings.isNotBlank(req.getTaskNum())){
+            List<TaskDevice> taskDevices = taskDeviceMapper.selectList(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM, req.getTaskNum()));
+            for(TaskDevice taskDevice : taskDevices){
+                resp.add(ListDeviceTaskResp.builder().deviceName(taskDevice.getDeviceName())
+                        .deviceNum(taskDevice.getDeviceNum()).build());
+            }
+        }
+        return resp;
     }
 
 }

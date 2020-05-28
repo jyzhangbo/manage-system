@@ -4,7 +4,10 @@ import com.github.managesystem.entity.Device;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.ListDeviceAdminResp;
+import com.github.managesystem.model.resp.ListDeviceTaskResp;
 import com.github.managesystem.model.resp.ListDeviceUserResp;
+
+import java.util.List;
 
 /**
  * <p>
@@ -28,4 +31,6 @@ public interface IDeviceService extends IService<Device> {
     ListDeviceUserResp listDeviceUser(ListDeviceUserReq req);
 
     void editDeviceUser(EditDeviceUserReq req);
+
+    List<ListDeviceTaskResp> listDeviceTask(ListDeviceTaskReq req);
 }

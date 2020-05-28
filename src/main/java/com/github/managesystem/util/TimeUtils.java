@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * 时间辅助类.
@@ -98,7 +99,10 @@ public class TimeUtils {
     }
 
     public static final String formatTime(LocalDateTime time){
-       return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        if(Objects.isNull(time)){
+            return "-";
+        }
+        return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
 

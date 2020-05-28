@@ -1,5 +1,7 @@
 package com.github.managesystem.controller;
 
+import com.github.managesystem.model.exception.CodeException;
+import com.github.managesystem.model.req.AddTaskReq;
 import com.github.managesystem.model.req.DeleteTaskReq;
 import com.github.managesystem.model.req.EditTaskReq;
 import com.github.managesystem.model.req.ListTaskReq;
@@ -41,17 +43,10 @@ public class TaskController {
         return Result.ok();
     }
 
-
-
-
-
-
-
-
-
-    @PostMapping(value = "/device/list")
-    public Result listTaskDevice(@RequestBody ListTaskReq req){
-       return Result.ok(Arrays.asList("123","234","345","789","678","567"));
+    @PostMapping(value = "/add")
+    public Result addTask(@RequestBody AddTaskReq req) throws CodeException {
+        taskService.addTask(req);
+        return Result.ok();
     }
 
 }

@@ -23,7 +23,8 @@ public enum ResultCode {
     ERROR_PARAMETER(1004, "检查输入参数:%s"),
     ERROR_AUTHORITY(1005, "HTTP请求头需要包含认证信息：%s"),
 
-    ERROR_USERNAME(1006, "用户名或密码错误");
+    ERROR_USERNAME(1006, "用户名或密码错误"),
+    ERROR_TASK(1007, "任务编号已经存在");
 
     private int code;
     private String message;
