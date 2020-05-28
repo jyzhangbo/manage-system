@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.managesystem.entity.Task;
-import com.github.managesystem.entity.TaskDeviceAttribute;
-import com.github.managesystem.entity.User;
+import com.github.managesystem.entity.TaskDevice;
 import com.github.managesystem.mapper.TaskMapper;
 import com.github.managesystem.model.req.DeleteTaskReq;
 import com.github.managesystem.model.req.EditTaskReq;
@@ -13,11 +12,12 @@ import com.github.managesystem.model.req.ListTaskReq;
 import com.github.managesystem.model.resp.DeviceInfo;
 import com.github.managesystem.model.resp.ListTaskInfo;
 import com.github.managesystem.model.resp.ListTaskResp;
-import com.github.managesystem.service.ITaskDeviceAttributeService;
+import com.github.managesystem.service.ITaskDeviceService;
 import com.github.managesystem.service.ITaskService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.managesystem.util.TimeUtils;
 import org.nutz.lang.Strings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -33,7 +33,8 @@ import java.util.*;
 @Service
 public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements ITaskService {
 
-    private ITaskDeviceAttributeService taskDeviceAttributeService;
+    @Autowired
+    private ITaskDeviceService taskDeviceService;
 
     @Override
     public ListTaskResp listTask(ListTaskReq req) {
@@ -51,7 +52,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
         IPage<Task> page1 = this.page(page, queryWrapper);
 
         for(Task task : page1.getRecords()){
-            List<DeviceInfo> devices = taskDeviceAttributeService.listDeviceByTaskNum(task.getTaskNum());
+            List<DeviceInfo> devices = taskDeviceService.listDeviceByTaskNum(task.getTaskNum());
             resp.getTasks().add(ListTaskInfo.builder().taskName(task.getTaskName())
                     .taskNum(task.getTaskNum())
                     .endTime(TimeUtils.formatTime(task.getEndTime()))
@@ -67,7 +68,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
     @Override
     public void deleteTask(DeleteTaskReq req) {
         this.remove(new QueryWrapper<Task>().eq(Task.TASK_NUM,req.getTaskNum()));
-        taskDeviceAttributeService.remove(new QueryWrapper<TaskDeviceAttribute>().eq(TaskDeviceAttribute.TASK_NUM,req.getTaskNum()));
+        taskDeviceService.remove(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM,req.getTaskNum()));
     }
 
     @Override
@@ -79,8 +80,8 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
             return;
         }
         if(req.getDevices().size() > 0){
-            taskDeviceAttributeService.remove(new QueryWrapper<TaskDeviceAttribute>().eq(TaskDeviceAttribute.TASK_NUM,req.getTaskNum()));
-            taskDeviceAttributeService.addTaskDeviceAttribute(task,req.getDevices());
+            taskDeviceService.remove(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM,req.getTaskNum()));
+            taskDeviceService.addTaskDevice(task,req.getDevices());
         }
 
 

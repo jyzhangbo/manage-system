@@ -3,8 +3,7 @@ package com.github.managesystem.controller;
 import com.github.managesystem.model.req.DeleteTaskReq;
 import com.github.managesystem.model.req.EditTaskReq;
 import com.github.managesystem.model.req.ListTaskReq;
-import com.github.managesystem.model.req.SimulationDataReq;
-import com.github.managesystem.model.resp.*;
+import com.github.managesystem.model.resp.Result;
 import com.github.managesystem.service.ITaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * @Author:zhangbo

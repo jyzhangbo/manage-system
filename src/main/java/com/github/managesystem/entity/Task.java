@@ -66,6 +66,11 @@ public class Task implements Serializable {
      */
     private LocalDateTime modifyTime;
 
+    /**
+     * 公司
+     */
+    private String companyName;
+
 
     public static final String ID = "id";
 

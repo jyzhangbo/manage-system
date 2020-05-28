@@ -17,14 +17,14 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author zhangbo
- * @since 2020-05-27
+ * @since 2020-05-28
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("t_task_device_attribute")
+@TableName("t_task_device")
 @Builder
-public class TaskDeviceAttribute implements Serializable {
+public class TaskDevice implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -55,19 +55,9 @@ public class TaskDeviceAttribute implements Serializable {
     private String deviceImg;
 
     /**
-     * 属性名
-     */
-    private String attributeCode;
-
-    /**
-     * 属性信息
+     * 设备属性
      */
     private String attributeInfo;
-
-    /**
-     * 属性别名
-     */
-    private String attributeName;
 
     /**
      * 创建时间
@@ -95,9 +85,7 @@ public class TaskDeviceAttribute implements Serializable {
 
     public static final String DEVICE_IMG = "device_img";
 
-    public static final String ATTRIBUTE_CODE = "attribute_code";
-
-    public static final String ATTRIBUTE_NAME = "attribute_name";
+    public static final String ATTRIBUTE_INFO = "attribute_info";
 
     public static final String CREATE_TIME = "create_time";
 

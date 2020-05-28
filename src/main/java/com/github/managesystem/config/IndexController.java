@@ -20,7 +20,6 @@ public class IndexController {
 
     @RequestMapping("/")
     public String goToindex(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("aaaa");
         return "index";
     }
 

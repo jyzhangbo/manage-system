@@ -118,7 +118,7 @@ public class CodeGenerator {
         strategy.setRestControllerStyle(true);
         //strategy.setSuperControllerClass("com.baomidou.ant.common.BaseController");
         //TODO 表配置
-        strategy.setInclude("t_task","t_user","t_device_attribute","t_task_device_attribute");
+        strategy.setInclude("t_task_device");
         //strategy.setSuperEntityColumns("id");
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix("t");
