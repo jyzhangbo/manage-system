@@ -1,4 +1,4 @@
-package com.github.managesystem.config;
+package com.github.managesystem.config.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

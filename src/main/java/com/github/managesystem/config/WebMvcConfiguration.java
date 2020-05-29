@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.*;
  * 配置类.
  */
 @Configuration
-public class WebMvcConfiguration extends WebMvcConfigurationSupport {
+public class WebMvcConfiguration implements WebMvcConfigurer {
 
 
     @Override
@@ -35,7 +35,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         InterceptorRegistration interceptorRegistration = registry.addInterceptor(gatewayInterceptor);
         interceptorRegistration.addPathPatterns("/**");
         interceptorRegistration.excludePathPatterns("/user/login");
-        interceptorRegistration.excludePathPatterns("/","/static/**");
+        interceptorRegistration.excludePathPatterns("/","/static/**","/home/img/**","/file/upload");
 
     }
 

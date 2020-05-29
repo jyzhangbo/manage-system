@@ -1,9 +1,13 @@
 package com.github.managesystem.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.managesystem.entity.Img;
 import com.github.managesystem.entity.Task;
 import com.github.managesystem.entity.User;
 import com.github.managesystem.model.req.ListCompanyNameReq;
+import com.github.managesystem.model.req.ListImgReq;
 import com.github.managesystem.model.req.ListTaskDeviceReq;
+import com.github.managesystem.model.req.RemoveImgReq;
 import com.github.managesystem.model.resp.DeviceInfo;
 import com.github.managesystem.model.resp.ListTaskDeviceResp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,9 @@ public class BaseService {
 
     @Autowired
     private ITaskDeviceService taskDeviceService;
+
+    @Autowired
+    private IImgService imgService;
 
 
     public List<String> listCompanyName(ListCompanyNameReq req){
@@ -60,5 +67,21 @@ public class BaseService {
         }
 
         return resp;
+    }
+
+    public List<Map<String,String>> listImg(ListImgReq req) {
+        List<Map<String,String>> imgs = new ArrayList<>();
+        List<Img> list = imgService.list();
+        for(Img img : list){
+            Map<String,String> map = new HashMap<>();
+            map.put("name",img.getImgName());
+            map.put("url",img.getImgUrl());
+            imgs.add(map);
+        }
+        return imgs;
+    }
+
+    public void removeImg(RemoveImgReq req) {
+        imgService.remove(new QueryWrapper<Img>().eq(Img.IMG_URL,req.getUrl()));
     }
 }

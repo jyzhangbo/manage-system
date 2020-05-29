@@ -1,7 +1,7 @@
 spring:
   datasource:
-    url:
-    username:
+    url: jdbc:mysql://rm-2ze34z31901fe8lrnbo.mysql.rds.aliyuncs.com/ai_smartdevice?useUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&useSSL=false
+    username: zhangbo123
     password:
     type: com.alibaba.druid.pool.DruidDataSource
   servlet:

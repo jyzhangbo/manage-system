@@ -1,8 +1,6 @@
 package com.github.managesystem.controller;
 
-import com.github.managesystem.model.req.ListCompanyNameReq;
-import com.github.managesystem.model.req.ListDeviceAdminReq;
-import com.github.managesystem.model.req.ListTaskDeviceReq;
+import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.Result;
 import com.github.managesystem.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +29,19 @@ public class BaseController {
     public Result listTaskDevice(@RequestBody ListTaskDeviceReq req){
         return Result.ok(baseService.listTaskDevice(req));
     }
+
+    @PostMapping(value = "/list/img")
+    public Result listImg(@RequestBody ListImgReq req){
+        return Result.ok(baseService.listImg(req));
+    }
+
+
+    @PostMapping(value = "/remove/img")
+    public Result removeImg(@RequestBody RemoveImgReq req){
+        baseService.removeImg(req);
+        return Result.ok();
+    }
+
+
 
 }
