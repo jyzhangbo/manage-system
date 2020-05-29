@@ -30,13 +30,12 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-      /*  //添加网关token验证拦截器
+        //添加网关token验证拦截器
         UserInterceptor gatewayInterceptor = new UserInterceptor();
         InterceptorRegistration interceptorRegistration = registry.addInterceptor(gatewayInterceptor);
         interceptorRegistration.addPathPatterns("/**");
         interceptorRegistration.excludePathPatterns("/user/login");
-        interceptorRegistration.excludePathPatterns("/user/info");
-        interceptorRegistration.excludePathPatterns("/","/favicon.ico","/static/**");*/
+        interceptorRegistration.excludePathPatterns("/","/static/**");
 
     }
 

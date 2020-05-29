@@ -22,7 +22,7 @@ import java.net.URLEncoder;
  * @Author:zhangbo
  * @Date:2020/5/25 11:03
  */
-//@Controller
+@Controller
 public class FileController {
 
 

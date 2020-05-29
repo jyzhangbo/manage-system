@@ -2,6 +2,7 @@ package com.github.managesystem.controller;
 
 import com.github.managesystem.model.req.ListCompanyNameReq;
 import com.github.managesystem.model.req.ListDeviceAdminReq;
+import com.github.managesystem.model.req.ListTaskDeviceReq;
 import com.github.managesystem.model.resp.Result;
 import com.github.managesystem.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class BaseController {
     @PostMapping(value = "/list/companyName")
     public Result listCompanyName(@RequestBody ListCompanyNameReq req){
         return Result.ok(baseService.listCompanyName(req));
+    }
+
+    @PostMapping(value = "/list/task/device")
+    public Result listTaskDevice(@RequestBody ListTaskDeviceReq req){
+        return Result.ok(baseService.listTaskDevice(req));
     }
 
 }

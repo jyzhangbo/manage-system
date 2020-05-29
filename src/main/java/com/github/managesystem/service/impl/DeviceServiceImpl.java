@@ -131,6 +131,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
                 .modifyTime(LocalDateTime.now())
                 .collectSpace(30 * 60)
                 .deviceImg("")
+                .deviceState(DeviceStateEnum.UNUSE.value)
                 .attributeInfo(Json.toJson(attributeInfo,JsonFormat.tidy()))
                 .build();
 
