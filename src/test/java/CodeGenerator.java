@@ -52,11 +52,11 @@ public class CodeGenerator {
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
         //TODO 数据源配置
-        dsc.setUrl("jdbc:mysql://10.16.16.106:3306/ai_smartdevice?useUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&useSSL=false");
+        dsc.setUrl("jdbc:mysql://rm-2ze34z31901fe8lrnbo.mysql.rds.aliyuncs.com/ai_smartdevice?useUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&useSSL=false");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
-        dsc.setUsername("dev_ai");
-        dsc.setPassword("ziroomdb");
+        dsc.setUsername("zhangbo123");
+        dsc.setPassword("");
 
         mpg.setDataSource(dsc);
 
