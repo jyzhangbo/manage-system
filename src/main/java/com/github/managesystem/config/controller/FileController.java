@@ -51,7 +51,7 @@ public class FileController {
         // 保存文件
         Files.write(fullPath, upfile.getInputStream());
 
-        String fileUrl = "http://localhost:8080" + fullPath;
+        String fileUrl = "http://114.55.171.27" + fullPath;
 
         imgService.save(Img.builder().imgName(hashcode).imgUrl(fileUrl).build());
 

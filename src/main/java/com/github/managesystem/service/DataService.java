@@ -3,6 +3,8 @@ package com.github.managesystem.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.managesystem.entity.Task;
 import com.github.managesystem.entity.TaskDevice;
+import com.github.managesystem.model.exception.CodeException;
+import com.github.managesystem.model.exception.ResultCode;
 import com.github.managesystem.model.req.QueryDataTableReq;
 import com.github.managesystem.model.resp.QueryDataTable;
 import com.github.managesystem.model.resp.QueryDataTableResp;
@@ -45,10 +47,13 @@ public class DataService {
     }
 
 
-    public QueryDataTableResp queryDataTable(QueryDataTableReq req) {
+    public QueryDataTableResp queryDataTable(QueryDataTableReq req) throws CodeException{
 
         if(Strings.isBlank(req.getTaskNum())){
             Task task = taskService.getOne(new QueryWrapper<Task>().orderByDesc(Task.MODIFY_TIME), false);
+            if(Objects.isNull(task)){
+                throw new CodeException(ResultCode.ERROR_TASK_NULL);
+            }
             req.setTaskNum(task.getTaskNum());
         }
 
