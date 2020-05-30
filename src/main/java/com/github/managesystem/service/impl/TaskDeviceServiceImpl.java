@@ -8,15 +8,20 @@ import com.github.managesystem.entity.TaskDevice;
 import com.github.managesystem.mapper.DeviceMapper;
 import com.github.managesystem.mapper.TaskDeviceMapper;
 import com.github.managesystem.model.constant.DeviceStateEnum;
+import com.github.managesystem.model.exception.CodeException;
+import com.github.managesystem.model.exception.ResultCode;
 import com.github.managesystem.model.resp.DeviceInfo;
 import com.github.managesystem.service.IDeviceService;
 import com.github.managesystem.service.ITaskDeviceService;
+import org.nutz.lang.Code;
+import org.nutz.lang.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -66,4 +71,17 @@ public class TaskDeviceServiceImpl extends ServiceImpl<TaskDeviceMapper, TaskDev
         this.saveBatch(taskDevices);
 
     }
+
+
+    public TaskDevice asertTaskDevice(String taskNum,String deviceNum) throws CodeException {
+        TaskDevice taskDevice = this.getOne(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM, taskNum)
+                .eq(Strings.isNotBlank(deviceNum),TaskDevice.DEVICE_NUM, deviceNum), false);
+
+        if(Objects.isNull(taskDevice)){
+            throw new CodeException(ResultCode.ERROR_TASK_DEVICE_NULL);
+        }
+
+        return taskDevice;
+    }
+
 }

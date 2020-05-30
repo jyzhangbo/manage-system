@@ -3,6 +3,7 @@ package com.github.managesystem.service;
 import com.github.managesystem.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.managesystem.entity.TaskDevice;
+import com.github.managesystem.model.exception.CodeException;
 import com.github.managesystem.model.resp.DeviceInfo;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface ITaskDeviceService extends IService<TaskDevice> {
     List<DeviceInfo> listDeviceByTaskNum(String taskNum);
 
     void addTaskDevice(Task task, List<String> devices);
+
+    TaskDevice asertTaskDevice(String taskNum,String deviceNum) throws CodeException;
 }

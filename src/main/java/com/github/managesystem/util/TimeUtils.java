@@ -3,7 +3,9 @@ package com.github.managesystem.util;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Objects;
@@ -37,23 +39,22 @@ public class TimeUtils {
     }
 
     /**
-     * Parses the time.
+     * 解析时间数据.
      *
-     * @param data the data
+     * @param data   the data
      * @return the timestamp
      */
-    public static final Timestamp parseTime(String data) {
-        return parseTime(data, null);
+    public static final LocalDateTime parseTime(String data) {
+        return LocalDateTime.parse(data,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     /**
      * Parses the time.
      *
-     * @param appStartTime the app start time
      * @return the timestamp
      */
-    public static Timestamp parseTime(Long appStartTime) {
-        return new Timestamp(appStartTime);
+    public static LocalDateTime parseTime(Long epochSecondTime) {
+        return LocalDateTime.ofEpochSecond(epochSecondTime,0, ZoneOffset.ofHours(8));
     }
 
     /**

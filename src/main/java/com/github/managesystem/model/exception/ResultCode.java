@@ -25,7 +25,8 @@ public enum ResultCode {
 
     ERROR_USERNAME(1006, "用户名或密码错误"),
     ERROR_TASK(1007, "任务编号已经存在"),
-    ERROR_TASK_NULL(1008, "还没有创建任务");
+    ERROR_TASK_NULL(1008, "还没有创建任务"),
+    ERROR_TASK_DEVICE_NULL(1009, "该任务还未添加设备");
 
     private int code;
     private String message;

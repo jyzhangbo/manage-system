@@ -14,4 +14,6 @@ public class QueryDataTable {
 
     private Map<String,Double> values;
 
+    private boolean show = false;
+
 }

@@ -36,7 +36,7 @@ public class UserInterceptor implements HandlerInterceptor {
         String userName = httpServletRequest.getHeader(USERNAME);
         String time = httpServletRequest.getHeader(TIME);
 
-        log.info(Lang.getIP(httpServletRequest) + "@" + httpServletRequest.getRequestURI() + "请求头userName：{};time: {}", userName, time);
+       // log.info(Lang.getIP(httpServletRequest) + "@" + httpServletRequest.getRequestURI() + "请求头userName：{};time: {}", userName, time);
 
         if (Strings.isBlank(userName)) {
             throw new CodeException(ResultCode.ERROR_AUTHORITY, USERNAME);

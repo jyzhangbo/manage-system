@@ -130,4 +130,16 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
         taskDeviceService.addTaskDevice(task,req.getDevices());
 
     }
+
+
+    public String asertTaskNum(String taskNum) throws CodeException{
+        if(Strings.isBlank(taskNum)) {
+            Task task = this.getOne(new QueryWrapper<Task>().orderByDesc(Task.MODIFY_TIME), false);
+            if (Objects.isNull(task)) {
+                throw new CodeException(ResultCode.ERROR_TASK_NULL);
+            }
+            return task.getTaskNum();
+        }
+        return taskNum;
+    }
 }

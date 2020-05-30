@@ -26,4 +26,6 @@ public interface ITaskService extends IService<Task> {
     void editTask(EditTaskReq req);
 
     void addTask(AddTaskReq req) throws CodeException;
+
+    String asertTaskNum(String taskNum) throws CodeException;
 }

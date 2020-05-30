@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Data
 @Builder
-public class SimulationData {
+public class ChartYData {
 
     private String name;
 

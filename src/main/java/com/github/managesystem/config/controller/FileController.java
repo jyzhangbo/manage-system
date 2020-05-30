@@ -11,6 +11,7 @@ import org.nutz.lang.Maths;
 import org.nutz.lang.Streams;
 import org.nutz.lang.random.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +35,9 @@ public class FileController {
     @Autowired
     private IImgService imgService;
 
+    @Value("${picture.url}")
+    private String picUrl;
+
     @PostMapping("/file/upload")
     @ResponseBody
     public Result uploadFile(@RequestParam("upfile") MultipartFile upfile) throws Exception {
@@ -51,7 +55,7 @@ public class FileController {
         // 保存文件
         Files.write(fullPath, upfile.getInputStream());
 
-        String fileUrl = "http://114.55.171.27" + fullPath;
+        String fileUrl = picUrl + fullPath;
 
         imgService.save(Img.builder().imgName(hashcode).imgUrl(fileUrl).build());
 

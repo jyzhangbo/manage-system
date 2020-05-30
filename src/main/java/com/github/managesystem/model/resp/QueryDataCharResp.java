@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author:zhangbo
@@ -11,10 +12,12 @@ import java.util.List;
  */
 @Data
 @Builder
-public class SimulationDataResp {
+public class QueryDataCharResp {
 
     public List<String> xDatas;
 
-    public List<SimulationData> yDatas;
+    public List<ChartYData> yDatas;
+
+    private Map<String,String> tableHeader;
 
 }
