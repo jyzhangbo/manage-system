@@ -1,5 +1,6 @@
 package com.github.managesystem.controller;
 
+import com.github.managesystem.model.exception.CodeException;
 import com.github.managesystem.model.req.ListAlarmReq;
 import com.github.managesystem.model.req.QueryDataTableReq;
 import com.github.managesystem.model.req.SimulationDataReq;
@@ -46,7 +47,7 @@ public class DataController {
     }
 
     @PostMapping(value = "/query/table")
-    public Result queryDataTable(@RequestBody QueryDataTableReq req){
+    public Result queryDataTable(@RequestBody QueryDataTableReq req) throws CodeException {
 
         return Result.ok(dataService.queryDataTable(req));
     }
