@@ -2,9 +2,9 @@ server:
   port: 8080
 spring:
   datasource:
-    url: jdbc:mysql://10.16.16.106:3306/ai_smartdevice?useUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&useSSL=false
+    url: jdbc:mysql:///ai_smartdevice?useUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&useSSL=false
     username: dev_ai
-    password: ziroomdb
+    password:
     type: com.alibaba.druid.pool.DruidDataSource
 
 picture:
