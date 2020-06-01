@@ -10,5 +10,7 @@ import lombok.Data;
 public class ListAlarmRuleReq {
 
     private String alarmObject;
+    private Integer isEnable;
+    private String companyName;
 
 }

@@ -1,7 +1,10 @@
 package com.github.managesystem.model.resp;
 
+import com.github.managesystem.entity.AlarmLog;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -11,10 +14,12 @@ import java.util.List;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ListAlarmResp {
 
-    private List<ListAlarmInfo> infos;
+    private List<AlarmLog> infos;
 
-    private Integer total;
+    private Long total;
 
 }

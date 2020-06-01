@@ -2,6 +2,8 @@ package com.github.managesystem.model.req;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * @Author:zhangbo
  * @Date:2020/5/19 16:13
@@ -10,6 +12,10 @@ import lombok.Data;
 public class ListAlarmReq {
 
     private String alarmObject;
-    private String alarmTime;
+    private String alarmStartTime;
+    private String alarmEndTime;
+    private String companyName;
+    private Integer pageNumber;
+    private Integer pageSize;
 
 }
