@@ -13,6 +13,7 @@ import com.github.managesystem.model.resp.ListUserResp;
 import com.github.managesystem.model.resp.UserInfoResp;
 import com.github.managesystem.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.nutz.lang.Code;
 import org.nutz.lang.Strings;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public String login(LoginReq req) throws CodeException{
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        User user = this.getOne(queryWrapper.eq(User.LOGIN_NAME, req.getUserName()).eq(User.PASSWORD, req.getPassword()));
+        User user = this.getOne(queryWrapper.eq(User.LOGIN_NAME, req.getUserName()).eq(User.PASSWORD, req.getPassword()),false);
         if(Objects.isNull(user)){
             throw new CodeException(ResultCode.ERROR_USERNAME);
         }
@@ -45,7 +46,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public UserInfoResp userInfo(UserInfoReq req) throws CodeException{
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        User user = this.getOne(queryWrapper.eq(User.LOGIN_NAME, req.getToken()));
+        User user = this.getOne(queryWrapper.eq(User.LOGIN_NAME, req.getToken()),false);
         if(Objects.isNull(user)){
             throw new CodeException(ResultCode.ERROR_USERNAME);
         }
@@ -81,8 +82,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public void addUser(AddUserReq req) {
-        User user = User.builder().companyName(req.getCompanyName())
+    public void addUser(AddUserReq req) throws CodeException {
+        User user = this.getOne(new QueryWrapper<User>().eq(User.LOGIN_NAME, req.getLoginName()), false);
+        if(Objects.nonNull(user)){
+            throw new CodeException(ResultCode.ERROR_USER_EXIST);
+        }
+
+        user = User.builder().companyName(req.getCompanyName())
                 .createTime(LocalDateTime.now())
                 .modifyTime(LocalDateTime.now())
                 .loginName(req.getLoginName())
@@ -96,7 +102,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public void editUser(EditUserReq req) {
-        User user = this.getOne(new QueryWrapper<User>().eq(User.LOGIN_NAME, req.getLoginName()));
+        User user = this.getOne(new QueryWrapper<User>().eq(User.LOGIN_NAME, req.getLoginName()),false);
         user.setCompanyName(req.getCompanyName());
         user.setPassword(req.getPassword());
         user.setPhone(req.getPhone());

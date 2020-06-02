@@ -74,6 +74,8 @@ public class TaskDevice implements Serializable {
      */
     private String taskName;
 
+    private String companyName;
+
 
     public static final String ID = "id";
 
@@ -92,5 +94,6 @@ public class TaskDevice implements Serializable {
     public static final String MODIFY_TIME = "modify_time";
 
     public static final String TASK_NAME = "task_name";
+    public static final String COMPANY_NAME = "company_name";
 
 }

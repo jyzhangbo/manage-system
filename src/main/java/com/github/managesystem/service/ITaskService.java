@@ -2,12 +2,13 @@ package com.github.managesystem.service;
 
 import com.github.managesystem.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.github.managesystem.entity.TaskDevice;
 import com.github.managesystem.model.exception.CodeException;
-import com.github.managesystem.model.req.AddTaskReq;
-import com.github.managesystem.model.req.DeleteTaskReq;
-import com.github.managesystem.model.req.EditTaskReq;
-import com.github.managesystem.model.req.ListTaskReq;
+import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.ListTaskResp;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * <p>
@@ -19,13 +20,15 @@ import com.github.managesystem.model.resp.ListTaskResp;
  */
 public interface ITaskService extends IService<Task> {
 
-    ListTaskResp listTask(ListTaskReq req);
+    ListTaskResp listTask(ListTaskReq req, HttpServletRequest request);
 
     void deleteTask(DeleteTaskReq req);
 
     void editTask(EditTaskReq req);
 
-    void addTask(AddTaskReq req) throws CodeException;
+    void addTask(AddTaskReq req, HttpServletRequest request) throws CodeException;
 
-    String asertTaskNum(String taskNum) throws CodeException;
+    String asertTaskNum(String taskNum, HttpServletRequest request) throws CodeException;
+
+    List<TaskDevice> listTaskSearch(ListTaskSearchReq req, HttpServletRequest request);
 }

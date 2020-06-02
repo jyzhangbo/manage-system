@@ -16,4 +16,8 @@ public class QueryDataTableResp {
 
     private Map<String,String> tableHeader;
 
+    private String deviceImg;
+
+    private Long total;
+
 }

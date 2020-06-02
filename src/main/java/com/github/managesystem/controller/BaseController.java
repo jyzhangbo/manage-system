@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @Author:zhangbo
  * @Date:2020/5/28 16:10
@@ -26,8 +28,8 @@ public class BaseController {
     }
 
     @PostMapping(value = "/list/task/device")
-    public Result listTaskDevice(@RequestBody ListTaskDeviceReq req){
-        return Result.ok(baseService.listTaskDevice(req));
+    public Result listTaskDevice(@RequestBody ListTaskDeviceReq req, HttpServletRequest request){
+        return Result.ok(baseService.listTaskDevice(req,request));
     }
 
     @PostMapping(value = "/list/img")

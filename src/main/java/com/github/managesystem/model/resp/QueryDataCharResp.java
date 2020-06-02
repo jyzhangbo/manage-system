@@ -20,4 +20,6 @@ public class QueryDataCharResp {
 
     private Map<String,String> tableHeader;
 
+    private String deviceImg;
+
 }

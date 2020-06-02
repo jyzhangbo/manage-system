@@ -18,4 +18,7 @@ public class CopyDataReq {
     private Integer addData;
     private Integer randomData;
 
+    private String startTime;
+    private String endTime;
+
 }

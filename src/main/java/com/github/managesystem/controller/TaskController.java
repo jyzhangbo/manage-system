@@ -1,10 +1,7 @@
 package com.github.managesystem.controller;
 
 import com.github.managesystem.model.exception.CodeException;
-import com.github.managesystem.model.req.AddTaskReq;
-import com.github.managesystem.model.req.DeleteTaskReq;
-import com.github.managesystem.model.req.EditTaskReq;
-import com.github.managesystem.model.req.ListTaskReq;
+import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.Result;
 import com.github.managesystem.service.ITaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
 /**
@@ -27,8 +25,8 @@ public class TaskController {
     private ITaskService taskService;
 
     @PostMapping(value = "/list")
-    public Result listTask(@RequestBody ListTaskReq req){
-        return Result.ok(taskService.listTask(req));
+    public Result listTask(@RequestBody ListTaskReq req, HttpServletRequest request){
+        return Result.ok(taskService.listTask(req,request));
     }
 
     @PostMapping(value = "/delete")
@@ -44,9 +42,14 @@ public class TaskController {
     }
 
     @PostMapping(value = "/add")
-    public Result addTask(@RequestBody AddTaskReq req) throws CodeException {
-        taskService.addTask(req);
+    public Result addTask(@RequestBody AddTaskReq req,HttpServletRequest request) throws CodeException {
+        taskService.addTask(req,request);
         return Result.ok();
+    }
+
+    @PostMapping(value = "/list/search")
+    public Result listTaskSearch(@RequestBody ListTaskSearchReq req, HttpServletRequest request){
+        return Result.ok(taskService.listTaskSearch(req,request));
     }
 
 }

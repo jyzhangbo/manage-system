@@ -3,14 +3,16 @@ package com.github.managesystem.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.managesystem.config.interceptor.UserInterceptor;
 import com.github.managesystem.entity.Device;
 import com.github.managesystem.entity.Task;
 import com.github.managesystem.entity.TaskDevice;
+import com.github.managesystem.entity.User;
 import com.github.managesystem.mapper.DeviceMapper;
 import com.github.managesystem.mapper.TaskDeviceMapper;
 import com.github.managesystem.mapper.TaskMapper;
 import com.github.managesystem.model.constant.DeviceStateEnum;
-import com.github.managesystem.model.constant.TaskStateEnum;
+import com.github.managesystem.model.constant.RoleEnum;
 import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.*;
 import com.github.managesystem.service.IDeviceService;
@@ -21,6 +23,7 @@ import org.nutz.lang.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -67,10 +70,16 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     }
 
     @Override
-    public ListDeviceUserResp listDeviceUser(ListDeviceUserReq req) {
+    public ListDeviceUserResp listDeviceUser(ListDeviceUserReq req, HttpServletRequest request) {
         ListDeviceUserResp resp = new ListDeviceUserResp();
         Page<Device> page = new Page<>(req.getPageNum(),req.getPageSize());
         QueryWrapper<Device> queryWrapper = new QueryWrapper<>();
+
+        User user = (User) request.getAttribute(UserInterceptor.USER_INFO);
+        if(!Strings.equals(user.getUserRole(),RoleEnum.ADMIN.value)){
+            queryWrapper.eq(Device.COMPANY_NAME,user.getCompanyName());
+        }
+
         if(Strings.isNotBlank(req.getDeviceName())){
             queryWrapper.eq(Device.DEVICE_NAME,req.getDeviceName());
         }
@@ -139,8 +148,8 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     }
 
     @Override
-    public void editDeviceUser(EditDeviceUserReq req) {
-        Device device = this.getOne(new QueryWrapper<Device>().eq(Device.DEVICE_NUM, req.getDeviceNum()));
+    public void editDeviceUser(EditDeviceUserReq req, HttpServletRequest request) {
+        Device device = this.getOne(new QueryWrapper<Device>().eq(Device.DEVICE_NUM, req.getDeviceNum()),false);
         device.setDeviceName(req.getDeviceName());
         device.setCollectSpace(req.getCollectSpace());
         device.setDeviceImg(req.getImg());
@@ -153,8 +162,16 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         device.setModifyTime(LocalDateTime.now());
         this.updateById(device);
 
-        List<Task> tasks = taskMapper.selectList(new QueryWrapper<Task>().ne(Task.TASK_STATUS, 2));
-        TaskDevice taskDevice = TaskDevice.builder().deviceImg(device.getDeviceImg())
+        QueryWrapper<Task> queryWrapper = new QueryWrapper<Task>().ne(Task.TASK_STATUS, 2);
+        User user = (User) request.getAttribute(UserInterceptor.USER_INFO);
+        if(!Strings.equals(user.getUserRole(),RoleEnum.ADMIN.value)){
+            queryWrapper.eq(Device.COMPANY_NAME,user.getCompanyName());
+        }
+
+        List<Task> tasks = taskMapper.selectList(queryWrapper);
+
+        TaskDevice taskDevice = TaskDevice.builder()
+                .deviceImg(device.getDeviceImg())
                 .deviceName(device.getDeviceName())
                 .attributeInfo(device.getAttributeInfo())
                 .modifyTime(LocalDateTime.now()).build();
@@ -166,9 +183,17 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     }
 
     @Override
-    public List<ListDeviceTaskResp> listDeviceTask(ListDeviceTaskReq req) {
+    public List<ListDeviceTaskResp> listDeviceTask(ListDeviceTaskReq req, HttpServletRequest request) {
         List<ListDeviceTaskResp> resp = new ArrayList<>();
-        List<Device> devices = this.list(new QueryWrapper<Device>().eq(Device.DEVICE_STATE,DeviceStateEnum.UNUSE.value));
+
+        QueryWrapper<Device> queryWrapper = new QueryWrapper<Device>().eq(Device.DEVICE_STATE, DeviceStateEnum.UNUSE.value);
+        User user = (User) request.getAttribute(UserInterceptor.USER_INFO);
+        if(!Strings.equals(user.getUserRole(),RoleEnum.ADMIN.value)){
+            queryWrapper.eq(Device.COMPANY_NAME,user.getCompanyName());
+        }
+
+        List<Device> devices = this.list(queryWrapper);
+
         for(Device device : devices){
             resp.add(ListDeviceTaskResp.builder().deviceName(device.getDeviceName())
                     .deviceNum(device.getDeviceNum()).build());
