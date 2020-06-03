@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.managesystem.entity.DeviceData;
 import com.github.managesystem.entity.TaskDevice;
-import com.github.managesystem.entity.User;
 import com.github.managesystem.model.constant.AttributeEnum;
 import com.github.managesystem.model.exception.CodeException;
 import com.github.managesystem.model.exception.ResultCode;
@@ -15,12 +14,12 @@ import com.github.managesystem.model.resp.*;
 import com.github.managesystem.util.AsertUtils;
 import com.github.managesystem.util.TimeUtils;
 import org.nutz.json.Json;
-import org.nutz.lang.Code;
 import org.nutz.lang.random.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.time.ZoneOffset;
 import java.util.*;
 
@@ -43,6 +42,7 @@ public class DataService {
 
     public QueryDataCharResp queryDataChar(QueryDataTableReq req, HttpServletRequest request) throws CodeException{
         req.setEndTime(AsertUtils.asertToNow(req.getEndTime()));
+        req.setTaskNum(taskService.asertTaskNum(req.getTaskNum(), request));
 
         TaskDevice taskDevice = taskDeviceService.asertTaskDevice(req.getTaskNum(),req.getDeviceNum());
         Map<String,String> tableHeader = Json.fromJsonAsMap(String.class,taskDevice.getAttributeInfo());
@@ -56,6 +56,7 @@ public class DataService {
 
         QueryDataCharResp queryDataCharResp = AttributeEnum.deviceDataToChart(datas, tableHeader);
         queryDataCharResp.setDeviceImg(taskDevice.getDeviceImg());
+        queryDataCharResp.setDeviceNum(Arrays.asList(taskDevice.getTaskNum(),taskDevice.getDeviceNum()));
         return queryDataCharResp;
     }
 
@@ -174,7 +175,7 @@ public class DataService {
             } else {
                 randomTemp = temp - r.nextDouble() * data.getRandomData();
             }
-            deviceData.copyValueToAttribute(data.getCode(), randomTemp);
+            deviceData.copyValueToAttribute(data.getCode(), new BigDecimal(randomTemp).setScale(1,BigDecimal.ROUND_HALF_UP).doubleValue());
         }
         return deviceData;
     }
@@ -198,7 +199,7 @@ public class DataService {
                 } else {
                     toValue = fromValue + req.getAddData() - r.nextDouble() * req.getRandomData();
                 }
-                deviceData.copyValueToAttribute(code,toValue);
+                deviceData.copyValueToAttribute(code,new BigDecimal(toValue).setScale(1,BigDecimal.ROUND_HALF_UP).doubleValue());
             }
             newDeviceDatas.add(deviceData);
         }
