@@ -65,9 +65,11 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
         if(Strings.isNotBlank(req.getTaskNum())){
             queryWrapper.eq(Task.TASK_NUM,req.getTaskNum());
         }
+        if(Objects.nonNull(req.getTaskState())){
+            queryWrapper.eq(Task.TASK_STATUS,req.getTaskState());
+        }
 
-
-        IPage<Task> page1 = this.page(page, queryWrapper);
+        IPage<Task> page1 = this.page(page, queryWrapper.orderByDesc(Task.MODIFY_TIME));
 
         for(Task task : page1.getRecords()){
             List<DeviceInfo> devices = taskDeviceService.listDeviceByTaskNum(task.getTaskNum());

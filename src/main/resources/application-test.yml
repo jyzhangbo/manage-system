@@ -8,8 +8,12 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
 
 picture:
-  url: http://localhost:8080
+  url: https://localhost:8080
 
 http:
   server:
     port: 8088
+
+device:
+  img: https://hlbr.smartdeviceclub.com/home/img/device_001.jpg
+  collectspace: 1800

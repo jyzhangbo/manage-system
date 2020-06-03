@@ -13,3 +13,7 @@ picture:
 http:
   server:
     port: 80
+
+device:
+  img: https://hlbr.smartdeviceclub.com/home/img/device_001.jpg
+  collectspace: 1800

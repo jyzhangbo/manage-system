@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.ListDeviceAdminResp;
 import com.github.managesystem.model.resp.ListDeviceTaskResp;
-import com.github.managesystem.model.resp.ListDeviceUserResp;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -29,9 +28,7 @@ public interface IDeviceService extends IService<Device> {
 
     void addDevice(AddDeviceReq req);
 
-    ListDeviceUserResp listDeviceUser(ListDeviceUserReq req, HttpServletRequest request);
-
-    void editDeviceUser(EditDeviceUserReq req, HttpServletRequest request);
+    void editDeviceUser(EditDeviceUserReq req);
 
     List<ListDeviceTaskResp> listDeviceTask(ListDeviceTaskReq req, HttpServletRequest request);
 }

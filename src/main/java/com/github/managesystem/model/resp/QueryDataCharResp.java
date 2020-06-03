@@ -20,8 +20,12 @@ public class QueryDataCharResp {
 
     private Map<String,String> tableHeader;
 
-    private List<String> deviceNum;
-
     private String deviceImg;
+
+    private Integer collectSpace;
+
+    private List<AttributeInfo> attributeInfo;
+
+    private String deviceName;
 
 }

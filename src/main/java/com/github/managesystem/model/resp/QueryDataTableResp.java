@@ -12,7 +12,6 @@ public class QueryDataTableResp {
 
     private List<QueryDataTable> datas;
 
-    private List<String> deviceNum;
 
     private Map<String,String> tableHeader;
 

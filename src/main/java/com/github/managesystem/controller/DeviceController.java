@@ -27,11 +27,6 @@ public class DeviceController {
         return Result.ok(deviceService.listDeviceAdmin(req));
     }
 
-    @PostMapping(value = "/list/user")
-    public Result listDeviceUser(@RequestBody ListDeviceUserReq req, HttpServletRequest request){
-        return Result.ok(deviceService.listDeviceUser(req,request));
-    }
-
     @PostMapping(value = "/delete")
     public Result deleteDevice(@RequestBody DeleteDeviceReq req){
         deviceService.deleteDevice(req);
@@ -51,8 +46,8 @@ public class DeviceController {
     }
 
     @PostMapping(value = "/edit/user")
-    public Result editDeviceUser(@RequestBody EditDeviceUserReq req, HttpServletRequest request){
-        deviceService.editDeviceUser(req,request);
+    public Result editDeviceUser(@RequestBody EditDeviceUserReq req){
+        deviceService.editDeviceUser(req);
         return Result.ok();
     }
 

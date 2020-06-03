@@ -76,6 +76,11 @@ public class TaskDevice implements Serializable {
 
     private String companyName;
 
+    /**
+     * 采集间隔 =
+     */
+    private Integer collectSpace;
+
 
     public static final String ID = "id";
 

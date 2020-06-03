@@ -90,5 +90,6 @@ public class Task implements Serializable {
     public static final String CREATE_TIME = "create_time";
 
     public static final String MODIFY_TIME = "modify_time";
+    public static final String COMPANY_NAME = "company_name";
 
 }

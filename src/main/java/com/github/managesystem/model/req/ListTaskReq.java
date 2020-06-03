@@ -11,6 +11,8 @@ public class ListTaskReq {
 
     private String taskNum;
     private String taskName;
+    private Integer taskState;
+
     public Integer pageNum;
 
     public Integer pageSize;

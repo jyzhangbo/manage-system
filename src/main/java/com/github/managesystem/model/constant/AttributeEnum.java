@@ -44,22 +44,32 @@ public enum  AttributeEnum {
         return "";
     }
 
+    public static Map<String,String> getDefaultAttribute(){
+        Map<String,String> attributeInfo = new LinkedHashMap<>();
+        attributeInfo.put("T1","T1");
+        attributeInfo.put("T2","T2");
+        attributeInfo.put("T3","T3");
+        attributeInfo.put("T4","T4");
+        attributeInfo.put("T5","T5");
+        attributeInfo.put("T6","T6");
+        attributeInfo.put("T7","T7");
+        attributeInfo.put("T8","T8");
+        return attributeInfo;
+    }
+
     public static Map<String,Double> deviceDataToMap(DeviceData data){
         Map<String,Double> map = new LinkedHashMap<>();
-        map.put(AttributeEnum.ATTRIBUTE_T1.value,data.getAttributeT1());
-        map.put(AttributeEnum.ATTRIBUTE_T2.value,data.getAttributeT2());
-        map.put(AttributeEnum.ATTRIBUTE_T3.value,data.getAttributeT3());
-        map.put(AttributeEnum.ATTRIBUTE_T4.value,data.getAttributeT4());
-        map.put(AttributeEnum.ATTRIBUTE_T5.value,data.getAttributeT5());
-        map.put(AttributeEnum.ATTRIBUTE_T6.value,data.getAttributeT6());
-        map.put(AttributeEnum.ATTRIBUTE_T7.value,data.getAttributeT7());
-        map.put(AttributeEnum.ATTRIBUTE_T8.value,data.getAttributeT8());
+
+        for(AttributeEnum attribute : AttributeEnum.values()){
+            map.put(attribute.value,data.getValueByAttributeCode(attribute.value));
+        }
         return map;
     }
 
     public static QueryDataCharResp deviceDataToChart(List<DeviceData> datas,Map<String,String> header) {
         List<String> xDatas = new ArrayList<>();
         List<ChartYData> yDatas = new ArrayList<>();
+
         List<Double> t1 = new LinkedList<>();
         List<Double> t2 = new LinkedList<>();
         List<Double> t3 = new LinkedList<>();

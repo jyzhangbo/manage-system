@@ -18,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author:zhangbo
@@ -60,7 +57,11 @@ public class BaseService {
         User user = (User) request.getAttribute(UserInterceptor.USER_INFO);
         QueryWrapper<Task> queryWrapper = new QueryWrapper<>();
         if(!Strings.equals(user.getUserRole(),RoleEnum.ADMIN.value)){
-            queryWrapper.eq(Device.COMPANY_NAME,user.getCompanyName());
+            queryWrapper.eq(Task.COMPANY_NAME,user.getCompanyName());
+        }
+
+        if(Objects.nonNull(req.getTaskState())){
+            queryWrapper.eq(Task.TASK_STATUS,req.getTaskState());
         }
 
         List<Task> tasks = taskService.list(queryWrapper);

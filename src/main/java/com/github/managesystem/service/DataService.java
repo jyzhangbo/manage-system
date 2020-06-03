@@ -56,7 +56,13 @@ public class DataService {
 
         QueryDataCharResp queryDataCharResp = AttributeEnum.deviceDataToChart(datas, tableHeader);
         queryDataCharResp.setDeviceImg(taskDevice.getDeviceImg());
-        queryDataCharResp.setDeviceNum(Arrays.asList(taskDevice.getTaskNum(),taskDevice.getDeviceNum()));
+        queryDataCharResp.setDeviceName(taskDevice.getDeviceName());
+        Map<String, String> attribute = Json.fromJsonAsMap(String.class, taskDevice.getAttributeInfo());
+        List<AttributeInfo> infos = new ArrayList<>();
+        for(Map.Entry<String,String> entry : attribute.entrySet()){
+            infos.add(AttributeInfo.builder().code(entry.getKey()).name(entry.getValue()).build());
+        }
+        queryDataCharResp.setAttributeInfo(infos);
         return queryDataCharResp;
     }
 
@@ -88,7 +94,6 @@ public class DataService {
                 .total(record.getTotal())
                 .deviceImg(taskDevice.getDeviceImg())
                 .tableHeader(tableHeader)
-                .deviceNum(Arrays.asList(taskDevice.getTaskNum(),taskDevice.getDeviceNum()))
                 .datas(tableDatas)
                 .build();
     }
