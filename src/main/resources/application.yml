@@ -1,9 +1,7 @@
 server:
   ssl:
-    key-store: classpath:keystore.p12
-    key-store-password: 123456
-    key-store-type: PKCS12
-    key-alias: yaoshumao
+    key-store: classpath:hlbr.smartdeviceclub.com.jks
+    key-store-password: hlbr.smartdeviceclub.com
 spring:
   profiles:
     active: prod
