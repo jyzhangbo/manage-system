@@ -8,7 +8,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
 
 picture:
-  url: http://114.55.171.27
+  url: https://hlbr.smartdeviceclub.com
 
 http:
   server:
