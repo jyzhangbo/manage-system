@@ -69,6 +69,7 @@ public class TaskDeviceServiceImpl extends ServiceImpl<TaskDeviceMapper, TaskDev
                     .taskNum(task.getTaskNum())
                     .taskName(task.getTaskName())
                     .companyName(task.getCompanyName())
+                    .collectSpace(device.getCollectSpace())
                     .build());
         }
         this.saveBatch(taskDevices);

@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.jar.JarEntry;
 
 /**
  * <p>
@@ -113,11 +114,18 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         for(AttributeInfo info : req.getAttributeInfo()){
             attributeInfo.put(info.getCode(),info.getName());
         }
+        Device device = this.getOne(new QueryWrapper<Device>().eq(Device.DEVICE_NUM, req.getDeviceNum()), false);
+        device.setAttributeInfo(Json.toJson(attributeInfo,JsonFormat.tidy()));
+        device.setDeviceImg(req.getImg());
+        device.setDeviceName(req.getDeviceName());
+        device.setCollectSpace(req.getCollectSpace());
+        this.updateById(device);
+
         TaskDevice taskDevice = TaskDevice.builder()
-                .deviceName(req.getDeviceName())
-                .deviceImg(req.getImg())
-                .attributeInfo(Json.toJson(attributeInfo,JsonFormat.tidy()))
-                .collectSpace(req.getCollectSpace())
+                .deviceName(device.getDeviceName())
+                .deviceImg(device.getDeviceImg())
+                .attributeInfo(device.getAttributeInfo())
+                .collectSpace(device.getCollectSpace())
                 .build();
 
         taskDeviceMapper.update(taskDevice,new QueryWrapper<TaskDevice>()
