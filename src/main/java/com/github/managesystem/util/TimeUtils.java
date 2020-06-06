@@ -1,5 +1,7 @@
 package com.github.managesystem.util;
 
+import org.apache.logging.log4j.util.Strings;
+
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,6 +47,9 @@ public class TimeUtils {
      * @return the timestamp
      */
     public static final LocalDateTime parseTime(String data) {
+        if(Strings.isBlank(data)){
+            return LocalDateTime.now();
+        }
         return LocalDateTime.parse(data,DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 

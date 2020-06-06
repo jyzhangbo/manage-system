@@ -1,5 +1,8 @@
 package com.github.managesystem.util;
 
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -10,29 +13,32 @@ import javax.servlet.ServletRequest;
  * @Author:zhangbo
  * @Date:2018/5/15 18:20
  */
-public class WebContextUtils {
+public class WebContextUtils implements ApplicationContextAware {
+
+    private static ApplicationContext applicationContext;
 
     /**
-     * 获取Spring应用上下文.
-     *
-     * @param request
-     * @return
+     * 获取applicationContext
      */
-    public static WebApplicationContext getWebAppliationContext(ServletRequest request) {
-        return WebApplicationContextUtils.getWebApplicationContext(request.getServletContext());
+    private static ApplicationContext getApplicationContext() {
+        return applicationContext;
     }
 
     /**
      * 从应用环境中获取Bean.
      *
-     * @param request
      * @param classBean
      * @param <T>
      * @return
      */
-    public static <T> T findBean(ServletRequest request, Class<T> classBean) {
-        WebApplicationContext context = getWebAppliationContext(request);
-        return context.getBean(classBean);
+    public static <T> T findBean(Class<T> classBean) {
+        return getApplicationContext().getBean(classBean);
     }
 
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        if (WebContextUtils.applicationContext == null) {
+            WebContextUtils.applicationContext = applicationContext;
+        }
+    }
 }

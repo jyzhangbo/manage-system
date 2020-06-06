@@ -41,7 +41,7 @@ public class UserInterceptor implements HandlerInterceptor {
             throw new CodeException(ResultCode.ERROR_AUTHORITY_NOT_EXIST, USERNAME);
         }
 
-        IUserService userService = WebContextUtils.findBean(httpServletRequest, IUserService.class);
+        IUserService userService = WebContextUtils.findBean(IUserService.class);
         User user = userService.getOne(new QueryWrapper<User>().eq(User.LOGIN_NAME, userName),false);
 
         if(user == null){
