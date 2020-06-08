@@ -1,4 +1,4 @@
-package com.github.managesystem.collection.decoder;
+package com.github.managesystem.collection.handle.decoder;
 
 import com.github.managesystem.collection.model.DeviceAttr;
 import com.github.managesystem.collection.model.ProtocolDecodeOutData;

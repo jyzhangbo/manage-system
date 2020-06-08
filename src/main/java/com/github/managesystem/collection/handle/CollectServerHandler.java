@@ -2,6 +2,7 @@ package com.github.managesystem.collection.handle;
 
 import com.github.managesystem.collection.model.ProtocolDecodeOutData;
 import com.github.managesystem.collection.model.ResponseModel;
+import com.github.managesystem.entity.DeviceControlRecord;
 import com.github.managesystem.service.IDeviceDataService;
 import com.github.managesystem.util.TimeUtils;
 import com.github.managesystem.util.TransformUtils;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.nio.ByteBuffer;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 public class CollectServerHandler extends SimpleChannelInboundHandler<ProtocolDecodeOutData> {
@@ -26,8 +28,10 @@ public class CollectServerHandler extends SimpleChannelInboundHandler<ProtocolDe
     protected void channelRead0(ChannelHandlerContext ctx, ProtocolDecodeOutData msg) throws Exception {
         log.info(Json.toJson(msg, JsonFormat.tidy()));
         msg.setDevNum(Encoding.CHARSET_ASCII.decode(ByteBuffer.wrap(msg.getDevId())).toString());
-       // IDeviceDataService deviceDataService = WebContextUtils.findBean(IDeviceDataService.class);
-       // deviceDataService.putData(msg);
+        IDeviceDataService deviceDataService = WebContextUtils.findBean(IDeviceDataService.class);
+        List<DeviceControlRecord> records = deviceDataService.putData(msg);
+
+
         ResponseModel resp = new ResponseModel();
         resp.setDevId(msg.getDevId());
         resp.setCommand(msg.getCommand());

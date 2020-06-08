@@ -1,26 +1,21 @@
-package com.github.managesystem.collection.handle;
+package com.github.managesystem.collection.handle.decoder;
 
-import com.github.managesystem.collection.decoder.TemperatureDecoder;
-import com.github.managesystem.collection.model.DeviceAttr;
+import com.github.managesystem.collection.handle.decoder.TemperatureDecoder;
 import com.github.managesystem.collection.model.MessageHexBody;
 import com.github.managesystem.collection.model.ProtocolDecodeOutData;
-import com.github.managesystem.util.TransformUtils;
-import com.sun.media.jfxmedia.track.Track;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import org.nutz.lang.Encoding;
 
-import javax.sound.sampled.AudioFormat;
 import java.io.ByteArrayInputStream;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * @Author:zhangbo
  * @Date:2020/6/4 16:19
  */
-public class HexToValueDecoder extends MessageToMessageDecoder<MessageHexBody> {
+public class ByteToValueDecoder extends MessageToMessageDecoder<MessageHexBody> {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, MessageHexBody msg, List<Object> out) throws Exception {

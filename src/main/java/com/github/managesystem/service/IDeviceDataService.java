@@ -1,8 +1,11 @@
 package com.github.managesystem.service;
 
 import com.github.managesystem.collection.model.ProtocolDecodeOutData;
+import com.github.managesystem.entity.DeviceControlRecord;
 import com.github.managesystem.entity.DeviceData;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,6 +17,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IDeviceDataService extends IService<DeviceData> {
 
-    void putData(ProtocolDecodeOutData data);
+    List<DeviceControlRecord> putData(ProtocolDecodeOutData data);
 
 }

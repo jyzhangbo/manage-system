@@ -1,9 +1,9 @@
 package com.github.managesystem.collection;
 
-import com.github.managesystem.collection.encoder.ResponseEncoder;
-import com.github.managesystem.collection.handle.ByteToObjectDecoder;
+import com.github.managesystem.collection.handle.encoder.ResponseEncoder;
+import com.github.managesystem.collection.handle.decoder.ProtocolReceiveDecoder;
 import com.github.managesystem.collection.handle.CollectServerHandler;
-import com.github.managesystem.collection.handle.HexToValueDecoder;
+import com.github.managesystem.collection.handle.decoder.ByteToValueDecoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -41,8 +41,8 @@ public class CollectServer {
                             System.out.println("Port:" + channel.localAddress().getPort());
                             System.out.println("报告完毕");
 
-                            channel.pipeline().addLast(new ByteToObjectDecoder());
-                            channel.pipeline().addLast(new HexToValueDecoder());
+                            channel.pipeline().addLast(new ProtocolReceiveDecoder());
+                            channel.pipeline().addLast(new ByteToValueDecoder());
                             channel.pipeline().addLast(new ResponseEncoder());
                             channel.pipeline().addLast(new StringEncoder());
                             channel.pipeline().addLast(new CollectServerHandler());

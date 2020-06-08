@@ -1,4 +1,4 @@
-package com.github.managesystem.collection.handle;
+package com.github.managesystem.collection.handle.decoder;
 
 import com.github.managesystem.collection.model.MessageHexBody;
 import com.github.managesystem.collection.model.ObjectDecoderState;
@@ -14,13 +14,13 @@ import java.util.List;
  * @Author:zhangbo
  * @Date:2020/6/3 12:04
  */
-public class ByteToObjectDecoder extends ReplayingDecoder<ObjectDecoderState> {
+public class ProtocolReceiveDecoder extends ReplayingDecoder<ObjectDecoderState> {
 
     private int length;
 
     private MessageHexBody body = new MessageHexBody();
 
-    public ByteToObjectDecoder(){
+    public ProtocolReceiveDecoder(){
         super(ObjectDecoderState.READ_HEADER);
     }
 

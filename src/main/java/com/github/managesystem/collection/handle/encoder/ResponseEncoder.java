@@ -1,4 +1,4 @@
-package com.github.managesystem.collection.encoder;
+package com.github.managesystem.collection.handle.encoder;
 
 import com.github.managesystem.collection.model.ResponseModel;
 import com.github.managesystem.entity.Task;
@@ -28,6 +28,7 @@ public class ResponseEncoder extends MessageToByteEncoder<ResponseModel> {
         String hour = TransformUtils.integerStrToHexString(now.substring(11,13));
         String minute = TransformUtils.integerStrToHexString(now.substring(14,16));
         String second = TransformUtils.integerStrToHexString(now.substring(17));
+
         String message = new StringBuilder()
                 .append("AA")
                 .append(TransformUtils.byteToHexString(msg.getDevId()))

@@ -1,13 +1,14 @@
 package com.github.managesystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.github.managesystem.collection.decoder.TemperatureDecoder;
+import com.github.managesystem.collection.handle.decoder.TemperatureDecoder;
 import com.github.managesystem.collection.model.DeviceAttr;
 import com.github.managesystem.collection.model.ProtocolDecodeOutData;
+import com.github.managesystem.entity.DeviceControlRecord;
 import com.github.managesystem.entity.DeviceData;
 import com.github.managesystem.entity.TaskDevice;
 import com.github.managesystem.mapper.DeviceDataMapper;
-import com.github.managesystem.model.constant.AttributeEnum;
+import com.github.managesystem.service.IDeviceControlRecordService;
 import com.github.managesystem.service.IDeviceDataService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.managesystem.service.ITaskDeviceService;
@@ -33,8 +34,11 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
     @Autowired
     private ITaskDeviceService taskDeviceService;
 
+    @Autowired
+    private IDeviceControlRecordService deviceControlRecordService;
+
     @Override
-    public void putData(ProtocolDecodeOutData data) {
+    public List<DeviceControlRecord> putData(ProtocolDecodeOutData data) {
         DeviceData deviceData = DeviceData.builder().build();
         TaskDevice taskDevice = taskDeviceService.getOne(new QueryWrapper<TaskDevice>().eq(TaskDevice.DEVICE_NUM, data.getDevNum()),false);
         if(taskDevice!= null){
@@ -50,5 +54,12 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
                 }
             }
         }
+        this.save(deviceData);
+
+        List<DeviceControlRecord> records = deviceControlRecordService.list(new QueryWrapper<DeviceControlRecord>()
+                .eq(DeviceControlRecord.DEVICE_NUM, data.getDevNum())
+                .eq(DeviceControlRecord.CONTROL_STATE, 0));
+
+        return records;
     }
 }
