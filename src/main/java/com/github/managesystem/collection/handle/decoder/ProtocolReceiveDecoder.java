@@ -1,7 +1,7 @@
 package com.github.managesystem.collection.handle.decoder;
 
-import com.github.managesystem.collection.model.MessageHexBody;
 import com.github.managesystem.collection.model.ObjectDecoderState;
+import com.github.managesystem.collection.model.ProtocolDecodeOutData;
 import com.github.managesystem.util.TransformUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -18,7 +18,7 @@ public class ProtocolReceiveDecoder extends ReplayingDecoder<ObjectDecoderState>
 
     private int length;
 
-    private MessageHexBody body = new MessageHexBody();
+    private ProtocolDecodeOutData body = new ProtocolDecodeOutData();
 
     public ProtocolReceiveDecoder(){
         super(ObjectDecoderState.READ_HEADER);
@@ -41,7 +41,7 @@ public class ProtocolReceiveDecoder extends ReplayingDecoder<ObjectDecoderState>
                 ByteBuf byteBuf = in.readBytes(12);
                 byte[] devId = new byte[12];
                 byteBuf.readBytes(devId);
-                body.devId = devId;
+                body.devNum = TransformUtils.byteToHexString(devId);
                 checkpoint(ObjectDecoderState.READ_VERSION);
                 return;
             case READ_VERSION:
@@ -57,9 +57,9 @@ public class ProtocolReceiveDecoder extends ReplayingDecoder<ObjectDecoderState>
                 checkpoint(ObjectDecoderState.READ_COMMAND);
                 return;
             case READ_COMMAND:
-                byte[] c = new byte[1];
-                c[0] = in.readByte();
-                body.command = c;
+                byte[] command = new byte[1];
+                command[0] = in.readByte();
+                body.command = TransformUtils.byteToHexString(command);
                 checkpoint(ObjectDecoderState.READ_LENGTH);
                 return;
             case READ_LENGTH:

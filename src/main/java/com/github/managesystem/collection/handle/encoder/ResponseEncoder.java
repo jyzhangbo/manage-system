@@ -1,16 +1,11 @@
 package com.github.managesystem.collection.handle.encoder;
 
 import com.github.managesystem.collection.model.ResponseModel;
-import com.github.managesystem.entity.Task;
-import com.github.managesystem.util.TimeUtils;
 import com.github.managesystem.util.TransformUtils;
 import com.google.common.primitives.Bytes;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-
-import java.io.ByteArrayOutputStream;
-import java.time.LocalDateTime;
 
 /**
  * @Author:zhangbo
@@ -19,33 +14,53 @@ import java.time.LocalDateTime;
 public class ResponseEncoder extends MessageToByteEncoder<ResponseModel> {
     @Override
     protected void encode(ChannelHandlerContext ctx, ResponseModel msg, ByteBuf out) throws Exception {
-
-        String now = TimeUtils.formatTime(LocalDateTime.now());
-        String year = TransformUtils.integerStrToHexString(now.substring(0,4));
-        String mounth = TransformUtils.integerStrToHexString(now.substring(5,7));
-        String day = TransformUtils.integerStrToHexString(now.substring(8,10));
-
-        String hour = TransformUtils.integerStrToHexString(now.substring(11,13));
-        String minute = TransformUtils.integerStrToHexString(now.substring(14,16));
-        String second = TransformUtils.integerStrToHexString(now.substring(17));
-
-        String message = new StringBuilder()
+        StringBuilder start = new StringBuilder()
                 .append("AA")
-                .append(TransformUtils.byteToHexString(msg.getDevId()))
-                .append("0000060581000B029A0181")
-                .append(year)
-                .append(mounth)
-                .append(day)
-                .append(hour).append(minute).append(second)
-                .append("5516")
-                .toString();
+                .append(msg.getDevNum())
+                .append("00000605")
+                .append(msg.getCommand());
+        byte[] startByte = TransformUtils.hexStringToBytes(start.toString());
+        StringBuilder content;
+        switch (msg.getCommand()){
+            case "86":
+                content = ControlEncoder.encoder(msg);
+                break;
+            case "81":
+                content = AckEncoder.encoder(msg);
+                break;
+            default:
+                content = new StringBuilder();
+                break;
+        }
 
-        out.writeBytes(TransformUtils.hexStringToBytes(message));
+        byte[] contentByte = TransformUtils.hexStringToBytes(content.toString());
+        byte[] checkSum = new byte[1];
+        checkSum[0] = sumCheck(contentByte, contentByte.length);
+
+        byte[] sizeByte = TransformUtils.shortoByteArray(Short.valueOf(String.valueOf(contentByte.length)));
+
+        byte[] end = {0x16};
+        byte[] concat = Bytes.concat(startByte,sizeByte,contentByte,checkSum, end);
+        out.writeBytes(concat);
     }
 
-    public static void main(String[] args) throws Exception{
-        byte[] a = TransformUtils.hexStringToBytes("AA5932382015504B37470027000000060581000B");
+    private byte sumCheck(byte[] b, int len){
+        int sum = 0;
+        for(int i = 0; i < len; i++){
+            sum = sum + b[i];
+        }
+        if(sum > 0xff){ //超过了255，使用补码（补码 = 原码取反 + 1）
+            sum = ~sum;
+            sum = sum + 1;
+        }
+        return (byte) (sum & 0xff);
+    }
 
-        System.out.println(TransformUtils.byteToHexString(a));
+
+    public static void main(String[] args) throws Exception{
+
+        if(TransformUtils.hexStringToBytes("86")[0] == 0x86){
+            System.out.println("11");
+        }
     }
 }

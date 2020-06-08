@@ -13,7 +13,9 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.string.StringEncoder;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class CollectServer {
 
     private final int port;
@@ -35,12 +37,7 @@ public class CollectServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel channel) throws Exception {
-                            System.out.println("报告");
-                            System.out.println("信息：有一客户端链接到本服务端");
-                            System.out.println("IP:" + channel.localAddress().getHostName());
-                            System.out.println("Port:" + channel.localAddress().getPort());
-                            System.out.println("报告完毕");
-
+                            log.info("IP:{} 连接成功",channel.remoteAddress().getHostName());
                             channel.pipeline().addLast(new ProtocolReceiveDecoder());
                             channel.pipeline().addLast(new ByteToValueDecoder());
                             channel.pipeline().addLast(new ResponseEncoder());

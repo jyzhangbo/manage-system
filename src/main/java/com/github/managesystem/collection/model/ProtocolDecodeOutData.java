@@ -12,13 +12,13 @@ import java.util.List;
 @Data
 public class ProtocolDecodeOutData {
 
-    private byte[] devId;
+    public String devNum;
 
-    private String devNum;
+    public List<DeviceAttr> attrs;
 
-    private List<DeviceAttr> attrs;
+    public String command;
 
-    public byte[] command;
+    public byte[] content;
 
     public ProtocolDecodeOutData() {
         attrs = new ArrayList<DeviceAttr>();
@@ -26,6 +26,10 @@ public class ProtocolDecodeOutData {
 
     public void addDeviceAttr(DeviceAttr attr) {
         attrs.add(attr);
+    }
+
+    public void clearDeviceAttr() {
+        attrs.clear();
     }
 
 }

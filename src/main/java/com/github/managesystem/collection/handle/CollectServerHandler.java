@@ -1,5 +1,6 @@
 package com.github.managesystem.collection.handle;
 
+import com.github.managesystem.collection.model.CommandEnum;
 import com.github.managesystem.collection.model.ProtocolDecodeOutData;
 import com.github.managesystem.collection.model.ResponseModel;
 import com.github.managesystem.entity.DeviceControlRecord;
@@ -7,6 +8,7 @@ import com.github.managesystem.service.IDeviceDataService;
 import com.github.managesystem.util.TimeUtils;
 import com.github.managesystem.util.TransformUtils;
 import com.github.managesystem.util.WebContextUtils;
+import com.google.common.primitives.Bytes;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -23,19 +25,21 @@ import java.util.List;
 @Slf4j
 public class CollectServerHandler extends SimpleChannelInboundHandler<ProtocolDecodeOutData> {
 
-
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ProtocolDecodeOutData msg) throws Exception {
-        log.info(Json.toJson(msg, JsonFormat.tidy()));
-        msg.setDevNum(Encoding.CHARSET_ASCII.decode(ByteBuffer.wrap(msg.getDevId())).toString());
+        log.info("数据：{}",Json.toJson(msg, JsonFormat.tidy()));
         IDeviceDataService deviceDataService = WebContextUtils.findBean(IDeviceDataService.class);
         List<DeviceControlRecord> records = deviceDataService.putData(msg);
-
-
         ResponseModel resp = new ResponseModel();
-        resp.setDevId(msg.getDevId());
-        resp.setCommand(msg.getCommand());
+        resp.setDevNum(msg.devNum);
 
+        if(records.size() > 0) {
+            resp.setCommand(CommandEnum.COMMAND_86.getValue());
+            resp.setRecords(records);
+            ctx.channel().writeAndFlush(resp);
+        }
+
+        resp.setCommand(CommandEnum.COMMAND_81.getValue());
         ctx.channel().writeAndFlush(resp);
     }
 
@@ -44,4 +48,5 @@ public class CollectServerHandler extends SimpleChannelInboundHandler<ProtocolDe
         super.exceptionCaught(ctx, cause);
         ctx.close();
     }
+
 }

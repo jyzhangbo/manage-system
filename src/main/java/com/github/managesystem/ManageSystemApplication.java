@@ -14,7 +14,7 @@ public class ManageSystemApplication {
         SpringApplication app = new SpringApplication(ManageSystemApplication.class);
         app.run(args);
         try {
-            new CollectServer(8888).start();
+            new CollectServer(7890).start();
         }catch (Exception e){
             log.error("数据采集服务异常");
         }

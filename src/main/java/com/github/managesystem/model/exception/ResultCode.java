@@ -17,7 +17,7 @@ public enum ResultCode {
     SUCCESS(200, "成功"),
 
     //系统异常 151
-    ERROR_SYSTEM(1001, "服务器异常：%s"),
+    ERROR_SYSTEM(1001, "服务器异常"),
     ERROR_REQUEST_BODY(1002, "接口请求JSON数据格式错误:%s"),
     ERROR_METHOD_REQUEST(1003, "调用方法不被支持"),
     ERROR_PARAMETER(1004, "检查输入参数:%s"),

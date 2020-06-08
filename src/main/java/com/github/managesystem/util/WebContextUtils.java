@@ -3,6 +3,7 @@ package com.github.managesystem.util;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -13,6 +14,7 @@ import javax.servlet.ServletRequest;
  * @Author:zhangbo
  * @Date:2018/5/15 18:20
  */
+@Component
 public class WebContextUtils implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;

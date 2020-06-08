@@ -1,6 +1,10 @@
 package com.github.managesystem.collection.model;
 
+import com.github.managesystem.entity.DeviceControlRecord;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author:zhangbo
@@ -9,7 +13,9 @@ import lombok.Data;
 @Data
 public class ResponseModel {
 
-    private byte[] devId;
-    private byte[] command;
+    private String devNum;
+    private String command;
+
+    private List<DeviceControlRecord> records = new ArrayList<>();
 
 }
