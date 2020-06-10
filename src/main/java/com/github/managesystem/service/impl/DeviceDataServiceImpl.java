@@ -8,6 +8,7 @@ import com.github.managesystem.entity.DeviceControlRecord;
 import com.github.managesystem.entity.DeviceData;
 import com.github.managesystem.entity.TaskDevice;
 import com.github.managesystem.mapper.DeviceDataMapper;
+import com.github.managesystem.model.constant.TaskStateEnum;
 import com.github.managesystem.service.IDeviceControlRecordService;
 import com.github.managesystem.service.IDeviceDataService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -40,7 +41,9 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
     @Override
     public List<DeviceControlRecord> putData(ProtocolDecodeOutData data) {
         DeviceData deviceData = DeviceData.builder().build();
-        TaskDevice taskDevice = taskDeviceService.getOne(new QueryWrapper<TaskDevice>().eq(TaskDevice.DEVICE_NUM, data.getDevNum()),false);
+        TaskDevice taskDevice = taskDeviceService.getOne(new QueryWrapper<TaskDevice>()
+                .eq(TaskDevice.DEVICE_NUM, data.getDevNum())
+                .eq(TaskDevice.TASK_STATUS,TaskStateEnum.START.value),false);
         if(taskDevice!= null){
             deviceData.setTaskNum(taskDevice.getTaskNum());
         }

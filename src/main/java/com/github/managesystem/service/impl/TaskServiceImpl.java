@@ -1,6 +1,7 @@
 package com.github.managesystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.managesystem.config.interceptor.UserInterceptor;
@@ -101,22 +102,23 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                 task.setStartTime(LocalDateTime.now());
             }else if (Objects.equals(req.getState(), TaskStateEnum.END.value)) {
                 task.setEndTime(LocalDateTime.now());
-                Device device = Device.builder()
-                        .deviceState(DeviceStateEnum.UNUSE.value)
-                        .modifyTime(LocalDateTime.now())
-                        .build();
-                deviceMapper.update(device, new QueryWrapper<Device>().in(Device.DEVICE_NUM, req.getDevices()));
             }
-
             this.updateById(task);
-            return;
-        }
+            taskDeviceService.update(new UpdateWrapper<TaskDevice>()
+                    .set(TaskDevice.MODIFY_TIME,LocalDateTime.now())
+                    .set(TaskDevice.TASK_STATUS,req.getState())
+                    .eq(TaskDevice.TASK_NUM,req.getTaskNum())
+                    .in(TaskDevice.DEVICE_NUM,req.getDevices()));
 
-        if(req.getDevices().size() > 0){
-            taskDeviceService.remove(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM,req.getTaskNum()));
-            taskDeviceService.addTaskDevice(task,req.getDevices());
+        }else {
+            task.setTaskName(req.getTaskName());
+            task.setModifyTime(LocalDateTime.now());
+            this.updateById(task);
+            taskDeviceService.remove(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM, req.getTaskNum()));
+            if (req.getDevices().size() > 0) {
+                taskDeviceService.addTaskDevice(task, req.getDevices());
+            }
         }
-
 
     }
 
@@ -142,7 +144,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
 
     }
 
-
+    @Override
     public String asertTaskNum(String taskNum, HttpServletRequest request) throws CodeException{
         if(Strings.isBlank(taskNum)) {
 

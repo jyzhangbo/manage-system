@@ -11,6 +11,7 @@ import com.github.managesystem.mapper.DeviceMapper;
 import com.github.managesystem.mapper.TaskDeviceMapper;
 import com.github.managesystem.model.constant.DeviceStateEnum;
 import com.github.managesystem.model.constant.RoleEnum;
+import com.github.managesystem.model.constant.TaskStateEnum;
 import com.github.managesystem.model.exception.CodeException;
 import com.github.managesystem.model.exception.ResultCode;
 import com.github.managesystem.model.req.ListTaskSearchReq;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -56,9 +58,6 @@ public class TaskDeviceServiceImpl extends ServiceImpl<TaskDeviceMapper, TaskDev
         List<TaskDevice> taskDevices = new ArrayList<>();
         for (String deviceNum : devices) {
             Device device = deviceMapper.selectOne(new QueryWrapper<Device>().eq(Device.DEVICE_NUM, deviceNum));
-            device.setDeviceState(DeviceStateEnum.USING.value);
-            device.setModifyTime(LocalDateTime.now());
-            deviceMapper.updateById(device);
 
             taskDevices.add(TaskDevice.builder().attributeInfo(device.getAttributeInfo())
                     .createTime(LocalDateTime.now())
@@ -70,6 +69,7 @@ public class TaskDeviceServiceImpl extends ServiceImpl<TaskDeviceMapper, TaskDev
                     .taskName(task.getTaskName())
                     .companyName(task.getCompanyName())
                     .collectSpace(device.getCollectSpace())
+                    .taskStatus(task.getTaskStatus())
                     .build());
         }
         this.saveBatch(taskDevices);

@@ -9,6 +9,7 @@ import java.util.List;
 public class EditTaskReq {
 
     private String taskNum;
+    private String taskName;
 
     private List<String> devices;
 

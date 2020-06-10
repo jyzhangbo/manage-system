@@ -14,6 +14,7 @@ import com.github.managesystem.mapper.TaskMapper;
 import com.github.managesystem.model.constant.AttributeEnum;
 import com.github.managesystem.model.constant.DeviceStateEnum;
 import com.github.managesystem.model.constant.RoleEnum;
+import com.github.managesystem.model.constant.TaskStateEnum;
 import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.*;
 import com.github.managesystem.service.IDeviceService;
@@ -26,6 +27,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.crypto.Data;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.jar.JarEntry;
@@ -92,7 +94,6 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
                 .modifyTime(LocalDateTime.now())
                 .collectSpace(deviceCollectSpace)
                 .deviceImg(deviceImg)
-                .deviceState(DeviceStateEnum.UNUSE.value)
                 .attributeInfo(Json.toJson(AttributeEnum.getDefaultAttribute(),JsonFormat.tidy()))
                 .build();
 
@@ -135,28 +136,32 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 
     @Override
     public List<ListDeviceTaskResp> listDeviceTask(ListDeviceTaskReq req, HttpServletRequest request) {
-        List<ListDeviceTaskResp> resp = new ArrayList<>();
 
-        QueryWrapper<Device> queryWrapper = new QueryWrapper<Device>().eq(Device.DEVICE_STATE, DeviceStateEnum.UNUSE.value);
+        QueryWrapper<Device> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<TaskDevice> taskDeviceQueryWrapper = new QueryWrapper<>();
         User user = (User) request.getAttribute(UserInterceptor.USER_INFO);
         if(!Strings.equals(user.getUserRole(),RoleEnum.ADMIN.value)){
             queryWrapper.eq(Device.COMPANY_NAME,user.getCompanyName());
+            taskDeviceQueryWrapper.eq(TaskDevice.COMPANY_NAME,user.getCompanyName());
         }
 
         List<Device> devices = this.list(queryWrapper);
-
-        for(Device device : devices){
-            resp.add(ListDeviceTaskResp.builder().deviceName(device.getDeviceName())
+        Map<String,ListDeviceTaskResp> deviceNums= new HashMap<>();
+        for(Device device:devices){
+            deviceNums.put(device.getDeviceNum(),ListDeviceTaskResp.builder().deviceName(device.getDeviceName())
                     .deviceNum(device.getDeviceNum()).build());
         }
-        if(Strings.isNotBlank(req.getTaskNum())){
-            List<TaskDevice> taskDevices = taskDeviceMapper.selectList(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM, req.getTaskNum()));
-            for(TaskDevice taskDevice : taskDevices){
-                resp.add(ListDeviceTaskResp.builder().deviceName(taskDevice.getDeviceName())
-                        .deviceNum(taskDevice.getDeviceNum()).build());
+
+        List<TaskDevice> taskDevices = taskDeviceMapper.selectList(taskDeviceQueryWrapper
+                .ne(TaskDevice.TASK_STATUS, TaskStateEnum.END.value)
+                .ne(TaskDevice.TASK_NUM,req.getTaskNum()));
+
+        for(TaskDevice taskDevice : taskDevices){
+            if(deviceNums.containsKey(taskDevice.getDeviceNum())) {
+                deviceNums.remove(taskDevice.getDeviceNum());
             }
         }
-        return resp;
+        return new ArrayList<>(deviceNums.values());
     }
 
 }

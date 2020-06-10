@@ -6,6 +6,7 @@ import com.github.managesystem.util.TransformUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
+import io.netty.util.ReferenceCountUtil;
 import org.nutz.lang.Strings;
 
 import java.util.List;
@@ -42,18 +43,19 @@ public class ProtocolReceiveDecoder extends ReplayingDecoder<ObjectDecoderState>
                 byte[] devId = new byte[12];
                 byteBuf.readBytes(devId);
                 body.devNum = TransformUtils.byteToHexString(devId);
+                ReferenceCountUtil.release(byteBuf);
                 checkpoint(ObjectDecoderState.READ_VERSION);
                 return;
             case READ_VERSION:
-                ByteBuf version = in.readBytes(1);
+                in.readByte();
                 checkpoint(ObjectDecoderState.READ_DEVTYPE);
                 return;
             case READ_DEVTYPE:
-                ByteBuf devType = in.readBytes(2);
+                in.readShort();
                 checkpoint(ObjectDecoderState.READ_NUM);
                 return;
             case READ_NUM:
-                ByteBuf num = in.readBytes(1);
+                in.readByte();
                 checkpoint(ObjectDecoderState.READ_COMMAND);
                 return;
             case READ_COMMAND:
@@ -71,15 +73,16 @@ public class ProtocolReceiveDecoder extends ReplayingDecoder<ObjectDecoderState>
                 ByteBuf content = in.readBytes(length);
                 byte[] contentByte = new byte[length];
                 content.readBytes(contentByte);
+                ReferenceCountUtil.release(content);
                 body.content = contentByte;
                 checkpoint(ObjectDecoderState.READ_CHECK);
                 return;
             case READ_CHECK:
-                ByteBuf check = in.readBytes(1);
+                in.readByte();
                 checkpoint(ObjectDecoderState.READ_END);
                 return;
             case READ_END:
-                ByteBuf end = in.readBytes(1);
+                in.readByte();
                 checkpoint(ObjectDecoderState.READ_HEADER);
                 out.add(body);
                 return;
