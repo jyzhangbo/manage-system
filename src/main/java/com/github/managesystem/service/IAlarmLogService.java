@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.managesystem.model.req.ListAlarmReq;
 import com.github.managesystem.model.resp.ListAlarmResp;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * <p>
  *  服务类
@@ -15,5 +17,5 @@ import com.github.managesystem.model.resp.ListAlarmResp;
  */
 public interface IAlarmLogService extends IService<AlarmLog> {
 
-    ListAlarmResp listLog(ListAlarmReq req);
+    ListAlarmResp listLog(ListAlarmReq req, HttpServletRequest request);
 }

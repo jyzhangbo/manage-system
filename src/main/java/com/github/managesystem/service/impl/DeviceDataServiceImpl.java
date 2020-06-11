@@ -1,6 +1,7 @@
 package com.github.managesystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.github.managesystem.collection.handle.decoder.TemperatureDecoder;
 import com.github.managesystem.collection.model.DeviceAttr;
 import com.github.managesystem.collection.model.ProtocolDecodeOutData;
@@ -62,6 +63,10 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
         List<DeviceControlRecord> records = deviceControlRecordService.list(new QueryWrapper<DeviceControlRecord>()
                 .eq(DeviceControlRecord.DEVICE_NUM, data.getDevNum())
                 .eq(DeviceControlRecord.CONTROL_STATE, 0));
+
+        deviceControlRecordService.update(new UpdateWrapper<DeviceControlRecord>()
+                .set(DeviceControlRecord.CONTROL_STATE, 1)
+                .eq(DeviceControlRecord.DEVICE_NUM, data.getDevNum()));
 
         return records;
     }

@@ -7,6 +7,8 @@ import com.github.managesystem.model.req.ListAlarmRuleReq;
 import com.github.managesystem.model.req.UpdateAlarmRuleReq;
 import com.github.managesystem.model.resp.ListAlarmRuleResp;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * <p>
  *  服务类
@@ -17,7 +19,7 @@ import com.github.managesystem.model.resp.ListAlarmRuleResp;
  */
 public interface IAlarmRuleService extends IService<AlarmRule> {
 
-    ListAlarmRuleResp listRule(ListAlarmRuleReq req);
+    ListAlarmRuleResp listRule(ListAlarmRuleReq req, HttpServletRequest request);
 
     void enableRule(EnableAlarmRuleReq req);
 

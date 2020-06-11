@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * <p>
  *  前端控制器
@@ -26,7 +28,7 @@ public class AlarmLogController {
     private IAlarmLogService alarmLogService;
 
     @PostMapping(value = "/list")
-    public Result listAlarmLog(@RequestBody ListAlarmReq req){
-        return Result.ok(alarmLogService.listLog(req));
+    public Result listAlarmLog(@RequestBody ListAlarmReq req,HttpServletRequest request){
+        return Result.ok(alarmLogService.listLog(req,request));
     }
 }

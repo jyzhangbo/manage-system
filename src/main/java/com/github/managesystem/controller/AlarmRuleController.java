@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * <p>
  *  前端控制器
@@ -28,8 +30,8 @@ public class AlarmRuleController {
     private IAlarmRuleService alarmRuleService;
 
     @PostMapping(value = "/list")
-    public Result listAlarmRule(@RequestBody ListAlarmRuleReq req){
-        return Result.ok(alarmRuleService.listRule(req));
+    public Result listAlarmRule(@RequestBody ListAlarmRuleReq req,HttpServletRequest request){
+        return Result.ok(alarmRuleService.listRule(req,request));
     }
 
     @PostMapping(value = "/enable")

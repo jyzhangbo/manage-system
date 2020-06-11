@@ -1,19 +1,25 @@
 package com.github.managesystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.managesystem.config.interceptor.UserInterceptor;
 import com.github.managesystem.entity.AlarmRule;
+import com.github.managesystem.entity.Device;
+import com.github.managesystem.entity.User;
 import com.github.managesystem.mapper.AlarmRuleMapper;
 import com.github.managesystem.model.constant.JudgeTypeEnum;
+import com.github.managesystem.model.constant.RoleEnum;
 import com.github.managesystem.model.req.EnableAlarmRuleReq;
 import com.github.managesystem.model.req.ListAlarmRuleReq;
 import com.github.managesystem.model.req.UpdateAlarmRuleReq;
 import com.github.managesystem.model.resp.ListAlarmRuleResp;
 import com.github.managesystem.service.IAlarmRuleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.nutz.lang.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,17 +38,19 @@ import java.util.stream.Collectors;
 public class AlarmRuleServiceImpl extends ServiceImpl<AlarmRuleMapper, AlarmRule> implements IAlarmRuleService {
 
     @Override
-    public ListAlarmRuleResp listRule(ListAlarmRuleReq req){
+    public ListAlarmRuleResp listRule(ListAlarmRuleReq req, HttpServletRequest request){
         ListAlarmRuleResp resp = new ListAlarmRuleResp();
-        if (StringUtils.isEmpty(req.getCompanyName())){
-            return resp;
-        }
+
         QueryWrapper<AlarmRule> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(AlarmRule.COMPANY_NAME, req.getCompanyName());
+        User user = (User) request.getAttribute(UserInterceptor.USER_INFO);
+        if(!Strings.equals(user.getUserRole(),RoleEnum.ADMIN.value)){
+            queryWrapper.eq(Device.COMPANY_NAME,user.getCompanyName());
+        }
+
         queryWrapper.eq(AlarmRule.IS_DEL,0);
         List<AlarmRule> alarmRuleList = this.list(queryWrapper);
         if (CollectionUtils.isEmpty(alarmRuleList)){
-            alarmRuleList = buildAlarmRules(req.getCompanyName());
+            alarmRuleList = buildAlarmRules(user.getCompanyName());
             this.saveBatch(alarmRuleList);
         }
         List<AlarmRule> respList = alarmRuleList.stream()

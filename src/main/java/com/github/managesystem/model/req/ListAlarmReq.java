@@ -14,7 +14,6 @@ public class ListAlarmReq {
     private String alarmObject;
     private String alarmStartTime;
     private String alarmEndTime;
-    private String companyName;
     private Integer pageNumber;
     private Integer pageSize;
 

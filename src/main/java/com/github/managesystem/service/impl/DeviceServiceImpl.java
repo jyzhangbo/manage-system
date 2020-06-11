@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.managesystem.config.interceptor.UserInterceptor;
-import com.github.managesystem.entity.Device;
-import com.github.managesystem.entity.Task;
-import com.github.managesystem.entity.TaskDevice;
-import com.github.managesystem.entity.User;
+import com.github.managesystem.entity.*;
 import com.github.managesystem.mapper.DeviceMapper;
 import com.github.managesystem.mapper.TaskDeviceMapper;
 import com.github.managesystem.mapper.TaskMapper;
@@ -17,6 +14,7 @@ import com.github.managesystem.model.constant.RoleEnum;
 import com.github.managesystem.model.constant.TaskStateEnum;
 import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.*;
+import com.github.managesystem.service.IDeviceControlRecordService;
 import com.github.managesystem.service.IDeviceService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.nutz.json.Json;
@@ -54,6 +52,9 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 
     @Value("${device.collectspace}")
     private Integer deviceCollectSpace;
+
+    @Autowired
+    private IDeviceControlRecordService deviceControlRecordService;
 
     @Override
     public ListDeviceAdminResp listDeviceAdmin(ListDeviceAdminReq req) {
@@ -116,6 +117,18 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
             attributeInfo.put(info.getCode(),info.getName());
         }
         Device device = this.getOne(new QueryWrapper<Device>().eq(Device.DEVICE_NUM, req.getDeviceNum()), false);
+
+        if(!Objects.equals(req.getCollectSpace(),device.getCollectSpace())){
+            //创建控制命令
+            DeviceControlRecord build = DeviceControlRecord.builder().deviceNum(device.getDeviceNum())
+                    .createTime(LocalDateTime.now())
+                    .modifyTime(LocalDateTime.now())
+                    .controlType("86")
+                    .controlData(String.valueOf(req.getCollectSpace()))
+                    .controlState(0).build();
+            deviceControlRecordService.save(build);
+        }
+
         device.setAttributeInfo(Json.toJson(attributeInfo,JsonFormat.tidy()));
         device.setDeviceImg(req.getImg());
         device.setDeviceName(req.getDeviceName());
