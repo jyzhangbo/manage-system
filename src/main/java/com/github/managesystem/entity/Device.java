@@ -72,10 +72,6 @@ public class Device implements Serializable {
      */
     private LocalDateTime modifyTime;
 
-    /**
-     * 设备状态 0:未使用;1使用中
-     */
-    private Integer deviceState;
 
 
     public static final String ID = "id";
@@ -96,6 +92,5 @@ public class Device implements Serializable {
 
     public static final String MODIFY_TIME = "modify_time";
 
-    public static final String DEVICE_STATE = "device_state";
 
 }

@@ -9,6 +9,7 @@ import org.nutz.lang.Strings;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.Objects;
 
 /**
@@ -17,9 +18,9 @@ import java.util.Objects;
  */
 public class AsertUtils {
 
-    public static String asertToZeroHour(String time){
-        if(Strings.isBlank(time)){
-            return TimeUtils.formatTime(LocalDateTime.of(LocalDate.now(),LocalTime.MIN));
+    public static Long asertToZeroHour(Long time){
+        if(Objects.isNull(time)){
+            return LocalDateTime.of(LocalDate.now(),LocalTime.MIN).toEpochSecond(ZoneOffset.ofHours(8)) * 1000;
         }else {
             return time;
         }
@@ -28,6 +29,14 @@ public class AsertUtils {
     public static String asertToNow(String time){
         if(Strings.isBlank(time)){
             return TimeUtils.formatTime(LocalDateTime.now());
+        }else {
+            return time;
+        }
+    }
+
+    public static Long asertToNow(Long time){
+        if(Objects.isNull(time)){
+            return LocalDateTime.now().toEpochSecond(ZoneOffset.ofHours(8)) * 1000;
         }else {
             return time;
         }

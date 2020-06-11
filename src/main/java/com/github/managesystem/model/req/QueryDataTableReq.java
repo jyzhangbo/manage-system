@@ -13,5 +13,7 @@ public class QueryDataTableReq {
     private String endTime;
     private String taskNum;
     private String deviceNum;
+    private Integer pageNum;
+    private Integer pageSize;
 
 }

@@ -13,11 +13,11 @@ import java.util.Map;
 @Data
 public class EditDeviceUserReq {
 
+    private String taskNum;
     private String deviceNum;
     private String deviceName;
     private String img;
     private Integer collectSpace;
-
     private List<AttributeInfo> attributeInfo;
 
 }

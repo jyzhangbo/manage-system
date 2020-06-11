@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -31,13 +32,13 @@ public class DataController {
     }
 
     @PostMapping(value = "/query/char")
-    public Result queryDataChar(@RequestBody QueryDataTableReq req) throws CodeException {
-        return Result.ok(dataService.queryDataChar(req));
+    public Result queryDataChar(@RequestBody QueryDataTableReq req, HttpServletRequest request) throws CodeException {
+        return Result.ok(dataService.queryDataChar(req,request));
     }
 
     @PostMapping(value = "/query/table")
-    public Result queryDataTable(@RequestBody QueryDataTableReq req) throws CodeException {
-        return Result.ok(dataService.queryDataTable(req));
+    public Result queryDataTable(@RequestBody QueryDataTableReq req,HttpServletRequest request) throws CodeException {
+        return Result.ok(dataService.queryDataTable(req,request));
     }
 
     @PostMapping(value = "/change")
@@ -47,9 +48,19 @@ public class DataController {
     }
 
     @PostMapping(value = "/copy")
-    public Result copyData(@RequestBody CopyDataReq req) throws CodeException {
-        dataService.copyData(req);
+    public Result copyData(@RequestBody CopyDataReq req,HttpServletRequest request) throws CodeException {
+        dataService.copyData(req,request);
         return Result.ok();
+    }
+
+    @PostMapping(value = "/query/history/app")
+    public Result queryDataHistoryApp(@RequestBody QueryDataHistoryAppReq req,HttpServletRequest request) throws CodeException {
+        return Result.ok(dataService.queryDataHistoryApp(req,request));
+    }
+
+    @PostMapping(value = "/query/realtime/app")
+    public Result queryDataRealtimeApp(@RequestBody QueryDataRealtimeAppReq req,HttpServletRequest request) throws CodeException {
+        return Result.ok(dataService.queryDataRealtimeApp(req,request));
     }
 
 }

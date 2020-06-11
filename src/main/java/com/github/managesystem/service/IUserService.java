@@ -25,7 +25,7 @@ public interface IUserService extends IService<User> {
 
     void deleteUser(DeleteUserReq req);
 
-    void addUser(AddUserReq req);
+    void addUser(AddUserReq req) throws CodeException;
 
     void editUser(EditUserReq req);
 }

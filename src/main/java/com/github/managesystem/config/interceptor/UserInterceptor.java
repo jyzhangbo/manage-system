@@ -1,9 +1,12 @@
 package com.github.managesystem.config.interceptor;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.managesystem.entity.User;
 import com.github.managesystem.model.exception.CodeException;
 import com.github.managesystem.model.exception.ResultCode;
+import com.github.managesystem.service.IUserService;
+import com.github.managesystem.util.WebContextUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,7 +26,7 @@ public class UserInterceptor implements HandlerInterceptor {
 
     private static final String USERNAME = "userName";
 
-    public static final String TIME = "time";
+    public static final String USER_INFO = "USER_INFO";
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
@@ -31,18 +34,21 @@ public class UserInterceptor implements HandlerInterceptor {
         if(httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())){
             return true;
         }
-
         //获取请求头中的userName和time
         String userName = httpServletRequest.getHeader(USERNAME);
-        String time = httpServletRequest.getHeader(TIME);
-
-       // log.info(Lang.getIP(httpServletRequest) + "@" + httpServletRequest.getRequestURI() + "请求头userName：{};time: {}", userName, time);
 
         if (Strings.isBlank(userName)) {
-            throw new CodeException(ResultCode.ERROR_AUTHORITY, USERNAME);
+            throw new CodeException(ResultCode.ERROR_AUTHORITY_NOT_EXIST, USERNAME);
         }
 
-        httpServletRequest.setAttribute(USERNAME, userName);
+        IUserService userService = WebContextUtils.findBean(IUserService.class);
+        User user = userService.getOne(new QueryWrapper<User>().eq(User.LOGIN_NAME, userName),false);
+
+        if(user == null){
+            throw new CodeException(ResultCode.ERROR_AUTHORITY,userName);
+        }
+
+        httpServletRequest.setAttribute(USER_INFO, user);
 
         return true;
     }

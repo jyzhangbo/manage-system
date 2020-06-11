@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.List;
 
 import com.github.managesystem.model.constant.AttributeEnum;
+import com.github.managesystem.model.resp.QueryDataHistoryValue;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -114,6 +116,31 @@ public class DeviceData implements Serializable {
     public static final String ATTRIBUTE_T7 = "attribute_t7";
 
     public static final String ATTRIBUTE_T8 = "attribute_t8";
+
+    public Double getValueByAttributeCode(String attributeCode) {
+        switch (attributeCode) {
+            case "T1" :
+                return this.getAttributeT1();
+            case "T2" :
+                return this.getAttributeT2();
+            case "T3" :
+                return this.getAttributeT3();
+            case "T4" :
+                return this.getAttributeT4();
+            case "T5" :
+                return this.getAttributeT5();
+            case "T6" :
+                return this.getAttributeT6();
+            case "T7" :
+                return this.getAttributeT7();
+            case "T8" :
+                return this.getAttributeT8();
+            default :
+                break;
+        }
+
+        return 0.0;
+    }
 
     public DeviceData copyValueToAttribute(String attributeCode, Double value) {
         switch (attributeCode) {

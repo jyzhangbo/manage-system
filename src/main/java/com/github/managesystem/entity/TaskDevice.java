@@ -74,6 +74,18 @@ public class TaskDevice implements Serializable {
      */
     private String taskName;
 
+    private String companyName;
+
+    /**
+     * 采集间隔 =
+     */
+    private Integer collectSpace;
+
+    /**
+     * 任务状态
+     */
+    private Integer taskStatus;
+
 
     public static final String ID = "id";
 
@@ -92,5 +104,8 @@ public class TaskDevice implements Serializable {
     public static final String MODIFY_TIME = "modify_time";
 
     public static final String TASK_NAME = "task_name";
+    public static final String COMPANY_NAME = "company_name";
+
+    public static final String TASK_STATUS = "task_status";
 
 }

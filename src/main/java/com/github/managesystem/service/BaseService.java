@@ -1,22 +1,24 @@
 package com.github.managesystem.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.managesystem.config.interceptor.UserInterceptor;
+import com.github.managesystem.entity.Device;
 import com.github.managesystem.entity.Img;
 import com.github.managesystem.entity.Task;
 import com.github.managesystem.entity.User;
+import com.github.managesystem.model.constant.RoleEnum;
 import com.github.managesystem.model.req.ListCompanyNameReq;
 import com.github.managesystem.model.req.ListImgReq;
 import com.github.managesystem.model.req.ListTaskDeviceReq;
 import com.github.managesystem.model.req.RemoveImgReq;
 import com.github.managesystem.model.resp.DeviceInfo;
 import com.github.managesystem.model.resp.ListTaskDeviceResp;
+import org.nutz.lang.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 /**
  * @Author:zhangbo
@@ -49,9 +51,20 @@ public class BaseService {
         return companyNames;
     }
 
-    public List<ListTaskDeviceResp> listTaskDevice(ListTaskDeviceReq req) {
+    public List<ListTaskDeviceResp> listTaskDevice(ListTaskDeviceReq req, HttpServletRequest request) {
         List<ListTaskDeviceResp> resp = new ArrayList<>();
-        List<Task> tasks = taskService.list();
+
+        User user = (User) request.getAttribute(UserInterceptor.USER_INFO);
+        QueryWrapper<Task> queryWrapper = new QueryWrapper<>();
+        if(!Strings.equals(user.getUserRole(),RoleEnum.ADMIN.value)){
+            queryWrapper.eq(Task.COMPANY_NAME,user.getCompanyName());
+        }
+
+        if(Objects.nonNull(req.getTaskState())){
+            queryWrapper.eq(Task.TASK_STATUS,req.getTaskState());
+        }
+
+        List<Task> tasks = taskService.list(queryWrapper);
         for(Task task : tasks){
             List<DeviceInfo> devices = taskDeviceService.listDeviceByTaskNum(task.getTaskNum());
             List<Map<String,String>> children = new ArrayList<>();

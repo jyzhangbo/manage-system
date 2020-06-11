@@ -11,11 +11,11 @@ public class SimulationData {
 
     private String name;
     private String code;
-    private Double startTemp;
-    private Double stableTemp;
-    private Double downTemp;
-    private Double endTemp;
-    private Integer randomData;
+    private Double startTemp = 0.0;
+    private Double stableTemp = 0.0;
+    private Double downTemp = 0.0;
+    private Double endTemp = 0.0;
+    private Integer randomData = 1;
     private Boolean effective;
 
 }

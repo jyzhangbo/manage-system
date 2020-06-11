@@ -1,21 +1,22 @@
 package com.github.managesystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.managesystem.config.interceptor.UserInterceptor;
 import com.github.managesystem.entity.Device;
 import com.github.managesystem.entity.Task;
 import com.github.managesystem.entity.TaskDevice;
+import com.github.managesystem.entity.User;
 import com.github.managesystem.mapper.DeviceMapper;
 import com.github.managesystem.mapper.TaskMapper;
 import com.github.managesystem.model.constant.DeviceStateEnum;
+import com.github.managesystem.model.constant.RoleEnum;
 import com.github.managesystem.model.constant.TaskStateEnum;
 import com.github.managesystem.model.exception.CodeException;
 import com.github.managesystem.model.exception.ResultCode;
-import com.github.managesystem.model.req.AddTaskReq;
-import com.github.managesystem.model.req.DeleteTaskReq;
-import com.github.managesystem.model.req.EditTaskReq;
-import com.github.managesystem.model.req.ListTaskReq;
+import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.DeviceInfo;
 import com.github.managesystem.model.resp.ListTaskInfo;
 import com.github.managesystem.model.resp.ListTaskResp;
@@ -27,7 +28,7 @@ import org.nutz.lang.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -49,19 +50,27 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
     private DeviceMapper deviceMapper;
 
     @Override
-    public ListTaskResp listTask(ListTaskReq req) {
+    public ListTaskResp listTask(ListTaskReq req, HttpServletRequest request) {
         ListTaskResp resp = new ListTaskResp();
         Page<Task> page = new Page<>(req.getPageNum(),req.getPageSize());
         QueryWrapper<Task> queryWrapper = new QueryWrapper<>();
+
+        User user = (User) request.getAttribute(UserInterceptor.USER_INFO);
+        if(!Strings.equals(user.getUserRole(),RoleEnum.ADMIN.value)){
+            queryWrapper.eq(Device.COMPANY_NAME,user.getCompanyName());
+        }
+
         if(Strings.isNotBlank(req.getTaskName())){
             queryWrapper.eq(Task.TASK_NAME,req.getTaskName());
         }
         if(Strings.isNotBlank(req.getTaskNum())){
             queryWrapper.eq(Task.TASK_NUM,req.getTaskNum());
         }
+        if(Objects.nonNull(req.getTaskState())){
+            queryWrapper.eq(Task.TASK_STATUS,req.getTaskState());
+        }
 
-
-        IPage<Task> page1 = this.page(page, queryWrapper);
+        IPage<Task> page1 = this.page(page, queryWrapper.orderByDesc(Task.MODIFY_TIME));
 
         for(Task task : page1.getRecords()){
             List<DeviceInfo> devices = taskDeviceService.listDeviceByTaskNum(task.getTaskNum());
@@ -85,7 +94,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
 
     @Override
     public void editTask(EditTaskReq req) {
-        Task task = this.getOne(new QueryWrapper<Task>().eq(Task.TASK_NUM, req.getTaskNum()));
+        Task task = this.getOne(new QueryWrapper<Task>().eq(Task.TASK_NUM, req.getTaskNum()),false);
         if(Objects.nonNull(req.getState())) {
             task.setTaskStatus(req.getState());
             task.setModifyTime(LocalDateTime.now());
@@ -93,37 +102,41 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                 task.setStartTime(LocalDateTime.now());
             }else if (Objects.equals(req.getState(), TaskStateEnum.END.value)) {
                 task.setEndTime(LocalDateTime.now());
-                Device device = Device.builder()
-                        .deviceState(DeviceStateEnum.UNUSE.value)
-                        .modifyTime(LocalDateTime.now())
-                        .build();
-                deviceMapper.update(device, new QueryWrapper<Device>().in(Device.DEVICE_NUM, req.getDevices()));
             }
-
             this.updateById(task);
-            return;
-        }
+            taskDeviceService.update(new UpdateWrapper<TaskDevice>()
+                    .set(TaskDevice.MODIFY_TIME,LocalDateTime.now())
+                    .set(TaskDevice.TASK_STATUS,req.getState())
+                    .eq(TaskDevice.TASK_NUM,req.getTaskNum())
+                    .in(TaskDevice.DEVICE_NUM,req.getDevices()));
 
-        if(req.getDevices().size() > 0){
-            taskDeviceService.remove(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM,req.getTaskNum()));
-            taskDeviceService.addTaskDevice(task,req.getDevices());
+        }else {
+            task.setTaskName(req.getTaskName());
+            task.setModifyTime(LocalDateTime.now());
+            this.updateById(task);
+            taskDeviceService.remove(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM, req.getTaskNum()));
+            if (req.getDevices().size() > 0) {
+                taskDeviceService.addTaskDevice(task, req.getDevices());
+            }
         }
-
 
     }
 
     @Override
-    public void addTask(AddTaskReq req) throws CodeException{
+    public void addTask(AddTaskReq req, HttpServletRequest request) throws CodeException{
         Task task = this.getOne(new QueryWrapper<Task>().eq(Task.TASK_NUM, req.getTaskNum()), false);
         if(Objects.nonNull(task)){
             throw new CodeException(ResultCode.ERROR_TASK);
         }
+
+        User user = (User) request.getAttribute(UserInterceptor.USER_INFO);
+
         task = Task.builder().taskName(req.getTaskName())
                 .taskNum(req.getTaskNum())
                 .taskStatus(TaskStateEnum.CREATE.value)
                 .createTime(LocalDateTime.now())
                 .modifyTime(LocalDateTime.now())
-                .companyName("ziru")
+                .companyName(user.getCompanyName())
                 .build();
         this.save(task);
 
@@ -131,15 +144,28 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
 
     }
 
-
-    public String asertTaskNum(String taskNum) throws CodeException{
+    @Override
+    public String asertTaskNum(String taskNum, HttpServletRequest request) throws CodeException{
         if(Strings.isBlank(taskNum)) {
-            Task task = this.getOne(new QueryWrapper<Task>().orderByDesc(Task.MODIFY_TIME), false);
-            if (Objects.isNull(task)) {
+
+            QueryWrapper<Task> queryWrapper = new QueryWrapper<>();
+            User user = (User) request.getAttribute(UserInterceptor.USER_INFO);
+            if(!Strings.equals(user.getUserRole(),RoleEnum.ADMIN.value)){
+                queryWrapper.eq(Device.COMPANY_NAME,user.getCompanyName());
+            }
+
+            List<Task> tasks = this.list(queryWrapper.orderByDesc(Task.MODIFY_TIME));
+            if(tasks.size() == 0){
                 throw new CodeException(ResultCode.ERROR_TASK_NULL);
             }
-            return task.getTaskNum();
+            return tasks.get(0).getTaskNum();
         }
         return taskNum;
+    }
+
+    @Override
+    public List<TaskDevice> listTaskSearch(ListTaskSearchReq req, HttpServletRequest request) {
+
+        return taskDeviceService.listTaskDeviceBySearch(req,request);
     }
 }

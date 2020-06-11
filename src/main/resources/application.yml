@@ -1,6 +1,10 @@
+server:
+  ssl:
+    key-store: classpath:hlbr.smartdeviceclub.com.jks
+    key-store-password: hlbr.smartdeviceclub.com
 spring:
   profiles:
-    active: test
+    active: prod
   servlet:
       multipart:
         max-file-size: 100MB

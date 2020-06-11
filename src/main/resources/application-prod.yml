@@ -1,5 +1,5 @@
 server:
-  port: 80
+  port: 443
 spring:
   datasource:
     url: jdbc:mysql://rm-2ze34z31901fe8lrnbo.mysql.rds.aliyuncs.com/ai_smartdevice?useUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8&useSSL=false
@@ -8,4 +8,12 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
 
 picture:
-  url: http://114.55.171.27
+  url: https://hlbr.smartdeviceclub.com
+
+http:
+  server:
+    port: 80
+
+device:
+  img: https://hlbr.smartdeviceclub.com/home/img/device_001.jpg
+  collectspace: 30

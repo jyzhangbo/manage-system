@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @Author:zhangbo
  * @Date:2020/5/18 18:48
@@ -23,11 +25,6 @@ public class DeviceController {
     @PostMapping(value = "/list/admin")
     public Result listDeviceAdmin(@RequestBody ListDeviceAdminReq req){
         return Result.ok(deviceService.listDeviceAdmin(req));
-    }
-
-    @PostMapping(value = "/list/user")
-    public Result listDeviceUser(@RequestBody ListDeviceUserReq req){
-        return Result.ok(deviceService.listDeviceUser(req));
     }
 
     @PostMapping(value = "/delete")
@@ -55,8 +52,8 @@ public class DeviceController {
     }
 
     @PostMapping(value = "/list/task")
-    public Result listDeviceTask(@RequestBody ListDeviceTaskReq req){
-        return Result.ok(deviceService.listDeviceTask(req));
+    public Result listDeviceTask(@RequestBody ListDeviceTaskReq req, HttpServletRequest request){
+        return Result.ok(deviceService.listDeviceTask(req,request));
     }
 
 }
