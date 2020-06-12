@@ -20,6 +20,4 @@ public class ListAlarmRuleResp {
 
     private List<AlarmRule> infos;
 
-    private Integer total;
-
 }

@@ -2,6 +2,7 @@ package com.github.managesystem.service;
 
 import com.github.managesystem.entity.Device;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.github.managesystem.model.exception.CodeException;
 import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.ListDeviceAdminResp;
 import com.github.managesystem.model.resp.ListDeviceTaskResp;
@@ -26,7 +27,7 @@ public interface IDeviceService extends IService<Device> {
 
     void editDeviceAdmin(EditDeviceAdmin req);
 
-    void addDevice(AddDeviceReq req);
+    void addDevice(AddDeviceReq req) throws CodeException;
 
     void editDeviceUser(EditDeviceUserReq req);
 

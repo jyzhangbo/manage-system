@@ -1,5 +1,6 @@
 package com.github.managesystem.controller;
 
+import com.github.managesystem.model.exception.CodeException;
 import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.Result;
 import com.github.managesystem.service.IDeviceService;
@@ -34,7 +35,7 @@ public class DeviceController {
     }
 
     @PostMapping(value = "/add")
-    public Result addDevice(@RequestBody AddDeviceReq req){
+    public Result addDevice(@RequestBody AddDeviceReq req) throws CodeException {
         deviceService.addDevice(req);
         return Result.ok();
     }

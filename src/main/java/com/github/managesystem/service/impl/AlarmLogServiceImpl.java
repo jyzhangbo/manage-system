@@ -13,6 +13,7 @@ import com.github.managesystem.model.req.ListAlarmReq;
 import com.github.managesystem.model.resp.ListAlarmResp;
 import com.github.managesystem.service.IAlarmLogService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.managesystem.util.TimeUtils;
 import org.nutz.lang.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -49,11 +50,11 @@ public class AlarmLogServiceImpl extends ServiceImpl<AlarmLogMapper, AlarmLog> i
             queryWrapper.like(AlarmLog.ALARM_RULE_OBJECT, req.getAlarmObject());
         }
         if (!StringUtils.isEmpty(req.getAlarmStartTime())){
-            LocalDateTime alarmTime = LocalDateTime.parse(req.getAlarmStartTime(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            LocalDateTime alarmTime = TimeUtils.parseTime(req.getAlarmStartTime());
             queryWrapper.ge(AlarmLog.CREATE_TIME, alarmTime);
         }
         if (!StringUtils.isEmpty(req.getAlarmEndTime())){
-            LocalDateTime alarmTime = LocalDateTime.parse(req.getAlarmEndTime(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            LocalDateTime alarmTime = TimeUtils.parseTime(req.getAlarmEndTime());
             queryWrapper.le(AlarmLog.CREATE_TIME, alarmTime);
         }
         IPage<AlarmLog> iPage = this.page(page,queryWrapper);

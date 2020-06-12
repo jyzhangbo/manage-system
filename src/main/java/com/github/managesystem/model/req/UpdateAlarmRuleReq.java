@@ -10,5 +10,4 @@ import lombok.Data;
 public class UpdateAlarmRuleReq {
     private Long id;
     private Integer judgeValue;
-    private String modifer;
 }

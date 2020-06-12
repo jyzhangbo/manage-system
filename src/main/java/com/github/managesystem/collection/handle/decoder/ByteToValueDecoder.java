@@ -4,6 +4,7 @@ import com.github.managesystem.collection.model.ProtocolDecodeOutData;
 import com.github.managesystem.util.TransformUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
+import lombok.extern.slf4j.Slf4j;
 import org.nutz.lang.Encoding;
 import org.nutz.lang.Strings;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * @Author:zhangbo
  * @Date:2020/6/4 16:19
  */
+@Slf4j
 public class ByteToValueDecoder extends MessageToMessageDecoder<ProtocolDecodeOutData> {
 
     @Override
@@ -46,6 +48,11 @@ public class ByteToValueDecoder extends MessageToMessageDecoder<ProtocolDecodeOu
         }
     }
 
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        super.exceptionCaught(ctx, cause);
+        log.error("消息转换异常:{}",cause.getMessage());
+    }
 
     public static void main(String[] args) throws Exception{
         byte[] b = {0x59,0x32,0x38,0x58,0x56,0x50,};

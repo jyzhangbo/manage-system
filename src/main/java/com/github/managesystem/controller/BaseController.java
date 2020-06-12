@@ -1,5 +1,6 @@
 package com.github.managesystem.controller;
 
+import com.github.managesystem.model.exception.CodeException;
 import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.Result;
 import com.github.managesystem.service.BaseService;
@@ -28,7 +29,7 @@ public class BaseController {
     }
 
     @PostMapping(value = "/list/task/device")
-    public Result listTaskDevice(@RequestBody ListTaskDeviceReq req, HttpServletRequest request){
+    public Result listTaskDevice(@RequestBody ListTaskDeviceReq req, HttpServletRequest request) throws CodeException {
         return Result.ok(baseService.listTaskDevice(req,request));
     }
 

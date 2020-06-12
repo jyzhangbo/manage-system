@@ -20,6 +20,8 @@ public class ProtocolDecodeOutData {
 
     public byte[] content;
 
+    public String contentStr;
+
     public ProtocolDecodeOutData() {
         attrs = new ArrayList<DeviceAttr>();
     }

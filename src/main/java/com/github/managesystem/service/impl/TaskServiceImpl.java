@@ -145,25 +145,6 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
     }
 
     @Override
-    public String asertTaskNum(String taskNum, HttpServletRequest request) throws CodeException{
-        if(Strings.isBlank(taskNum)) {
-
-            QueryWrapper<Task> queryWrapper = new QueryWrapper<>();
-            User user = (User) request.getAttribute(UserInterceptor.USER_INFO);
-            if(!Strings.equals(user.getUserRole(),RoleEnum.ADMIN.value)){
-                queryWrapper.eq(Device.COMPANY_NAME,user.getCompanyName());
-            }
-
-            List<Task> tasks = this.list(queryWrapper.orderByDesc(Task.MODIFY_TIME));
-            if(tasks.size() == 0){
-                throw new CodeException(ResultCode.ERROR_TASK_NULL);
-            }
-            return tasks.get(0).getTaskNum();
-        }
-        return taskNum;
-    }
-
-    @Override
     public List<TaskDevice> listTaskSearch(ListTaskSearchReq req, HttpServletRequest request) {
 
         return taskDeviceService.listTaskDeviceBySearch(req,request);

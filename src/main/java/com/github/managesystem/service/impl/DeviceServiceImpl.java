@@ -12,6 +12,8 @@ import com.github.managesystem.model.constant.AttributeEnum;
 import com.github.managesystem.model.constant.DeviceStateEnum;
 import com.github.managesystem.model.constant.RoleEnum;
 import com.github.managesystem.model.constant.TaskStateEnum;
+import com.github.managesystem.model.exception.CodeException;
+import com.github.managesystem.model.exception.ResultCode;
 import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.*;
 import com.github.managesystem.service.IDeviceControlRecordService;
@@ -87,7 +89,12 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     }
 
     @Override
-    public void addDevice(AddDeviceReq req) {
+    public void addDevice(AddDeviceReq req) throws CodeException{
+        Device one = this.getOne(new QueryWrapper<Device>().eq(Device.DEVICE_NUM, req.getDeviceNum()));
+        if(one != null){
+            throw new CodeException(ResultCode.ERROR_DEVICE);
+        }
+
         Device device = Device.builder().deviceNum(req.getDeviceNum())
                 .deviceName(req.getDeviceNum())
                 .companyName(req.getCompanyName())

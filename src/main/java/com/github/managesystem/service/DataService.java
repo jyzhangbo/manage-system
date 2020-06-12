@@ -40,9 +40,8 @@ public class DataService {
     private IDeviceDataService deviceDataService;
 
 
-    public QueryDataCharResp queryDataChar(QueryDataTableReq req, HttpServletRequest request) throws CodeException{
+    public QueryDataCharResp queryDataChar(QueryDataTableReq req) throws CodeException{
         req.setEndTime(AsertUtils.asertToNow(req.getEndTime()));
-        req.setTaskNum(taskService.asertTaskNum(req.getTaskNum(), request));
 
         TaskDevice taskDevice = taskDeviceService.asertTaskDevice(req.getTaskNum(),req.getDeviceNum());
         Map<String,String> tableHeader = Json.fromJsonAsMap(String.class,taskDevice.getAttributeInfo());
@@ -66,22 +65,15 @@ public class DataService {
         return queryDataCharResp;
     }
 
-    public QueryDataTableResp queryDataTable(QueryDataTableReq req, HttpServletRequest request) throws CodeException{
+    public QueryDataTableResp queryDataTable(QueryDataTableReq req) throws CodeException{
 
         req.setEndTime(AsertUtils.asertToNow(req.getEndTime()));
-        req.setTaskNum(taskService.asertTaskNum(req.getTaskNum(), request));
 
         TaskDevice taskDevice = taskDeviceService.asertTaskDevice(req.getTaskNum(),req.getDeviceNum());
         Map<String,String> tableHeader = Json.fromJsonAsMap(String.class,taskDevice.getAttributeInfo());
         req.setDeviceNum(taskDevice.getDeviceNum());
 
-        IPage<DeviceData> record =deviceDataService.page(
-                new Page<>(req.getPageNum(),req.getPageSize()),
-                new QueryWrapper<DeviceData>()
-                .eq(DeviceData.TASK_NUM, req.getTaskNum())
-                .eq(DeviceData.DEVICE_NUM, req.getDeviceNum())
-                .between(DeviceData.DATA_TIME, TimeUtils.parseTime(req.getStartTime()), TimeUtils.parseTime(req.getEndTime()))
-                .orderByDesc(DeviceData.DATA_TIME));
+        IPage<DeviceData> record = queryDeviceDataPage(req);
 
         List<QueryDataTable> tableDatas = new ArrayList<>();
         for(DeviceData data : record.getRecords()){
@@ -97,6 +89,18 @@ public class DataService {
                 .datas(tableDatas)
                 .build();
     }
+
+
+    public IPage<DeviceData> queryDeviceDataPage(QueryDataTableReq req){
+        return deviceDataService.page(
+                new Page<>(req.getPageNum(),req.getPageSize()),
+                new QueryWrapper<DeviceData>()
+                        .eq(DeviceData.TASK_NUM, req.getTaskNum())
+                        .eq(DeviceData.DEVICE_NUM, req.getDeviceNum())
+                        .between(DeviceData.DATA_TIME, TimeUtils.parseTime(req.getStartTime()), TimeUtils.parseTime(req.getEndTime()))
+                        .orderByDesc(DeviceData.DATA_TIME));
+    }
+
 
     public void changeData(ChangeDataReq req) {
 

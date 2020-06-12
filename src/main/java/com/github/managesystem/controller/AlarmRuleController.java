@@ -35,14 +35,14 @@ public class AlarmRuleController {
     }
 
     @PostMapping(value = "/enable")
-    public Result enableAlarmRule(@RequestBody EnableAlarmRuleReq req){
-        alarmRuleService.enableRule(req);
+    public Result enableAlarmRule(@RequestBody EnableAlarmRuleReq req,HttpServletRequest request){
+        alarmRuleService.enableRule(req,request);
         return Result.ok();
     }
 
     @PostMapping(value = "/update")
-    public Result updateAlarmRule(@RequestBody UpdateAlarmRuleReq req){
-        alarmRuleService.updateRule(req);
+    public Result updateAlarmRule(@RequestBody UpdateAlarmRuleReq req,HttpServletRequest request){
+        alarmRuleService.updateRule(req,request);
         return Result.ok();
     }
 

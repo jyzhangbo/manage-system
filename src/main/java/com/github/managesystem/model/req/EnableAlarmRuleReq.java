@@ -10,5 +10,4 @@ import lombok.Data;
 public class EnableAlarmRuleReq {
     private Long id;
     private Integer isEnable;
-    private String modifer;
 }

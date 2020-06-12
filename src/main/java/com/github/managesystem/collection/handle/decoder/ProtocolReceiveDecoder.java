@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
 import io.netty.util.ReferenceCountUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.nutz.lang.Strings;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
  * @Author:zhangbo
  * @Date:2020/6/3 12:04
  */
+@Slf4j
 public class ProtocolReceiveDecoder extends ReplayingDecoder<ObjectDecoderState> {
 
     private int length;
@@ -75,6 +77,7 @@ public class ProtocolReceiveDecoder extends ReplayingDecoder<ObjectDecoderState>
                 content.readBytes(contentByte);
                 ReferenceCountUtil.release(content);
                 body.content = contentByte;
+                body.contentStr = TransformUtils.byteToHexString(contentByte);
                 checkpoint(ObjectDecoderState.READ_CHECK);
                 return;
             case READ_CHECK:
@@ -91,6 +94,12 @@ public class ProtocolReceiveDecoder extends ReplayingDecoder<ObjectDecoderState>
 
         }
 
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        super.exceptionCaught(ctx, cause);
+        log.error("接收消息异常:{}",cause.getMessage());
     }
 
     public static void main(String[] args) {

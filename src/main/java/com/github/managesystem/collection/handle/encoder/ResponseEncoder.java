@@ -6,11 +6,13 @@ import com.google.common.primitives.Bytes;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Author:zhangbo
  * @Date:2020/6/6 18:21
  */
+@Slf4j
 public class ResponseEncoder extends MessageToByteEncoder<ResponseModel> {
     @Override
     protected void encode(ChannelHandlerContext ctx, ResponseModel msg, ByteBuf out) throws Exception {
@@ -41,6 +43,8 @@ public class ResponseEncoder extends MessageToByteEncoder<ResponseModel> {
 
         byte[] end = {0x16};
         byte[] concat = Bytes.concat(startByte,sizeByte,contentByte,checkSum, end);
+
+        log.info("resp data: {}",TransformUtils.byteToHexString(concat));
         out.writeBytes(concat);
     }
 
@@ -49,18 +53,16 @@ public class ResponseEncoder extends MessageToByteEncoder<ResponseModel> {
         for(int i = 0; i < len; i++){
             sum = sum + b[i];
         }
-        if(sum > 0xff){ //超过了255，使用补码（补码 = 原码取反 + 1）
-            sum = ~sum;
-            sum = sum + 1;
-        }
+
         return (byte) (sum & 0xff);
     }
 
 
     public static void main(String[] args) throws Exception{
-
-        if(TransformUtils.hexStringToBytes("86")[0] == 0x86){
-            System.out.println("11");
-        }
+        ResponseEncoder encoder = new ResponseEncoder();
+        byte[] b1 = new byte[1];
+        byte[] b = {0x72,0x65,0x01,0x77,0x77};
+        b1[0] = encoder.sumCheck(b, b.length);
+        System.out.println(TransformUtils.byteToHexString(b1));
     }
 }

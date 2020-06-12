@@ -21,7 +21,7 @@ public interface IAlarmRuleService extends IService<AlarmRule> {
 
     ListAlarmRuleResp listRule(ListAlarmRuleReq req, HttpServletRequest request);
 
-    void enableRule(EnableAlarmRuleReq req);
+    void enableRule(EnableAlarmRuleReq req, HttpServletRequest request);
 
-    void updateRule(UpdateAlarmRuleReq req);
+    void updateRule(UpdateAlarmRuleReq req, HttpServletRequest request);
 }

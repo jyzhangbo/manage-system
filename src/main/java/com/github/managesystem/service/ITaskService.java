@@ -28,7 +28,5 @@ public interface ITaskService extends IService<Task> {
 
     void addTask(AddTaskReq req, HttpServletRequest request) throws CodeException;
 
-    String asertTaskNum(String taskNum, HttpServletRequest request) throws CodeException;
-
     List<TaskDevice> listTaskSearch(ListTaskSearchReq req, HttpServletRequest request);
 }

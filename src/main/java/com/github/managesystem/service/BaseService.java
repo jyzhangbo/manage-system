@@ -7,6 +7,8 @@ import com.github.managesystem.entity.Img;
 import com.github.managesystem.entity.Task;
 import com.github.managesystem.entity.User;
 import com.github.managesystem.model.constant.RoleEnum;
+import com.github.managesystem.model.exception.CodeException;
+import com.github.managesystem.model.exception.ResultCode;
 import com.github.managesystem.model.req.ListCompanyNameReq;
 import com.github.managesystem.model.req.ListImgReq;
 import com.github.managesystem.model.req.ListTaskDeviceReq;
@@ -51,7 +53,7 @@ public class BaseService {
         return companyNames;
     }
 
-    public List<ListTaskDeviceResp> listTaskDevice(ListTaskDeviceReq req, HttpServletRequest request) {
+    public List<ListTaskDeviceResp> listTaskDevice(ListTaskDeviceReq req, HttpServletRequest request) throws CodeException {
         List<ListTaskDeviceResp> resp = new ArrayList<>();
 
         User user = (User) request.getAttribute(UserInterceptor.USER_INFO);
@@ -65,6 +67,9 @@ public class BaseService {
         }
 
         List<Task> tasks = taskService.list(queryWrapper);
+        if(tasks.size() == 0) {
+            throw new CodeException(ResultCode.ERROR_TASK_NULL);
+        }
         for(Task task : tasks){
             List<DeviceInfo> devices = taskDeviceService.listDeviceByTaskNum(task.getTaskNum());
             List<Map<String,String>> children = new ArrayList<>();
