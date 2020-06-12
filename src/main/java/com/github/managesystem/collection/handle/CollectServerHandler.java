@@ -50,4 +50,10 @@ public class CollectServerHandler extends SimpleChannelInboundHandler<ProtocolDe
         ctx.close();
     }
 
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+
+        log.info("连接断开");
+        ctx.channel().close();
+    }
 }
