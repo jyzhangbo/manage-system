@@ -47,13 +47,15 @@ public class CollectServerHandler extends SimpleChannelInboundHandler<ProtocolDe
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         super.exceptionCaught(ctx, cause);
         log.error("消息处理异常:{}",cause.getMessage());
-        ctx.close();
+        if(ctx.channel().isActive()){
+            ctx.close();
+        }
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 
-        log.info("连接断开");
+        log.info("{},连接断开",ctx.channel().remoteAddress().toString());
         ctx.channel().close();
     }
 }

@@ -50,8 +50,10 @@ public class ByteToValueDecoder extends MessageToMessageDecoder<ProtocolDecodeOu
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        super.exceptionCaught(ctx, cause);
         log.error("消息转换异常:{}",cause.getMessage());
+        if(ctx.channel().isActive()){
+            ctx.close();
+        }
     }
 
     public static void main(String[] args) throws Exception{
