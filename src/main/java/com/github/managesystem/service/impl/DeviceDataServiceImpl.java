@@ -52,6 +52,12 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
         TaskDevice taskDevice = taskDeviceService.getOne(new QueryWrapper<TaskDevice>()
                 .eq(TaskDevice.DEVICE_NUM, data.getDevNum())
                 .eq(TaskDevice.TASK_STATUS,TaskStateEnum.START.value),false);
+        List<AlarmRule> rules = new ArrayList<>();
+        if(taskDevice!=null) {
+            rules = alarmRuleService.list(new QueryWrapper<AlarmRule>()
+                    .eq(AlarmRule.COMPANY_NAME, taskDevice.getCompanyName())
+                    .eq(AlarmRule.IS_DEL, 0).eq(AlarmRule.IS_ENABLE, 1));
+        }
 
         List<DeviceData> deviceDatas = new ArrayList<>();
         for(DeviceAttr attr : data.getAttrs()){
@@ -66,7 +72,7 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
 
                     if(taskDevice!= null){
                         deviceData.setTaskNum(taskDevice.getTaskNum());
-                        saveAlarmLog(taskDevice,key,value);
+                        saveAlarmLog(rules,taskDevice,key,value);
                     }
                 }
                 deviceDatas.add(deviceData);
@@ -87,11 +93,9 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
     }
 
 
-    public void saveAlarmLog(TaskDevice taskDevice,String key,double value){
+    public void saveAlarmLog(List<AlarmRule> rules,TaskDevice taskDevice,String key,double value){
         List<AlarmLog> logs= new ArrayList<>();
-        List<AlarmRule> rules = alarmRuleService.list(new QueryWrapper<AlarmRule>()
-                .eq(AlarmRule.COMPANY_NAME, taskDevice.getCompanyName())
-                .eq(AlarmRule.IS_DEL,0).eq(AlarmRule.IS_ENABLE,1));
+
         Map<String,String> tableHeader = Json.fromJsonAsMap(String.class,taskDevice.getAttributeInfo());
 
         if(rules.size() > 0){
