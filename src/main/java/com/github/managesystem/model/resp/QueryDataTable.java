@@ -12,7 +12,7 @@ public class QueryDataTable {
 
     private String time;
 
-    private Map<String,Double> values;
+    private Map<String,String> values;
 
     private boolean show = false;
 

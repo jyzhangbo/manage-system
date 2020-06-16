@@ -172,9 +172,12 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
                     .deviceNum(device.getDeviceNum()).build());
         }
 
-        List<TaskDevice> taskDevices = taskDeviceMapper.selectList(taskDeviceQueryWrapper
-                .ne(TaskDevice.TASK_STATUS, TaskStateEnum.END.value)
-                .ne(TaskDevice.TASK_NUM,req.getTaskNum()));
+        if(Strings.isNotBlank(req.getTaskNum())){
+            taskDeviceQueryWrapper
+                    .ne(TaskDevice.TASK_NUM,req.getTaskNum());
+        }
+
+        List<TaskDevice> taskDevices = taskDeviceMapper.selectList(taskDeviceQueryWrapper.ne(TaskDevice.TASK_STATUS, TaskStateEnum.END.value));
 
         for(TaskDevice taskDevice : taskDevices){
             if(deviceNums.containsKey(taskDevice.getDeviceNum())) {

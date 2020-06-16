@@ -48,14 +48,15 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
 
     @Override
     public List<DeviceControlRecord> putData(ProtocolDecodeOutData data) {
-        DeviceData deviceData = DeviceData.builder().build();
+
         TaskDevice taskDevice = taskDeviceService.getOne(new QueryWrapper<TaskDevice>()
                 .eq(TaskDevice.DEVICE_NUM, data.getDevNum())
                 .eq(TaskDevice.TASK_STATUS,TaskStateEnum.START.value),false);
 
-        deviceData.setDeviceNum(data.getDevNum());
-
+        List<DeviceData> deviceDatas = new ArrayList<>();
         for(DeviceAttr attr : data.getAttrs()){
+            DeviceData deviceData = DeviceData.builder().build();
+            deviceData.setDeviceNum(data.getDevNum());
             deviceData.setDataTime(TimeUtils.parseTime(attr.getTime()));
             if(Strings.equals(attr.getDataType(),TemperatureDecoder.uploadData)){
                 for(Map.Entry<String,String> entry : attr.getData().entrySet()){
@@ -68,10 +69,11 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
                         saveAlarmLog(taskDevice,key,value);
                     }
                 }
+                deviceDatas.add(deviceData);
             }
         }
 
-        this.save(deviceData);
+        this.saveBatch(deviceDatas);
 
         List<DeviceControlRecord> records = deviceControlRecordService.list(new QueryWrapper<DeviceControlRecord>()
                 .eq(DeviceControlRecord.DEVICE_NUM, data.getDevNum())

@@ -80,7 +80,7 @@ public class BaseService {
                 children.add(map);
             }
             resp.add(ListTaskDeviceResp.builder().children(children)
-                    .label(task.getTaskName())
+                    .label(task.getTaskNum() + task.getTaskName())
                     .value(task.getTaskNum()).build());
         }
 

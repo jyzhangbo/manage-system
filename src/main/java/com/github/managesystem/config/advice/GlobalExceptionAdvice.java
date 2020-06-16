@@ -78,6 +78,7 @@ public class GlobalExceptionAdvice {
      */
     @ExceptionHandler(value = {Exception.class})
     public Result defaultErrorHandler(HttpServletRequest request, Exception exception) {
+        exception.printStackTrace();
         String msg = exception.toString();
         StackTraceElement[] stackTrace = exception.getStackTrace();
         if (stackTrace.length > 0) {

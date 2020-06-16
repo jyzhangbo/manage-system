@@ -57,11 +57,15 @@ public enum  AttributeEnum {
         return attributeInfo;
     }
 
-    public static Map<String,Double> deviceDataToMap(DeviceData data){
-        Map<String,Double> map = new LinkedHashMap<>();
+    public static Map<String,String> deviceDataToMap(DeviceData data){
+        Map<String,String> map = new LinkedHashMap<>();
 
         for(AttributeEnum attribute : AttributeEnum.values()){
-            map.put(attribute.value,data.getValueByAttributeCode(attribute.value));
+            String value = data.getValueByAttributeCode(attribute.value).toString();
+            if(Strings.equals(value,"-3276.7")){
+                value = "-";
+            }
+            map.put(attribute.value,value);
         }
         return map;
     }

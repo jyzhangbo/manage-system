@@ -56,6 +56,7 @@ public class DataService {
         QueryDataCharResp queryDataCharResp = AttributeEnum.deviceDataToChart(datas, tableHeader);
         queryDataCharResp.setDeviceImg(taskDevice.getDeviceImg());
         queryDataCharResp.setDeviceName(taskDevice.getDeviceName());
+        queryDataCharResp.setCollectSpace(taskDevice.getCollectSpace());
         Map<String, String> attribute = Json.fromJsonAsMap(String.class, taskDevice.getAttributeInfo());
         List<AttributeInfo> infos = new ArrayList<>();
         for(Map.Entry<String,String> entry : attribute.entrySet()){
@@ -124,7 +125,13 @@ public class DataService {
         Long downTime = TimeUtils.parseTime(req.getDownTime()).toEpochSecond(ZoneOffset.ofHours(8));
         Long endTime = TimeUtils.parseTime(req.getEndTime()).toEpochSecond(ZoneOffset.ofHours(8));
         Random r = new Random();
-        if(req.getListTemp().size() == 8){
+
+        List<DeviceData> deviceDatasOld = deviceDataService.list(new QueryWrapper<DeviceData>().eq(DeviceData.TASK_NUM, req.getTaskNum())
+                .eq(DeviceData.DEVICE_NUM, req.getDeviceNum())
+                .between(DeviceData.DATA_TIME, TimeUtils.parseTime(req.getStartTime()), TimeUtils.parseTime(req.getEndTime()))
+                .orderByAsc(DeviceData.DATA_TIME));
+
+        if(req.getListTemp().size() == 8 || deviceDatasOld.size() == 0){
             int timeSpace = req.getTimeSpace() * 60;
             //全部模拟
             int second = req.getRandomTime() * 60;
@@ -147,12 +154,8 @@ public class DataService {
 
         }else {
             //部分模拟(时间不变)
-            List<DeviceData> deviceDatas = deviceDataService.list(new QueryWrapper<DeviceData>().eq(DeviceData.TASK_NUM, req.getTaskNum())
-                            .eq(DeviceData.DEVICE_NUM, req.getDeviceNum())
-                            .between(DeviceData.DATA_TIME, TimeUtils.parseTime(req.getStartTime()), TimeUtils.parseTime(req.getEndTime()))
-                            .orderByAsc(DeviceData.DATA_TIME));
             List<DeviceData> newDeviceDatas = new ArrayList<>();
-            for(DeviceData deviceData : deviceDatas){
+            for(DeviceData deviceData : deviceDatasOld){
                 long dataTime = deviceData.getDataTime().toEpochSecond(ZoneOffset.ofHours(8));
                 newDeviceDatas.add(createRandomData(r,req, startTime, stableTime, downTime, endTime, dataTime, deviceData));
             }
