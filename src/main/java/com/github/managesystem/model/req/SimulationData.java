@@ -15,7 +15,7 @@ public class SimulationData {
     private Double stableTemp = 0.0;
     private Double downTemp = 0.0;
     private Double endTemp = 0.0;
-    private Integer randomData = 1;
+    private Double randomData = 0.0;
     private Boolean effective;
 
 }

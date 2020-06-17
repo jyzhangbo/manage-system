@@ -87,9 +87,16 @@ public class BaseService {
         return resp;
     }
 
-    public List<Map<String,String>> listImg(ListImgReq req) {
+    public List<Map<String,String>> listImg(ListImgReq req, HttpServletRequest request) {
         List<Map<String,String>> imgs = new ArrayList<>();
-        List<Img> list = imgService.list();
+
+        User user = (User) request.getAttribute(UserInterceptor.USER_INFO);
+        QueryWrapper<Img> queryWrapper = new QueryWrapper<>();
+        if(!Strings.equals(user.getUserRole(),RoleEnum.ADMIN.value)){
+            queryWrapper.in(Task.COMPANY_NAME,user.getCompanyName(),RoleEnum.ADMIN.value);
+        }
+
+        List<Img> list = imgService.list(queryWrapper);
         for(Img img : list){
             Map<String,String> map = new HashMap<>();
             map.put("name",img.getImgName());

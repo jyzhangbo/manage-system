@@ -1,14 +1,18 @@
 package com.github.managesystem.config.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.managesystem.entity.Img;
+import com.github.managesystem.entity.Task;
+import com.github.managesystem.entity.User;
+import com.github.managesystem.model.constant.RoleEnum;
+import com.github.managesystem.model.exception.CodeException;
+import com.github.managesystem.model.exception.ResultCode;
 import com.github.managesystem.model.resp.Result;
 import com.github.managesystem.service.IImgService;
+import com.github.managesystem.service.IUserService;
 import org.nutz.img.Colors;
 import org.nutz.img.Images;
-import org.nutz.lang.Files;
-import org.nutz.lang.Lang;
-import org.nutz.lang.Maths;
-import org.nutz.lang.Streams;
+import org.nutz.lang.*;
 import org.nutz.lang.random.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,15 +42,19 @@ public class FileController {
     @Value("${picture.url}")
     private String picUrl;
 
+    @Autowired
+    private IUserService userService;
+
     @PostMapping("/file/upload")
     @ResponseBody
-    public Result uploadFile(@RequestParam("upfile") MultipartFile upfile) throws Exception {
+    public Result uploadFile(@RequestParam("token") String token,@RequestParam("upfile") MultipartFile upfile) throws Exception {
 
         String filename = upfile.getOriginalFilename();
         // 检查文件格式
         String prefix = filename.substring(filename.lastIndexOf(".") + 1);
         System.out.println("-----------------------filename:"+filename);
         System.out.println("-----------------------prefix:"+prefix);
+        System.out.println("-----------------------userName:"+token);
         String hashcode = R.UU16();
         String fn = hashcode + "." + prefix;
 
@@ -56,8 +64,14 @@ public class FileController {
         Files.write(fullPath, upfile.getInputStream());
 
         String fileUrl = picUrl + fullPath;
-
-        imgService.save(Img.builder().imgName(hashcode).imgUrl(fileUrl).build());
+        User user = userService.getOne(new QueryWrapper<User>().eq(User.LOGIN_NAME, token),false);
+        if(user == null){
+            throw new CodeException(ResultCode.ERROR_SYSTEM);
+        }
+        if(Strings.equals(user.getUserRole(),RoleEnum.ADMIN.value)){
+            user.setCompanyName(user.getUserRole());
+        }
+        imgService.save(Img.builder().imgName(hashcode).imgUrl(fileUrl).companyName(user.getCompanyName()).build());
 
         return Result.ok(fileUrl);
     }

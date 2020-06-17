@@ -34,7 +34,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         UserInterceptor gatewayInterceptor = new UserInterceptor();
         InterceptorRegistration interceptorRegistration = registry.addInterceptor(gatewayInterceptor);
         interceptorRegistration.addPathPatterns("/**");
-        interceptorRegistration.excludePathPatterns("/user/login");
+        interceptorRegistration.excludePathPatterns("/user/login","/error");
         interceptorRegistration.excludePathPatterns("/data/export/excel");
         interceptorRegistration.excludePathPatterns("/","/static/**","/home/img/**","/file/upload");
 

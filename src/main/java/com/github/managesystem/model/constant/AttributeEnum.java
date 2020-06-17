@@ -16,6 +16,9 @@ import java.util.*;
 @Getter
 public enum  AttributeEnum {
 
+    /**
+     * 属性1
+     */
     ATTRIBUTE_T1("attribute_t1","T1"),
     ATTRIBUTE_T2("attribute_t2","T2"),
     ATTRIBUTE_T3("attribute_t3","T3"),
@@ -61,11 +64,14 @@ public enum  AttributeEnum {
         Map<String,String> map = new LinkedHashMap<>();
 
         for(AttributeEnum attribute : AttributeEnum.values()){
-            String value = data.getValueByAttributeCode(attribute.value).toString();
-            if(Strings.equals(value,"-3276.7")){
-                value = "-";
+            Double value = data.getValueByAttributeCode(attribute.value);
+            String valueStr;
+            if(value == null || value == -3276.7){
+                valueStr = "-";
+            }else{
+                valueStr = value.toString();
             }
-            map.put(attribute.value,value);
+            map.put(attribute.value,valueStr);
         }
         return map;
     }

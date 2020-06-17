@@ -34,8 +34,8 @@ public class BaseController {
     }
 
     @PostMapping(value = "/list/img")
-    public Result listImg(@RequestBody ListImgReq req){
-        return Result.ok(baseService.listImg(req));
+    public Result listImg(@RequestBody ListImgReq req, HttpServletRequest request){
+        return Result.ok(baseService.listImg(req,request));
     }
 
 

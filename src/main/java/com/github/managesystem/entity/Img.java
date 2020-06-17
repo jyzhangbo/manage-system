@@ -40,11 +40,18 @@ public class Img implements Serializable {
 
     private String imgName;
 
+    /**
+     * 公司
+     */
+    private String companyName;
+
 
     public static final String ID = "id";
 
     public static final String IMG_URL = "img_url";
 
     public static final String IMG_NAME = "img_name";
+
+    public static final String COMPANY_NAME = "company_name";
 
 }
