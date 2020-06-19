@@ -15,5 +15,5 @@ http:
     port: 8088
 
 device:
-  img: https://hlbr.smartdeviceclub.com/home/img/device_001.jpg
+  img: https://hlbr.smartdeviceclub.com/home/img/d7dcd2deb11840af8b40cd93f800b116.png
   collectspace: 30
