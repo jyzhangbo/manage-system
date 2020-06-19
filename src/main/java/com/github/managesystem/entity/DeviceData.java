@@ -55,42 +55,42 @@ public class DeviceData implements Serializable {
     /**
      * 温度
      */
-    private Double attributeT1;
+    private String attributeT1;
 
     /**
      * 温度
      */
-    private Double attributeT2;
+    private String attributeT2;
 
     /**
      * 温度
      */
-    private Double attributeT3;
+    private String attributeT3;
 
     /**
      * 温度
      */
-    private Double attributeT4;
+    private String attributeT4;
 
     /**
      * 温度
      */
-    private Double attributeT5;
+    private String attributeT5;
 
     /**
      * 温度
      */
-    private Double attributeT6;
+    private String attributeT6;
 
     /**
      * 温度
      */
-    private Double attributeT7;
+    private String attributeT7;
 
     /**
      * 温度
      */
-    private Double attributeT8;
+    private String attributeT8;
 
 
     public static final String ID = "id";
@@ -117,7 +117,7 @@ public class DeviceData implements Serializable {
 
     public static final String ATTRIBUTE_T8 = "attribute_t8";
 
-    public Double getValueByAttributeCode(String attributeCode) {
+    public String getValueByAttributeCode(String attributeCode) {
         switch (attributeCode) {
             case "T1" :
                 return this.getAttributeT1();
@@ -139,10 +139,10 @@ public class DeviceData implements Serializable {
                 break;
         }
 
-        return 0.0;
+        return "0.0";
     }
 
-    public DeviceData copyValueToAttribute(String attributeCode, Double value) {
+    public DeviceData copyValueToAttribute(String attributeCode, String value) {
         switch (attributeCode) {
             case "T1" :
                 this.setAttributeT1(value);

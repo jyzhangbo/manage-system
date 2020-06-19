@@ -15,6 +15,6 @@ public class ChartYData {
 
     private String name;
 
-    private List<Double> values;
+    private List<String> values;
 
 }

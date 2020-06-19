@@ -64,14 +64,7 @@ public enum  AttributeEnum {
         Map<String,String> map = new LinkedHashMap<>();
 
         for(AttributeEnum attribute : AttributeEnum.values()){
-            Double value = data.getValueByAttributeCode(attribute.value);
-            String valueStr;
-            if(value == null || value == -3276.7){
-                valueStr = "-";
-            }else{
-                valueStr = value.toString();
-            }
-            map.put(attribute.value,valueStr);
+            map.put(attribute.value,data.getValueByAttributeCode(attribute.value));
         }
         return map;
     }
@@ -80,14 +73,14 @@ public enum  AttributeEnum {
         List<String> xDatas = new ArrayList<>();
         List<ChartYData> yDatas = new ArrayList<>();
 
-        List<Double> t1 = new LinkedList<>();
-        List<Double> t2 = new LinkedList<>();
-        List<Double> t3 = new LinkedList<>();
-        List<Double> t4 = new LinkedList<>();
-        List<Double> t5 = new LinkedList<>();
-        List<Double> t6 = new LinkedList<>();
-        List<Double> t7 = new LinkedList<>();
-        List<Double> t8 = new LinkedList<>();
+        List<String> t1 = new LinkedList<>();
+        List<String> t2 = new LinkedList<>();
+        List<String> t3 = new LinkedList<>();
+        List<String> t4 = new LinkedList<>();
+        List<String> t5 = new LinkedList<>();
+        List<String> t6 = new LinkedList<>();
+        List<String> t7 = new LinkedList<>();
+        List<String> t8 = new LinkedList<>();
         for(DeviceData data : datas){
             xDatas.add(TimeUtils.formatTime(data.getDataTime()));
             t1.add(data.getAttributeT1());

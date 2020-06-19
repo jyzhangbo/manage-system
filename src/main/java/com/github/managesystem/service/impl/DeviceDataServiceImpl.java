@@ -67,12 +67,14 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
             if(Strings.equals(attr.getDataType(),TemperatureDecoder.uploadData)){
                 for(Map.Entry<String,String> entry : attr.getData().entrySet()){
                     String key = entry.getKey();
-                    double value = Double.valueOf(entry.getValue());
+                    String value = Strings.equals("-3276.7",entry.getValue()) ? "-" : entry.getValue();
                     deviceData.copyValueToAttribute(key,value);
 
                     if(taskDevice!= null){
                         deviceData.setTaskNum(taskDevice.getTaskNum());
-                        saveAlarmLog(rules,taskDevice,key,value);
+                        if(!Strings.equals("-",value)) {
+                            saveAlarmLog(rules, taskDevice, key, Double.valueOf(value));
+                        }
                     }
                 }
                 deviceDatas.add(deviceData);

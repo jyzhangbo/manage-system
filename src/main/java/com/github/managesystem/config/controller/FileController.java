@@ -20,11 +20,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.UUID;
@@ -60,8 +60,19 @@ public class FileController {
 
         // 全路径
         String fullPath = "/home/img" + File.separator + fn;
-        // 保存文件
-        Files.write(fullPath, upfile.getInputStream());
+        BufferedOutputStream out= null;
+        try {
+            //修改图片宽和高
+            BufferedImage read = ImageIO.read(upfile.getInputStream());
+            read = Images.scale(read, 686, 217);
+
+            out = new BufferedOutputStream(new FileOutputStream(fullPath));
+            ImageIO.write(read, prefix, out);
+        }catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            out.close();
+        }
 
         String fileUrl = picUrl + fullPath;
         User user = userService.getOne(new QueryWrapper<User>().eq(User.LOGIN_NAME, token),false);

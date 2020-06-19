@@ -34,9 +34,6 @@ public class DataService {
     private ITaskDeviceService taskDeviceService;
 
     @Autowired
-    private ITaskService taskService;
-
-    @Autowired
     private IDeviceDataService deviceDataService;
 
 
@@ -187,7 +184,7 @@ public class DataService {
             } else {
                 randomTemp = temp - r.nextDouble() * data.getRandomData();
             }
-            deviceData.copyValueToAttribute(data.getCode(), new BigDecimal(randomTemp).setScale(1,BigDecimal.ROUND_HALF_UP).doubleValue());
+            deviceData.copyValueToAttribute(data.getCode(), new BigDecimal(randomTemp).setScale(1,BigDecimal.ROUND_HALF_UP).toString());
         }
         return deviceData;
     }
@@ -202,7 +199,7 @@ public class DataService {
         List<DeviceData> newDeviceDatas = new ArrayList<>();
         Random r= new Random();
         for(DeviceData deviceData : deviceDatas){
-            double fromValue = deviceData.getValueByAttributeCode(req.getFromAttr());
+            double fromValue = Double.valueOf(deviceData.getValueByAttributeCode(req.getFromAttr()));
 
             for(String code : req.getToAttr()){
                 double toValue = 0;
@@ -211,7 +208,7 @@ public class DataService {
                 } else {
                     toValue = fromValue + req.getAddData() - r.nextDouble() * req.getRandomData();
                 }
-                deviceData.copyValueToAttribute(code,new BigDecimal(toValue).setScale(1,BigDecimal.ROUND_HALF_UP).doubleValue());
+                deviceData.copyValueToAttribute(code,new BigDecimal(toValue).setScale(1,BigDecimal.ROUND_HALF_UP).toString());
             }
             newDeviceDatas.add(deviceData);
         }
@@ -219,9 +216,7 @@ public class DataService {
     }
 
     public static void main(String[] args) {
-        Random r = new Random();
-        System.out.println(r.nextBoolean());
-        System.out.println(r.nextDouble());
+        System.out.println(new BigDecimal(26.32).setScale(1,BigDecimal.ROUND_HALF_UP).toString());
     }
 
     public QueryDataHistoryAppResp queryDataHistoryApp(QueryDataHistoryAppReq req, HttpServletRequest request) throws CodeException{

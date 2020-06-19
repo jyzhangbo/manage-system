@@ -12,5 +12,5 @@ import lombok.Data;
 public class QueryDataHistoryValue {
 
     private String attributeName;
-    private Double attributeValue;
+    private String attributeValue;
 }
