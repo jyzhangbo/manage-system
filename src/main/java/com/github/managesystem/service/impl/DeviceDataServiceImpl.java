@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,10 +61,16 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
         }
 
         List<DeviceData> deviceDatas = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now();
         for(DeviceAttr attr : data.getAttrs()){
             DeviceData deviceData = DeviceData.builder().build();
             deviceData.setDeviceNum(data.getDevNum());
-            deviceData.setDataTime(TimeUtils.parseTime(attr.getTime()));
+            LocalDateTime time = TimeUtils.parseTime(attr.getTime());
+            long difference = time.toEpochSecond(ZoneOffset.ofHours(8)) - now.toEpochSecond(ZoneOffset.ofHours(8));
+            if(difference > 24 * 60 * 60 || difference < -24 * 60 * 60){
+                continue;
+            }
+            deviceData.setDataTime(time);
             if(Strings.equals(attr.getDataType(),TemperatureDecoder.uploadData)){
                 for(Map.Entry<String,String> entry : attr.getData().entrySet()){
                     String key = entry.getKey();
@@ -94,6 +101,15 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
         return records;
     }
 
+
+    public static void main(String[] args) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime time = TimeUtils.parseTime("2020-06-24 17:00:00");
+        long difference = time.toEpochSecond(ZoneOffset.ofHours(8)) - now.toEpochSecond(ZoneOffset.ofHours(8));
+        if(difference > 24 * 60 * 60 || difference < -24 * 60 * 60){
+           System.out.println(true);
+        }
+    }
 
     public void saveAlarmLog(List<AlarmRule> rules,TaskDevice taskDevice,String key,double value){
         List<AlarmLog> logs= new ArrayList<>();
