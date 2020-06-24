@@ -3,6 +3,7 @@ package com.github.managesystem.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.managesystem.collection.CollectServer;
 import com.github.managesystem.config.interceptor.UserInterceptor;
 import com.github.managesystem.entity.*;
 import com.github.managesystem.mapper.DeviceMapper;
@@ -19,6 +20,7 @@ import com.github.managesystem.model.resp.*;
 import com.github.managesystem.service.IDeviceControlRecordService;
 import com.github.managesystem.service.IDeviceService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.netty.channel.ChannelHandlerContext;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
 import org.nutz.lang.Strings;
@@ -185,6 +187,11 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
             }
         }
         return new ArrayList<>(deviceNums.values());
+    }
+
+    @Override
+    public void controlDevice(ControlDeviceReq req) {
+        ChannelHandlerContext ctx = CollectServer.channelHandlerMap.get(req.getDeviceNum());
     }
 
 }

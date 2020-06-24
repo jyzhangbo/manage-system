@@ -57,4 +57,10 @@ public class DeviceController {
         return Result.ok(deviceService.listDeviceTask(req,request));
     }
 
+    @PostMapping(value = "/control")
+    public Result controlDevice(@RequestBody ControlDeviceReq req){
+        deviceService.controlDevice(req);
+        return Result.ok();
+    }
+
 }

@@ -5,20 +5,22 @@ import com.github.managesystem.collection.handle.decoder.ProtocolReceiveDecoder;
 import com.github.managesystem.collection.handle.CollectServerHandler;
 import com.github.managesystem.collection.handle.decoder.ByteToValueDecoder;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.string.StringEncoder;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 public class CollectServer {
 
     private final int port;
+
+    public static Map<String,ChannelHandlerContext> channelHandlerMap = new HashMap<>();
 
     public CollectServer(int port){
         this.port = port;

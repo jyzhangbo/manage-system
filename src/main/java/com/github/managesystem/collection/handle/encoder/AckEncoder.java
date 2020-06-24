@@ -23,7 +23,9 @@ public class AckEncoder {
         String hour = TransformUtils.integerStrToHexString(now.substring(11,13));
         String minute = TransformUtils.integerStrToHexString(now.substring(14,16));
         String second = TransformUtils.integerStrToHexString(now.substring(17));
-        content.append("029A0181")
+        content.append("029A")
+                .append(msg.getOldCommand())
+                .append("81")
                 .append(year)
                 .append(mounth)
                 .append(day)

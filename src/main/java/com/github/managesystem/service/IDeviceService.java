@@ -32,4 +32,6 @@ public interface IDeviceService extends IService<Device> {
     void editDeviceUser(EditDeviceUserReq req);
 
     List<ListDeviceTaskResp> listDeviceTask(ListDeviceTaskReq req, HttpServletRequest request);
+
+    void controlDevice(ControlDeviceReq req);
 }

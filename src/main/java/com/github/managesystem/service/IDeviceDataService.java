@@ -17,6 +17,6 @@ import java.util.List;
  */
 public interface IDeviceDataService extends IService<DeviceData> {
 
-    List<DeviceControlRecord> putData(ProtocolDecodeOutData data);
+    void putData(ProtocolDecodeOutData data);
 
 }

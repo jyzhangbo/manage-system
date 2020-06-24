@@ -15,6 +15,7 @@ public class ResponseModel {
 
     private String devNum;
     private String command;
+    private String oldCommand;
 
     private List<DeviceControlRecord> records = new ArrayList<>();
 

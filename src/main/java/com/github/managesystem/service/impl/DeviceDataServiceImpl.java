@@ -48,7 +48,7 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
     private IAlarmLogService alarmLogService;
 
     @Override
-    public List<DeviceControlRecord> putData(ProtocolDecodeOutData data) {
+    public void putData(ProtocolDecodeOutData data) {
 
         TaskDevice taskDevice = taskDeviceService.getOne(new QueryWrapper<TaskDevice>()
                 .eq(TaskDevice.DEVICE_NUM, data.getDevNum())
@@ -89,16 +89,6 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
         }
 
         this.saveBatch(deviceDatas);
-
-        List<DeviceControlRecord> records = deviceControlRecordService.list(new QueryWrapper<DeviceControlRecord>()
-                .eq(DeviceControlRecord.DEVICE_NUM, data.getDevNum())
-                .eq(DeviceControlRecord.CONTROL_STATE, 0));
-
-        deviceControlRecordService.update(new UpdateWrapper<DeviceControlRecord>()
-                .set(DeviceControlRecord.CONTROL_STATE, 1)
-                .eq(DeviceControlRecord.DEVICE_NUM, data.getDevNum()));
-
-        return records;
     }
 
 
