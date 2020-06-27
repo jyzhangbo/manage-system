@@ -100,7 +100,6 @@ public class DataController {
         paramReq.setPageNum(1);
         paramReq.setPageSize(10000);
 
-        paramReq.setEndTime(AsertUtils.asertToNow(paramReq.getEndTime()));
         IPage<DeviceData> record =dataService.queryDeviceDataPage(paramReq);
         List<DeviceDataRecord> datas = new ArrayList<>();
         for(DeviceData deviceData : record.getRecords()){

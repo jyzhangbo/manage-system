@@ -17,8 +17,8 @@ public class SimulationDataReq {
     private String endTime;
     private String taskNum;
     private String deviceNum;
-    private Integer timeSpace;
-    private Integer randomTime;
+    private Integer timeSpace = 0;
+    private Double randomTime = 0.0;
     private List<SimulationData> listTemp;
 
 }

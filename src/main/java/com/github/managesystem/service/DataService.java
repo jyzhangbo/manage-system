@@ -38,7 +38,6 @@ public class DataService {
 
 
     public QueryDataCharResp queryDataChar(QueryDataTableReq req) throws CodeException{
-        req.setEndTime(AsertUtils.asertToNow(req.getEndTime()));
 
         TaskDevice taskDevice = taskDeviceService.asertTaskDevice(req.getTaskNum(),req.getDeviceNum());
         Map<String,String> tableHeader = Json.fromJsonAsMap(String.class,taskDevice.getAttributeInfo());
@@ -47,7 +46,6 @@ public class DataService {
         List<DeviceData> datas = deviceDataService.list(new QueryWrapper<DeviceData>()
                 .eq(DeviceData.TASK_NUM, req.getTaskNum())
                 .eq(DeviceData.DEVICE_NUM, req.getDeviceNum())
-                .between(DeviceData.DATA_TIME, TimeUtils.parseTime(req.getStartTime()), TimeUtils.parseTime(req.getEndTime()))
                 .orderByAsc(DeviceData.DATA_TIME));
 
         QueryDataCharResp queryDataCharResp = AttributeEnum.deviceDataToChart(datas, tableHeader);
@@ -64,8 +62,6 @@ public class DataService {
     }
 
     public QueryDataTableResp queryDataTable(QueryDataTableReq req) throws CodeException{
-
-        req.setEndTime(AsertUtils.asertToNow(req.getEndTime()));
 
         TaskDevice taskDevice = taskDeviceService.asertTaskDevice(req.getTaskNum(),req.getDeviceNum());
         Map<String,String> tableHeader = Json.fromJsonAsMap(String.class,taskDevice.getAttributeInfo());
@@ -95,7 +91,6 @@ public class DataService {
                 new QueryWrapper<DeviceData>()
                         .eq(DeviceData.TASK_NUM, req.getTaskNum())
                         .eq(DeviceData.DEVICE_NUM, req.getDeviceNum())
-                        .between(DeviceData.DATA_TIME, TimeUtils.parseTime(req.getStartTime()), TimeUtils.parseTime(req.getEndTime()))
                         .orderByDesc(DeviceData.DATA_TIME));
     }
 
@@ -131,7 +126,7 @@ public class DataService {
         if(req.getListTemp().size() == 8 || deviceDatasOld.size() == 0){
             int timeSpace = req.getTimeSpace() * 60;
             //全部模拟
-            int second = req.getRandomTime() * 60;
+            int second = new Double(req.getRandomTime() * 60).intValue();
             List<DeviceData> deviceDatas = new LinkedList<>();
             long dataTime = startTime;
             while (dataTime< endTime){
@@ -190,12 +185,10 @@ public class DataService {
     }
 
     public void copyData(CopyDataReq req,HttpServletRequest request) throws CodeException{
-        req.setEndTime(AsertUtils.asertToNow(req.getEndTime()));
 
         //复制数据
         List<DeviceData> deviceDatas = deviceDataService.list(new QueryWrapper<DeviceData>().eq(DeviceData.TASK_NUM, req.getTaskNum())
-                .eq(DeviceData.DEVICE_NUM, req.getDeviceNum())
-                .between(DeviceData.DATA_TIME, TimeUtils.parseTime(req.getStartTime()), TimeUtils.parseTime(req.getEndTime())));
+                .eq(DeviceData.DEVICE_NUM, req.getDeviceNum()));
         List<DeviceData> newDeviceDatas = new ArrayList<>();
         Random r= new Random();
         for(DeviceData deviceData : deviceDatas){
@@ -216,7 +209,7 @@ public class DataService {
     }
 
     public static void main(String[] args) {
-        System.out.println(new BigDecimal(26.32).setScale(1,BigDecimal.ROUND_HALF_UP).toString());
+        System.out.println(R.random(-0,0));
     }
 
     public QueryDataHistoryAppResp queryDataHistoryApp(QueryDataHistoryAppReq req, HttpServletRequest request) throws CodeException{

@@ -9,8 +9,6 @@ import lombok.Data;
 @Data
 public class QueryDataTableReq {
 
-    private String startTime;
-    private String endTime;
     private String taskNum;
     private String deviceNum;
     private Integer pageNum;
