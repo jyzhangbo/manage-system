@@ -14,9 +14,9 @@ import java.util.Map;
 @Builder
 public class QueryDataCharResp {
 
-    public List<String> xDatas;
+    public List<String> xdatas;
 
-    public List<ChartYData> yDatas;
+    public List<ChartYData> ydatas;
 
     private Map<String,String> tableHeader;
 

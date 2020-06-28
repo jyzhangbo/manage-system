@@ -16,7 +16,7 @@ public class ControlEncoder {
         content.append(length);
         for(DeviceControlRecord record : msg.getRecords()){
             content.append(record.getControlType());
-            content.append(TransformUtils.shortoByteArray(Short.valueOf(record.getControlData())));
+            content.append(TransformUtils.hexStringToBytes(record.getControlData()));
         }
         return content;
     }

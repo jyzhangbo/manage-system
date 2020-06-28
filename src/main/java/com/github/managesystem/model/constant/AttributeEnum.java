@@ -103,7 +103,7 @@ public enum  AttributeEnum {
         yDatas.add(ChartYData.builder().name(header.get(ATTRIBUTE_T8.value)).values(t8).build());
 
 
-        return QueryDataCharResp.builder().tableHeader(header).xDatas(xDatas).yDatas(yDatas).build();
+        return QueryDataCharResp.builder().tableHeader(header).xdatas(xDatas).ydatas(yDatas).build();
     }
 
 }

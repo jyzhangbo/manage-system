@@ -20,6 +20,7 @@ import com.github.managesystem.model.resp.*;
 import com.github.managesystem.service.IDeviceControlRecordService;
 import com.github.managesystem.service.IDeviceService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.managesystem.util.TransformUtils;
 import io.netty.channel.ChannelHandlerContext;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
@@ -133,7 +134,7 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
                     .createTime(LocalDateTime.now())
                     .modifyTime(LocalDateTime.now())
                     .controlType("86")
-                    .controlData(String.valueOf(req.getCollectSpace()))
+                    .controlData(TransformUtils.byteToHexString(TransformUtils.shortoByteArray(Short.valueOf(req.getCollectSpace().toString()))))
                     .controlState(0).build();
             deviceControlRecordService.save(build);
         }

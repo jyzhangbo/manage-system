@@ -36,12 +36,6 @@ public class CollectServerHandler extends SimpleChannelInboundHandler<ProtocolDe
 
         if(!CollectServer.channelHandlerMap.containsKey(msg.devNum)){
             CollectServer.channelHandlerMap.put(msg.devNum,ctx);
-        }
-
-        if(Strings.equals(msg.command,"01")) {
-            IDeviceDataService deviceDataService = WebContextUtils.findBean(IDeviceDataService.class);
-            deviceDataService.putData(msg);
-        }else if(Strings.equals(msg.command,"02")) {
             IDeviceControlRecordService deviceControlRecordService = WebContextUtils.findBean(IDeviceControlRecordService.class);
             List<DeviceControlRecord> records = deviceControlRecordService.getControlRecord(msg);
             ResponseModel resp = new ResponseModel();
@@ -51,6 +45,11 @@ public class CollectServerHandler extends SimpleChannelInboundHandler<ProtocolDe
                 resp.setRecords(records);
                 ctx.channel().writeAndFlush(resp);
             }
+        }
+
+        if(Strings.equals(msg.command,"01")) {
+            IDeviceDataService deviceDataService = WebContextUtils.findBean(IDeviceDataService.class);
+            deviceDataService.putData(msg);
         }
 
         ResponseModel resp = new ResponseModel();
