@@ -4,7 +4,7 @@ server:
     key-store-password: hlbr.smartdeviceclub.com
 spring:
   profiles:
-    active: prod
+    active: test
   servlet:
       multipart:
         max-file-size: 100MB
