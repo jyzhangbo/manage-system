@@ -40,6 +40,18 @@ public class ByteToValueDecoder extends MessageToMessageDecoder<ProtocolDecodeOu
                     in.skip(1);
                 } else if (Integer.valueOf(type[0]) == 0x81) {
                     in.skip(7);
+                } else if(Integer.valueOf(type[0]) == 0x8A){
+                    in.skip(1);
+                } else if(Integer.valueOf(type[0]) == 0x8B){
+                    in.skip(1);
+                } else if(Integer.valueOf(type[0]) == 0x8C){
+                    in.skip(2);
+                } else if(Integer.valueOf(type[0]) == 0x8D){
+                    in.skip(14);
+                } else if(Integer.valueOf(type[0]) == 0x85){
+                    in.skip(1);
+                } else if(Integer.valueOf(type[0]) == 0x86){
+                    in.skip(2);
                 }
             }
             out.add(msg);

@@ -15,7 +15,7 @@ public class CopyDataReq {
     private String deviceNum;
     private String fromAttr;
     private List<String> toAttr;
-    private Integer addData;
-    private Integer randomData;
+    private Double addData;
+    private Double randomData;
 
 }
