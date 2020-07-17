@@ -33,5 +33,7 @@ public interface IDeviceService extends IService<Device> {
 
     List<ListDeviceTaskResp> listDeviceTask(ListDeviceTaskReq req, HttpServletRequest request);
 
-    void controlDevice(ControlDeviceReq req);
+    void controlDevice(ControlDeviceReq req) throws CodeException;
+
+    ControlDeviceReq queryControlInfo(QueryControlInfoReq req) throws CodeException;
 }

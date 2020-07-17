@@ -1,9 +1,13 @@
 package com.github.managesystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.managesystem.collection.CollectServer;
+import com.github.managesystem.collection.handle.decoder.TemperatureDecoder;
+import com.github.managesystem.collection.model.CommandEnum;
+import com.github.managesystem.collection.model.ResponseModel;
 import com.github.managesystem.config.interceptor.UserInterceptor;
 import com.github.managesystem.entity.*;
 import com.github.managesystem.mapper.DeviceMapper;
@@ -25,6 +29,9 @@ import io.netty.channel.ChannelHandlerContext;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
 import org.nutz.lang.Strings;
+import org.nutz.lang.random.R;
+import org.nutz.lang.util.ListSet;
+import org.nutz.mapl.Mapl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -191,8 +198,61 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
     }
 
     @Override
-    public void controlDevice(ControlDeviceReq req) {
+    public void controlDevice(ControlDeviceReq req) throws CodeException {
+        this.update(new UpdateWrapper<Device>().set(Device.CONTROL_DATA,Json.toJson(req,JsonFormat.tidy()))
+                .eq(Device.DEVICE_NUM,req.getDeviceNum()));
+
         ChannelHandlerContext ctx = CollectServer.channelHandlerMap.get(req.getDeviceNum());
+        if(ctx == null){
+            throw new CodeException(ResultCode.ERROR_DEVICE_DISCONNECT);
+        }
+        ResponseModel resp = new ResponseModel();
+        resp.setDevNum(req.getDeviceNum());
+        resp.setCommand(CommandEnum.COMMAND_86.getValue());
+        List<DeviceControlRecord> records = new ArrayList<>();
+
+        if(Strings.isNotBlank(req.getModelType())){
+            records.add(DeviceControlRecord.builder()
+                    .controlType(CommandEnum.COMMAND_8A.getValue())
+                    .controlData(req.getModelType()).build());
+        }
+
+        if(Strings.isNotBlank(req.getTapControl1()) || Strings.isNotBlank(req.getTapControl2())){
+            records.add(DeviceControlRecord.builder()
+                    .controlType(CommandEnum.COMMAND_8B.getValue())
+                    .controlData(req.getTapControl1()+req.getTapControl2()).build());
+        }
+
+        int probeType1 = 0;
+        int probeType2 = 0;
+        for(int i : req.getProbeType1()){
+            probeType1 += i;
+        }
+        for(int i : req.getProbeType2()){
+            probeType2 += i;
+        }
+        byte[] b = {Byte.parseByte(String.valueOf(probeType1)),Byte.parseByte(String.valueOf(probeType2))};
+        records.add(DeviceControlRecord.builder()
+                .controlType(CommandEnum.COMMAND_8C.getValue())
+                .controlData(TransformUtils.byteToHexString(b)).build());
+
+        if(Objects.nonNull(req.getTempControl())) {
+            records.add(DeviceControlRecord.builder()
+                    .controlType(CommandEnum.COMMAND_8D.getValue())
+                    .controlData(TemperatureDecoder.encode(req.getTempControl())).build());
+        }
+
+        resp.setRecords(records);
+        ctx.channel().writeAndFlush(resp);
+    }
+
+    @Override
+    public ControlDeviceReq queryControlInfo(QueryControlInfoReq req) throws CodeException {
+        Device device = this.getOne(new QueryWrapper<Device>().eq(Device.DEVICE_NUM, req.getDeviceNum()), false);
+        if(device == null){
+            throw new CodeException(ResultCode.ERROR_DEVICE__EXIST);
+        }
+        return Json.fromJson(ControlDeviceReq.class, device.getControlData());
     }
 
 }

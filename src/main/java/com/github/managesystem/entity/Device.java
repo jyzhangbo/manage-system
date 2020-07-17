@@ -72,7 +72,10 @@ public class Device implements Serializable {
      */
     private LocalDateTime modifyTime;
 
-
+    /**
+     * 控制内容
+     */
+    private String controlData;
 
     public static final String ID = "id";
 
@@ -91,6 +94,8 @@ public class Device implements Serializable {
     public static final String CREATE_TIME = "create_time";
 
     public static final String MODIFY_TIME = "modify_time";
+
+    public static final String CONTROL_DATA = "control_data";
 
 
 }

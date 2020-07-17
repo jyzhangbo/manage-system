@@ -31,7 +31,9 @@ public enum ResultCode {
     ERROR_AUTHORITY(1011, "认证信息不对: %s"),
     ERROR_NO_DATA(1012, "该设备还未上传过数据"),
     ERROR_EXCEL_RULE(1013, "excel字段格式不符合规则"),
-    ERROR_DEVICE(1014, "设备编号已存在");
+    ERROR_DEVICE(1014, "设备编号已存在"),
+    ERROR_DEVICE_DISCONNECT(1015, "该设备没有通电"),
+    ERROR_DEVICE__EXIST(1016, "该设备不存在");
 
     private int code;
     private String message;

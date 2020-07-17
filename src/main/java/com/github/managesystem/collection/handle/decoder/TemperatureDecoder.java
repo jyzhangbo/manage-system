@@ -2,8 +2,10 @@ package com.github.managesystem.collection.handle.decoder;
 
 import com.github.managesystem.collection.model.DeviceAttr;
 import com.github.managesystem.collection.model.ProtocolDecodeOutData;
+import com.github.managesystem.model.req.ControlDeviceTemp;
 import com.github.managesystem.util.TimeUtils;
 import com.github.managesystem.util.TransformUtils;
+import com.google.common.primitives.Bytes;
 
 import java.time.LocalDateTime;
 
@@ -54,5 +56,30 @@ public class TemperatureDecoder{
             attr.addAttr(KEY_T[i++], value);
         }
         return attr;
+    }
+
+
+    public static String encode(ControlDeviceTemp temp){
+
+        short startTime = Double.valueOf(temp.getStartTime() * 10).shortValue();
+        short startTemp = Double.valueOf(temp.getStartTemp() * 10).shortValue();
+        short upSpeed = Double.valueOf(temp.getUpSpeed() * 10).shortValue();
+        short constantTemp = Double.valueOf(temp.getConstantTemp() * 10).shortValue();
+        short constantTime = Double.valueOf(temp.getConstantTime() * 10).shortValue();
+        short downSpeep = Double.valueOf(temp.getDownSpeed() * 10).shortValue();
+        short endTemp = Double.valueOf(temp.getEndTemp() * 10).shortValue();
+
+        byte[] concat = Bytes.concat(TransformUtils.shortoByteArray(startTime), TransformUtils.shortoByteArray(startTemp),
+                TransformUtils.shortoByteArray(upSpeed),TransformUtils.shortoByteArray(constantTemp),
+                TransformUtils.shortoByteArray(constantTime),TransformUtils.shortoByteArray(downSpeep)
+                ,TransformUtils.shortoByteArray(endTemp));
+
+        return TransformUtils.byteToHexString(concat);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Double.valueOf(-3.5*10).shortValue());
+
+
     }
 }

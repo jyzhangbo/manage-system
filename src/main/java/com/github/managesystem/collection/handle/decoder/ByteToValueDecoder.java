@@ -52,6 +52,8 @@ public class ByteToValueDecoder extends MessageToMessageDecoder<ProtocolDecodeOu
                     in.skip(1);
                 } else if(Integer.valueOf(type[0]) == 0x86){
                     in.skip(2);
+                } else if(Integer.valueOf(type[0]) == 0x90){
+                    in.skip(1);
                 }
             }
             out.add(msg);

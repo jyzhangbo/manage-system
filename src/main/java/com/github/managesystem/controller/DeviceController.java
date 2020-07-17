@@ -58,9 +58,13 @@ public class DeviceController {
     }
 
     @PostMapping(value = "/control")
-    public Result controlDevice(@RequestBody ControlDeviceReq req){
+    public Result controlDevice(@RequestBody ControlDeviceReq req) throws CodeException {
         deviceService.controlDevice(req);
         return Result.ok();
     }
 
+    @PostMapping(value = "/control/info/query")
+    public Result queryControlInfo(@RequestBody QueryControlInfoReq req) throws CodeException {
+        return Result.ok(deviceService.queryControlInfo(req));
+    }
 }
