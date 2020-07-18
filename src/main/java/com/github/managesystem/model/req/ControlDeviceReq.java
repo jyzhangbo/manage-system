@@ -15,12 +15,21 @@ public class ControlDeviceReq {
 
 
     private String deviceNum;
-    private ControlDeviceTemp tempControl;
+    private ControlDeviceTemp tempControl ;
     private String modelType;
     private String tapControl1;
     private String tapControl2;
-    private List<Integer> probeType1;
-    private List<Integer> probeType2;
+    private List<String> probeType1;
+    private List<String> probeType2;
+
+    public ControlDeviceReq(){
+        this.tempControl = new ControlDeviceTemp();
+        modelType="01";
+        probeType1=new ArrayList<>();
+        probeType1.add("0");
+        probeType2=new ArrayList<>();
+        probeType2.add("0");
+    }
 
 
 }

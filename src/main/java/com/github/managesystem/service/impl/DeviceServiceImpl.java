@@ -225,11 +225,11 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 
         int probeType1 = 0;
         int probeType2 = 0;
-        for(int i : req.getProbeType1()){
-            probeType1 += i;
+        for(String i : req.getProbeType1()){
+            probeType1 += Integer.valueOf(i);
         }
-        for(int i : req.getProbeType2()){
-            probeType2 += i;
+        for(String i : req.getProbeType2()){
+            probeType2 += Integer.valueOf(i);
         }
         byte[] b = {Byte.parseByte(String.valueOf(probeType1)),Byte.parseByte(String.valueOf(probeType2))};
         records.add(DeviceControlRecord.builder()
@@ -251,6 +251,9 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         Device device = this.getOne(new QueryWrapper<Device>().eq(Device.DEVICE_NUM, req.getDeviceNum()), false);
         if(device == null){
             throw new CodeException(ResultCode.ERROR_DEVICE__EXIST);
+        }
+        if(Strings.isBlank(device.getControlData())){
+            return new ControlDeviceReq();
         }
         return Json.fromJson(ControlDeviceReq.class, device.getControlData());
     }
