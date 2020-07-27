@@ -57,7 +57,9 @@ public class ByteToValueDecoder extends MessageToMessageDecoder<ProtocolDecodeOu
                 }
             }
             out.add(msg);
-        } else {
+        } else if(Strings.equals(msg.command,"02")) {
+            out.add(msg);
+        }else {
             return;
         }
     }

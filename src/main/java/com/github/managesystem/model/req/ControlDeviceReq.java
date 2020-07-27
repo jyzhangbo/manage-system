@@ -26,9 +26,7 @@ public class ControlDeviceReq {
         this.tempControl = new ControlDeviceTemp();
         modelType="01";
         probeType1=new ArrayList<>();
-        probeType1.add("0");
         probeType2=new ArrayList<>();
-        probeType2.add("0");
     }
 
 

@@ -223,20 +223,24 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
                     .controlData(req.getTapControl1()+req.getTapControl2()).build());
         }
 
-        int probeType1 = 0;
-        int probeType2 = 0;
-        for(String i : req.getProbeType1()){
-            probeType1 += Integer.valueOf(i);
-        }
-        for(String i : req.getProbeType2()){
-            probeType2 += Integer.valueOf(i);
-        }
-        byte[] b = {Byte.parseByte(String.valueOf(probeType1)),Byte.parseByte(String.valueOf(probeType2))};
-        records.add(DeviceControlRecord.builder()
-                .controlType(CommandEnum.COMMAND_8C.getValue())
-                .controlData(TransformUtils.byteToHexString(b)).build());
 
-        if(Objects.nonNull(req.getTempControl())) {
+        if(req.getProbeType1().size() > 0 || req.getProbeType1().size() > 0){
+            int probeType1 = 0;
+            int probeType2 = 0;
+            for(String i : req.getProbeType1()){
+                probeType1 += Integer.valueOf(i);
+            }
+            for(String i : req.getProbeType2()){
+                probeType2 += Integer.valueOf(i);
+            }
+            byte[] b = {Byte.parseByte(String.valueOf(probeType1)),Byte.parseByte(String.valueOf(probeType2))};
+            records.add(DeviceControlRecord.builder()
+                    .controlType(CommandEnum.COMMAND_8C.getValue())
+                    .controlData(TransformUtils.byteToHexString(b)).build());
+
+        }
+
+        if(Objects.nonNull(req.getTempControl()) && Objects.nonNull(req.getTempControl().getConstantTemp())) {
             records.add(DeviceControlRecord.builder()
                     .controlType(CommandEnum.COMMAND_8D.getValue())
                     .controlData(TemperatureDecoder.encode(req.getTempControl())).build());
