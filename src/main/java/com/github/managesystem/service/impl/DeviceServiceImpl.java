@@ -233,10 +233,11 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
             for(String i : req.getProbeType2()){
                 probeType2 += Integer.valueOf(i);
             }
-            byte[] b = {Byte.parseByte(String.valueOf(probeType1)),Byte.parseByte(String.valueOf(probeType2))};
+            String data = TransformUtils.integerStrToHexString(String.valueOf(probeType1))
+                             +TransformUtils.integerStrToHexString(String.valueOf(probeType2));
             records.add(DeviceControlRecord.builder()
                     .controlType(CommandEnum.COMMAND_8C.getValue())
-                    .controlData(TransformUtils.byteToHexString(b)).build());
+                    .controlData(data).build());
 
         }
 
@@ -260,6 +261,11 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
             return new ControlDeviceReq();
         }
         return Json.fromJson(ControlDeviceReq.class, device.getControlData());
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println(TransformUtils.integerStrToHexString("255"));
     }
 
 }
