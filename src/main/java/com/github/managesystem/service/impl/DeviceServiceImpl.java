@@ -211,6 +211,19 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
         resp.setCommand(CommandEnum.COMMAND_86.getValue());
         List<DeviceControlRecord> records = new ArrayList<>();
 
+        switch(req.getType()) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            default:
+                break;
+        }
+
         if(Strings.isNotBlank(req.getModelType())){
             records.add(DeviceControlRecord.builder()
                     .controlType(CommandEnum.COMMAND_8A.getValue())
