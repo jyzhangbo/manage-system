@@ -16,7 +16,9 @@ public enum CommandEnum {
     COMMAND_8A("8A"),
     COMMAND_8B("8B"),
     COMMAND_8C("8C"),
-    COMMAND_8D("8D");
+    COMMAND_8D("8D"),
+    COMMAND_8E("8E"),
+    COMMAND_8F("8F");
 
     private String value;
 

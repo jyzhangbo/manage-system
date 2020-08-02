@@ -114,4 +114,8 @@ public class TransformUtils {
         }
         return value;
     }
+
+    public static int byteToUnsignInt(byte b) {
+        return b & 0xFF;
+    }
 }

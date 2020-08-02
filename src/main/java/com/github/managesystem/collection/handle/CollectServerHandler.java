@@ -32,31 +32,33 @@ public class CollectServerHandler extends SimpleChannelInboundHandler<ProtocolDe
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ProtocolDecodeOutData msg) throws Exception {
-        log.info("数据：{}",Json.toJson(msg, JsonFormat.tidy()));
+        try {
+            if (!CollectServer.channelHandlerMap.containsKey(msg.devNum)) {
+                CollectServer.channelHandlerMap.put(msg.devNum, ctx);
+                IDeviceControlRecordService deviceControlRecordService = WebContextUtils.findBean(IDeviceControlRecordService.class);
+                List<DeviceControlRecord> records = deviceControlRecordService.getControlRecord(msg);
+                ResponseModel resp = new ResponseModel();
+                resp.setDevNum(msg.devNum);
+                if (records.size() > 0) {
+                    resp.setCommand(CommandEnum.COMMAND_86.getValue());
+                    resp.setRecords(records);
+                    ctx.channel().writeAndFlush(resp);
+                }
+            }
 
-        if(!CollectServer.channelHandlerMap.containsKey(msg.devNum)){
-            CollectServer.channelHandlerMap.put(msg.devNum,ctx);
-            IDeviceControlRecordService deviceControlRecordService = WebContextUtils.findBean(IDeviceControlRecordService.class);
-            List<DeviceControlRecord> records = deviceControlRecordService.getControlRecord(msg);
+            if (Strings.equals(msg.command, "01")) {
+                IDeviceDataService deviceDataService = WebContextUtils.findBean(IDeviceDataService.class);
+                deviceDataService.putData(msg);
+            }
+
             ResponseModel resp = new ResponseModel();
             resp.setDevNum(msg.devNum);
-            if(records.size() > 0) {
-                resp.setCommand(CommandEnum.COMMAND_86.getValue());
-                resp.setRecords(records);
-                ctx.channel().writeAndFlush(resp);
-            }
+            resp.setCommand(CommandEnum.COMMAND_81.getValue());
+            resp.setOldCommand(msg.getCommand());
+            ctx.channel().writeAndFlush(resp);
+        }catch (Exception e){
+            log.error("消息处理异常:{}",e.getMessage());
         }
-
-        if(Strings.equals(msg.command,"01")) {
-            IDeviceDataService deviceDataService = WebContextUtils.findBean(IDeviceDataService.class);
-            deviceDataService.putData(msg);
-        }
-
-        ResponseModel resp = new ResponseModel();
-        resp.setDevNum(msg.devNum);
-        resp.setCommand(CommandEnum.COMMAND_81.getValue());
-        resp.setOldCommand(msg.getCommand());
-        ctx.channel().writeAndFlush(resp);
     }
 
     @Override

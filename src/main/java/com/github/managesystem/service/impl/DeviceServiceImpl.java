@@ -213,51 +213,58 @@ public class DeviceServiceImpl extends ServiceImpl<DeviceMapper, Device> impleme
 
         switch(req.getType()) {
             case 1:
+                if(Strings.isNotBlank(req.getModelType())) {
+                    records.add(DeviceControlRecord.builder()
+                            .controlType(CommandEnum.COMMAND_8A.getValue())
+                            .controlData(req.getModelType()).build());
+                }
                 break;
             case 2:
+                if(Strings.isNotBlank(req.getTapControl1()) && Strings.isNotBlank(req.getTapControl2())) {
+                    records.add(DeviceControlRecord.builder()
+                            .controlType(CommandEnum.COMMAND_8B.getValue())
+                            .controlData(req.getTapControl1() + req.getTapControl2()).build());
+                }
                 break;
             case 3:
+                if(req.getProbeType1().size() > 0 || req.getProbeType1().size() > 0){
+                    int probeType1 = 0;
+                    int probeType2 = 0;
+                    for(String i : req.getProbeType1()){
+                        probeType1 += Integer.valueOf(i);
+                    }
+                    for(String i : req.getProbeType2()){
+                        probeType2 += Integer.valueOf(i);
+                    }
+                    String data = TransformUtils.integerStrToHexString(String.valueOf(probeType1))
+                            +TransformUtils.integerStrToHexString(String.valueOf(probeType2));
+                    records.add(DeviceControlRecord.builder()
+                            .controlType(CommandEnum.COMMAND_8C.getValue())
+                            .controlData(data).build());
+
+                }
+
+                if(Objects.nonNull(req.getTempControl()) && Objects.nonNull(req.getTempControl().getConstantTemp())) {
+                    records.add(DeviceControlRecord.builder()
+                            .controlType(CommandEnum.COMMAND_8D.getValue())
+                            .controlData(TemperatureDecoder.encode(req.getTempControl())).build());
+                }
                 break;
             case 4:
+                if(Strings.isNotBlank(req.getManualControl1())){
+                    records.add(DeviceControlRecord.builder()
+                            .controlType(CommandEnum.COMMAND_8E.getValue())
+                            .controlData(req.getManualControl1()).build());
+                }
+                if(Strings.isNotBlank(req.getManualControl2())){
+                    records.add(DeviceControlRecord.builder()
+                            .controlType(CommandEnum.COMMAND_8F.getValue())
+                            .controlData(req.getManualControl2()).build());
+                }
+
                 break;
             default:
                 break;
-        }
-
-        if(Strings.isNotBlank(req.getModelType())){
-            records.add(DeviceControlRecord.builder()
-                    .controlType(CommandEnum.COMMAND_8A.getValue())
-                    .controlData(req.getModelType()).build());
-        }
-
-        if(Strings.isNotBlank(req.getTapControl1()) || Strings.isNotBlank(req.getTapControl2())){
-            records.add(DeviceControlRecord.builder()
-                    .controlType(CommandEnum.COMMAND_8B.getValue())
-                    .controlData(req.getTapControl1()+req.getTapControl2()).build());
-        }
-
-
-        if(req.getProbeType1().size() > 0 || req.getProbeType1().size() > 0){
-            int probeType1 = 0;
-            int probeType2 = 0;
-            for(String i : req.getProbeType1()){
-                probeType1 += Integer.valueOf(i);
-            }
-            for(String i : req.getProbeType2()){
-                probeType2 += Integer.valueOf(i);
-            }
-            String data = TransformUtils.integerStrToHexString(String.valueOf(probeType1))
-                             +TransformUtils.integerStrToHexString(String.valueOf(probeType2));
-            records.add(DeviceControlRecord.builder()
-                    .controlType(CommandEnum.COMMAND_8C.getValue())
-                    .controlData(data).build());
-
-        }
-
-        if(Objects.nonNull(req.getTempControl()) && Objects.nonNull(req.getTempControl().getConstantTemp())) {
-            records.add(DeviceControlRecord.builder()
-                    .controlType(CommandEnum.COMMAND_8D.getValue())
-                    .controlData(TemperatureDecoder.encode(req.getTempControl())).build());
         }
 
         resp.setRecords(records);
