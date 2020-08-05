@@ -3,16 +3,17 @@ package com.github.managesystem.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.managesystem.entity.DeviceData;
+import com.github.managesystem.entity.Task;
 import com.github.managesystem.entity.TaskDevice;
 import com.github.managesystem.model.excel.DeviceDataRecord;
+import com.github.managesystem.model.excel.TaskDeviceInfo;
 import com.github.managesystem.model.exception.CodeException;
 import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.*;
 import com.github.managesystem.service.DataService;
 import com.github.managesystem.service.ITaskDeviceService;
-import com.github.managesystem.util.AsertUtils;
+import com.github.managesystem.service.ITaskService;
 import com.github.managesystem.util.TimeUtils;
-import com.github.managesystem.util.excel.BaseExcelWriterHandler;
 import com.github.managesystem.util.excel.EasyExcelUtils;
 import org.nutz.json.Json;
 import org.springframework.beans.BeanUtils;
@@ -38,10 +39,10 @@ public class DataController {
     private DataService dataService;
 
     @Autowired
-    private BaseExcelWriterHandler baseExcelWriterHandler;
+    private ITaskDeviceService taskDeviceService;
 
     @Autowired
-    private ITaskDeviceService taskDeviceService;
+    private ITaskService taskService;
 
     @PostMapping(value = "/simulation")
     public Result simulationData(@RequestBody SimulationDataReq req) throws CodeException{
@@ -88,14 +89,8 @@ public class DataController {
         TaskDevice taskDevice = taskDeviceService.getOne(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM, paramReq.getTaskNum())
                 .eq(TaskDevice.DEVICE_NUM, paramReq.getDeviceNum()), false);
         Map<String,String> attributeInfo = Json.fromJsonAsMap(String.class,taskDevice.getAttributeInfo());
-        List<List<String>> heads = new ArrayList<List<String>>();
-        heads.add(Arrays.asList("时间"));
-        for(String value : attributeInfo.values()){
-            List<String> head = new ArrayList<String>();
-            head.add(value);
-            heads.add(head);
-        }
 
+        Task task = taskService.getOne(new QueryWrapper<Task>().eq(Task.TASK_NUM, paramReq.getTaskNum()));
 
         paramReq.setPageNum(1);
         paramReq.setPageSize(10000);
@@ -108,15 +103,19 @@ public class DataController {
             deviceDataRecord.setTime(TimeUtils.formatTime(deviceData.getDataTime()));
             datas.add(deviceDataRecord);
         }
+        TaskDeviceInfo taskDeviceInfo = TaskDeviceInfo.builder()
+                .taskNum(taskDevice.getTaskNum())
+                .taskName(taskDevice.getTaskName())
+                .deviceNum(taskDevice.getDeviceNum())
+                .startTime(TimeUtils.formatTime(task.getStartTime()))
+                .endTime(TimeUtils.formatTime(task.getEndTime()))
+                .build();
 
-
-        EasyExcelUtils.downloadExcelFileDynamicHead(
-                String.format("%s-%s",taskDevice.getTaskName(),taskDevice.getDeviceName()),
+        EasyExcelUtils.downloadExcelModel(response,
+                String.format("%s-%s-%s",taskDevice.getTaskNum(),taskDevice.getTaskName(),taskDevice.getDeviceName()),
                 datas,
-                DeviceDataRecord.class,
-                response,
-                baseExcelWriterHandler,
-                heads);
+                taskDeviceInfo,
+                attributeInfo);
     }
 
 }

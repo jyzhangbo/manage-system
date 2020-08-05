@@ -6,4 +6,6 @@ import lombok.Data;
 public class DeleteUserReq {
 
     private String loginName;
+
+    private String companyName;
 }

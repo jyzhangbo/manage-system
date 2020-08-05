@@ -15,58 +15,47 @@ import java.time.LocalDateTime;
  * @Date:2020/6/12 17:02
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
-public class DeviceDataRecord extends BaseRowModel {
+public class DeviceDataRecord {
 
-    @ExcelProperty(index = 1)
     private String time;
 
     /**
      * 温度
      */
-    @ExcelProperty(index = 2)
-    private Double attributeT1;
+    private String attributeT1;
 
     /**
      * 温度
      */
-    @ExcelProperty(index = 3)
-    private Double attributeT2;
+    private String attributeT2;
 
     /**
      * 温度
      */
-    @ExcelProperty(index = 4)
-    private Double attributeT3;
+    private String attributeT3;
 
     /**
      * 温度
      */
-    @ExcelProperty(index = 5)
-    private Double attributeT4;
+    private String attributeT4;
 
     /**
      * 温度
      */
-    @ExcelProperty(index = 6)
-    private Double attributeT5;
+    private String attributeT5;
 
     /**
      * 温度
      */
-    @ExcelProperty(index = 7)
-    private Double attributeT6;
+    private String attributeT6;
 
     /**
      * 温度
      */
-    @ExcelProperty(index = 8)
-    private Double attributeT7;
+    private String attributeT7;
 
     /**
      * 温度
      */
-    @ExcelProperty(index = 9)
-    private Double attributeT8;
+    private String attributeT8;
 }

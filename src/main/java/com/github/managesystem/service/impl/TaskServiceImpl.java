@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.managesystem.config.interceptor.UserInterceptor;
-import com.github.managesystem.entity.Device;
-import com.github.managesystem.entity.Task;
-import com.github.managesystem.entity.TaskDevice;
-import com.github.managesystem.entity.User;
+import com.github.managesystem.entity.*;
 import com.github.managesystem.mapper.DeviceMapper;
 import com.github.managesystem.mapper.TaskMapper;
 import com.github.managesystem.model.constant.DeviceStateEnum;
@@ -20,6 +17,7 @@ import com.github.managesystem.model.req.*;
 import com.github.managesystem.model.resp.DeviceInfo;
 import com.github.managesystem.model.resp.ListTaskInfo;
 import com.github.managesystem.model.resp.ListTaskResp;
+import com.github.managesystem.service.IDeviceDataService;
 import com.github.managesystem.service.ITaskDeviceService;
 import com.github.managesystem.service.ITaskService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -47,7 +45,8 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
     private ITaskDeviceService taskDeviceService;
 
     @Autowired
-    private DeviceMapper deviceMapper;
+    private IDeviceDataService deviceDataService;
+
 
     @Override
     public ListTaskResp listTask(ListTaskReq req, HttpServletRequest request) {
@@ -90,6 +89,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
     public void deleteTask(DeleteTaskReq req) {
         this.remove(new QueryWrapper<Task>().eq(Task.TASK_NUM,req.getTaskNum()));
         taskDeviceService.remove(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM,req.getTaskNum()));
+        deviceDataService.remove(new QueryWrapper<DeviceData>().eq(DeviceData.TASK_NUM,req.getTaskNum()));
     }
 
     @Override
