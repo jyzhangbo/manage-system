@@ -36,7 +36,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         interceptorRegistration.addPathPatterns("/**");
         interceptorRegistration.excludePathPatterns("/user/login","/error");
         interceptorRegistration.excludePathPatterns("/data/export/excel");
-        interceptorRegistration.excludePathPatterns("/","/static/**","/home/img/**","/file/upload");
+        interceptorRegistration.excludePathPatterns("/","/static/**","/home/img/**","/file/upload","/excel/upload");
 
     }
 

@@ -45,6 +45,15 @@ public class FileController {
     @Autowired
     private IUserService userService;
 
+    @PostMapping("/excel/upload")
+    @ResponseBody
+    public Result uploadExcel(@RequestParam("taskNum") String taskNum,
+                              @RequestParam("deviceNum") String deviceNum,
+                              @RequestParam("upfile") MultipartFile upfile) throws Exception {
+
+        return Result.ok();
+    }
+
     @PostMapping("/file/upload")
     @ResponseBody
     public Result uploadFile(@RequestParam("token") String token,@RequestParam("upfile") MultipartFile upfile) throws Exception {
