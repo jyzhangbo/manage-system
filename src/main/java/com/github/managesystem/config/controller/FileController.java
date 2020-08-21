@@ -1,15 +1,19 @@
 package com.github.managesystem.config.controller;
 
+import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.managesystem.entity.Img;
 import com.github.managesystem.entity.Task;
 import com.github.managesystem.entity.User;
 import com.github.managesystem.model.constant.RoleEnum;
+import com.github.managesystem.model.excel.DeviceDataRecord;
 import com.github.managesystem.model.exception.CodeException;
 import com.github.managesystem.model.exception.ResultCode;
 import com.github.managesystem.model.resp.Result;
+import com.github.managesystem.service.IDeviceDataService;
 import com.github.managesystem.service.IImgService;
 import com.github.managesystem.service.IUserService;
+import com.github.managesystem.util.excel.ExcelDataListener;
 import org.nutz.img.Colors;
 import org.nutz.img.Images;
 import org.nutz.lang.*;
@@ -45,12 +49,17 @@ public class FileController {
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private IDeviceDataService deviceDataService;
+
     @PostMapping("/excel/upload")
     @ResponseBody
     public Result uploadExcel(@RequestParam("taskNum") String taskNum,
                               @RequestParam("deviceNum") String deviceNum,
                               @RequestParam("upfile") MultipartFile upfile) throws Exception {
 
+        EasyExcel.read(upfile.getInputStream(),DeviceDataRecord.class,
+                new ExcelDataListener(deviceDataService,taskNum,deviceNum)).sheet().headRowNumber(3).doRead();
         return Result.ok();
     }
 
