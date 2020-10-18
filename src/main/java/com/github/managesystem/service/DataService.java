@@ -94,6 +94,15 @@ public class DataService {
                         .orderByDesc(DeviceData.DATA_TIME));
     }
 
+    public IPage<DeviceData> queryDeviceDataPageAsc(QueryDataTableReq req){
+        return deviceDataService.page(
+                new Page<>(req.getPageNum(),req.getPageSize()),
+                new QueryWrapper<DeviceData>()
+                        .eq(DeviceData.TASK_NUM, req.getTaskNum())
+                        .eq(DeviceData.DEVICE_NUM, req.getDeviceNum())
+                        .orderByAsc(DeviceData.DATA_TIME));
+    }
+
 
     public void changeData(ChangeDataReq req) {
 

@@ -19,7 +19,7 @@ public class ExcelDataListener extends AnalysisEventListener<DeviceDataRecord> {
     /**
      * 每隔5条存储数据库，实际使用中可以3000条，然后清理list ，方便内存回收
      */
-    private static final int BATCH_COUNT = 4;
+    private static final int BATCH_COUNT = 200;
     List<DeviceData> list = new ArrayList<DeviceData>();
 
     private IDeviceDataService deviceDataService;
@@ -34,7 +34,6 @@ public class ExcelDataListener extends AnalysisEventListener<DeviceDataRecord> {
 
     @Override
     public void invoke(DeviceDataRecord data, AnalysisContext context) {
-        log.info("解析到一条数据:{}", Json.toJson(data,JsonFormat.tidy()));
         list.add(DeviceData.builder().taskNum(this.taskNum)
                 .deviceNum(this.deviceNum)
                 .dataTime(TimeUtils.parseTime(data.getTime()))

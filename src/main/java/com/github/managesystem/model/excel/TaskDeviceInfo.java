@@ -27,7 +27,7 @@ public class TaskDeviceInfo {
      */
     private String taskName;
 
-    private String deviceNum;
+    private String deviceName;
 
     /**
      * 开始时间

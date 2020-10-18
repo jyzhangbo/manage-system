@@ -94,6 +94,7 @@ public class TaskDeviceServiceImpl extends ServiceImpl<TaskDeviceMapper, TaskDev
         if(!Strings.equals(user.getUserRole(),RoleEnum.ADMIN.value)){
             queryWrapper.eq(Device.COMPANY_NAME,user.getCompanyName());
         }
+        queryWrapper.eq(TaskDevice.TASK_STATUS,TaskStateEnum.START.value);
         return this.list(queryWrapper.like(TaskDevice.DEVICE_NAME, req.getParam()).or().like(TaskDevice.TASK_NAME, req.getParam()));
     }
 

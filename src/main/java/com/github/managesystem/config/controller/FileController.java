@@ -2,6 +2,7 @@ package com.github.managesystem.config.controller;
 
 import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.managesystem.entity.DeviceData;
 import com.github.managesystem.entity.Img;
 import com.github.managesystem.entity.Task;
 import com.github.managesystem.entity.User;
@@ -58,6 +59,8 @@ public class FileController {
                               @RequestParam("deviceNum") String deviceNum,
                               @RequestParam("upfile") MultipartFile upfile) throws Exception {
 
+        deviceDataService.remove(new QueryWrapper<DeviceData>().eq(DeviceData.TASK_NUM,taskNum)
+        .eq(DeviceData.DEVICE_NUM,deviceNum));
         EasyExcel.read(upfile.getInputStream(),DeviceDataRecord.class,
                 new ExcelDataListener(deviceDataService,taskNum,deviceNum)).sheet().headRowNumber(3).doRead();
         return Result.ok();

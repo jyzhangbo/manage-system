@@ -95,7 +95,7 @@ public class DataController {
         paramReq.setPageNum(1);
         paramReq.setPageSize(10000);
 
-        IPage<DeviceData> record =dataService.queryDeviceDataPage(paramReq);
+        IPage<DeviceData> record =dataService.queryDeviceDataPageAsc(paramReq);
         List<DeviceDataRecord> datas = new ArrayList<>();
         for(DeviceData deviceData : record.getRecords()){
             DeviceDataRecord deviceDataRecord = new DeviceDataRecord();
@@ -106,7 +106,7 @@ public class DataController {
         TaskDeviceInfo taskDeviceInfo = TaskDeviceInfo.builder()
                 .taskNum(taskDevice.getTaskNum())
                 .taskName(taskDevice.getTaskName())
-                .deviceNum(taskDevice.getDeviceNum())
+                .deviceName(taskDevice.getDeviceName())
                 .startTime(TimeUtils.formatTime(task.getStartTime()))
                 .endTime(TimeUtils.formatTime(task.getEndTime()))
                 .build();
