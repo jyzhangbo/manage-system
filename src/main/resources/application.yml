@@ -1,7 +1,7 @@
 server:
   ssl:
-    key-store: classpath:hlbr.smartdeviceclub.com.jks
-    key-store-password: hlbr.smartdeviceclub.com
+    key-store: classpath:hlbr.smartdeviceclub.cn.jks
+    key-store-password: hlbr.smartdeviceclub.cn
 spring:
   profiles:
     active: prod

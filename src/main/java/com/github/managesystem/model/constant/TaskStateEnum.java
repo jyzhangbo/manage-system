@@ -13,7 +13,8 @@ public enum TaskStateEnum {
 
     CREATE(0),
     START(1),
-    END(2);
+    END(2),
+    ALL(3);
 
     public Integer value;
 
