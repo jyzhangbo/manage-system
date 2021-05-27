@@ -14,6 +14,6 @@ public class ChangeDataReq {
     private String taskNum;
     private String deviceNum;
     private String time;
-    private Map<String,Double> values;
+    private Map<String,String> values;
 
 }

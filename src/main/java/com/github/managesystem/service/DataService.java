@@ -109,7 +109,7 @@ public class DataService {
         UpdateWrapper<DeviceData> wrapper = new UpdateWrapper<>();
         wrapper.eq(DeviceData.TASK_NUM, req.getTaskNum())
                 .eq(DeviceData.DEVICE_NUM, req.getDeviceNum()).eq(DeviceData.DATA_TIME, TimeUtils.parseTime(req.getTime()));
-        for(Map.Entry<String,Double> entry : req.getValues().entrySet()){
+        for(Map.Entry<String,String> entry : req.getValues().entrySet()){
             wrapper.set(AttributeEnum.getAttributeName(entry.getKey()),entry.getValue());
         }
         deviceDataService.update(wrapper);
