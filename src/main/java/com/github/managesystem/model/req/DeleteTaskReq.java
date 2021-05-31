@@ -7,4 +7,6 @@ public class DeleteTaskReq {
 
     private String taskNum;
 
+    private String companyName;
+
 }

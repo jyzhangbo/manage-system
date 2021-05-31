@@ -71,7 +71,7 @@ public class BaseService {
             throw new CodeException(ResultCode.ERROR_TASK_NULL);
         }
         for(Task task : tasks){
-            List<DeviceInfo> devices = taskDeviceService.listDeviceByTaskNum(task.getTaskNum());
+            List<DeviceInfo> devices = taskDeviceService.listDeviceByTaskNum(task.getTaskNum(),task.getCompanyName());
             List<Map<String,String>> children = new ArrayList<>();
             for(DeviceInfo deviceInfo : devices){
                 Map<String,String> map = new HashMap<>();

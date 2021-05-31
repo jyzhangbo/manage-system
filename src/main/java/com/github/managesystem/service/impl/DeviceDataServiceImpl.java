@@ -79,6 +79,7 @@ public class DeviceDataServiceImpl extends ServiceImpl<DeviceDataMapper, DeviceD
 
                     if(taskDevice!= null){
                         deviceData.setTaskNum(taskDevice.getTaskNum());
+                        deviceData.setCompanyName(taskDevice.getCompanyName());
                         if(!Strings.equals("-",value)) {
                             saveAlarmLog(rules, taskDevice, key, Double.valueOf(value));
                         }

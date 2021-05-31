@@ -48,6 +48,11 @@ public class DeviceData implements Serializable {
     private String deviceNum;
 
     /**
+     * 公司名称
+     */
+    private String companyName;
+
+    /**
      * 数据时间
      */
     private LocalDateTime dataTime;
@@ -100,6 +105,7 @@ public class DeviceData implements Serializable {
     public static final String DEVICE_NUM = "device_num";
 
     public static final String DATA_TIME = "data_time";
+    public static final String COMPANY_NAME = "company_name";
 
     public static final String ATTRIBUTE_T1 = "attribute_t1";
 

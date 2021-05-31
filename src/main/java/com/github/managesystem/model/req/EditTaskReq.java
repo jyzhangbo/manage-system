@@ -10,6 +10,7 @@ public class EditTaskReq {
 
     private String taskNum;
     private String taskName;
+    private String companyName;
 
     private List<String> devices;
 

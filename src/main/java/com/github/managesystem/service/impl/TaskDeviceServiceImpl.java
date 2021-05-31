@@ -42,8 +42,8 @@ public class TaskDeviceServiceImpl extends ServiceImpl<TaskDeviceMapper, TaskDev
     private DeviceMapper deviceMapper;
 
     @Override
-    public List<DeviceInfo> listDeviceByTaskNum(String taskNum) {
-        List<TaskDevice> list = this.list(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM, taskNum));
+    public List<DeviceInfo> listDeviceByTaskNum(String taskNum,String companyName) {
+        List<TaskDevice> list = this.list(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM, taskNum).eq(TaskDevice.COMPANY_NAME, companyName));
         List<DeviceInfo> devices = new ArrayList();
         for (TaskDevice attribute : list) {
             devices.add(DeviceInfo.builder().deviceNum(attribute.getDeviceNum())

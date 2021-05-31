@@ -22,6 +22,7 @@ import com.github.managesystem.service.ITaskDeviceService;
 import com.github.managesystem.service.ITaskService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.managesystem.util.TimeUtils;
+import com.sun.javafx.tk.Toolkit;
 import org.nutz.lang.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,8 +75,9 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
         IPage<Task> page1 = this.page(page, queryWrapper.orderByDesc(Task.MODIFY_TIME));
 
         for(Task task : page1.getRecords()){
-            List<DeviceInfo> devices = taskDeviceService.listDeviceByTaskNum(task.getTaskNum());
-            resp.getTasks().add(ListTaskInfo.builder().taskName(task.getTaskName())
+            List<DeviceInfo> devices = taskDeviceService.listDeviceByTaskNum(task.getTaskNum(), task.getCompanyName());
+            resp.getTasks().add(ListTaskInfo.builder().companyName(task.getCompanyName())
+                    .taskName(task.getTaskName())
                     .taskNum(task.getTaskNum())
                     .endTime(TimeUtils.formatTime(task.getEndTime()))
                     .startTime(TimeUtils.formatTime(task.getStartTime()))
@@ -89,14 +91,14 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
 
     @Override
     public void deleteTask(DeleteTaskReq req) {
-        this.remove(new QueryWrapper<Task>().eq(Task.TASK_NUM,req.getTaskNum()));
-        taskDeviceService.remove(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM,req.getTaskNum()));
-        deviceDataService.remove(new QueryWrapper<DeviceData>().eq(DeviceData.TASK_NUM,req.getTaskNum()));
+        this.remove(new QueryWrapper<Task>().eq(Task.TASK_NUM,req.getTaskNum()).eq(Task.COMPANY_NAME,req.getCompanyName()));
+        taskDeviceService.remove(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM,req.getTaskNum()).eq(Task.COMPANY_NAME,req.getCompanyName()));
+        deviceDataService.remove(new QueryWrapper<DeviceData>().eq(DeviceData.TASK_NUM,req.getTaskNum()).eq(Task.COMPANY_NAME,req.getCompanyName()));
     }
 
     @Override
     public void editTask(EditTaskReq req) {
-        Task task = this.getOne(new QueryWrapper<Task>().eq(Task.TASK_NUM, req.getTaskNum()),false);
+        Task task = this.getOne(new QueryWrapper<Task>().eq(Task.TASK_NUM, req.getTaskNum()).eq(Task.COMPANY_NAME, req.getCompanyName()),false);
         if(Objects.nonNull(req.getState())) {
             task.setTaskStatus(req.getState());
             task.setModifyTime(LocalDateTime.now());
@@ -110,13 +112,14 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                     .set(TaskDevice.MODIFY_TIME,LocalDateTime.now())
                     .set(TaskDevice.TASK_STATUS,req.getState())
                     .eq(TaskDevice.TASK_NUM,req.getTaskNum())
+                    .eq(TaskDevice.COMPANY_NAME,req.getCompanyName())
                     .in(TaskDevice.DEVICE_NUM,req.getDevices()));
 
         }else {
             task.setTaskName(req.getTaskName());
             task.setModifyTime(LocalDateTime.now());
             this.updateById(task);
-            taskDeviceService.remove(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM, req.getTaskNum()));
+            taskDeviceService.remove(new QueryWrapper<TaskDevice>().eq(TaskDevice.TASK_NUM, req.getTaskNum()).eq(TaskDevice.COMPANY_NAME, req.getCompanyName()));
             if (req.getDevices().size() > 0) {
                 taskDeviceService.addTaskDevice(task, req.getDevices());
             }
@@ -126,12 +129,13 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
 
     @Override
     public void addTask(AddTaskReq req, HttpServletRequest request) throws CodeException{
-        Task task = this.getOne(new QueryWrapper<Task>().eq(Task.TASK_NUM, req.getTaskNum()), false);
+        User user = (User) request.getAttribute(UserInterceptor.USER_INFO);
+
+        Task task = this.getOne(new QueryWrapper<Task>().eq(Task.TASK_NUM, req.getTaskNum()).eq(Task.COMPANY_NAME, user.getCompanyName()), false);
         if(Objects.nonNull(task)){
             throw new CodeException(ResultCode.ERROR_TASK);
         }
 
-        User user = (User) request.getAttribute(UserInterceptor.USER_INFO);
 
         task = Task.builder().taskName(req.getTaskName())
                 .taskNum(req.getTaskNum())

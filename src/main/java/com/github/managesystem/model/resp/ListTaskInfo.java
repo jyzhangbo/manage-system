@@ -13,6 +13,7 @@ import java.util.List;
 @Builder
 public class ListTaskInfo {
 
+    private String companyName;
     private String taskName;
     private String taskNum;
     private Integer taskStatus;

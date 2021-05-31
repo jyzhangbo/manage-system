@@ -21,7 +21,7 @@ import java.util.List;
 public interface ITaskDeviceService extends IService<TaskDevice> {
 
 
-    List<DeviceInfo> listDeviceByTaskNum(String taskNum);
+    List<DeviceInfo> listDeviceByTaskNum(String taskNum,String companyName);
 
     void addTaskDevice(Task task, List<String> devices);
 
